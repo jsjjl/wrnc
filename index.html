@@ -247,6 +247,30 @@ main { flex: 1; display: flex; flex-direction: column; }
   .desktop-sidebar .sidebar-title { display: none; }
   .main-content { margin-left: 60px !important; }
 }
+
+.chat-fab{position:fixed;bottom:24px;right:24px;z-index:8000;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1DB954,#00B4D8);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(29,185,84,.4);display:flex;align-items:center;justify-content:center;transition:all .3s}
+.chat-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(29,185,84,.5)}
+.chat-fab.open{transform:rotate(90deg) scale(1.1)}
+.chat-panel{position:fixed;bottom:92px;right:24px;z-index:8000;width:360px;max-width:calc(100vw - 48px);height:480px;max-height:calc(100vh - 140px);background:#111D33;border:1px solid #1E3A5F;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden;animation:fadeInUp .3s ease-out}
+.chat-panel.open{display:flex}
+.chat-header{padding:14px 16px;border-bottom:1px solid #1E3A5F;display:flex;align-items:center;gap:10px;background:rgba(22,34,54,.8)}
+.chat-messages{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.chat-msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;animation:fadeInUp .3s ease-out}
+.chat-msg.bot{background:#162236;color:#E8F0FE;align-self:flex-start;border-bottom-left-radius:4px}
+.chat-msg.user{background:rgba(29,185,84,.15);color:#1DB954;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-quick{display:flex;flex-wrap:wrap;gap:6px;padding:6px 16px;border-top:1px solid rgba(30,58,95,.4)}
+.chat-quick button{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid #1E3A5F;background:rgba(22,34,54,.8);color:#7B93B0;cursor:pointer;transition:all .2s;white-space:nowrap}
+.chat-quick button:hover{border-color:#1DB954;color:#1DB954;background:rgba(29,185,84,.1)}
+.chat-input-wrap{padding:10px 16px;border-top:1px solid #1E3A5F;display:flex;gap:8px;align-items:center}
+.chat-input-wrap input{flex:1;background:#162236;border:1px solid #1E3A5F;border-radius:20px;padding:8px 14px;color:#E8F0FE;font-size:13px;outline:none;transition:border-color .2s}
+.chat-input-wrap input:focus{border-color:#1DB954}
+.chat-input-wrap input::placeholder{color:#5A6F8A}
+.chat-input-wrap button{width:36px;height:36px;border-radius:50%;background:#1DB954;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
+.chat-input-wrap button:hover{background:#148F3F}
+.typing-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#7B93B0;margin:0 2px;animation:float 1.2s ease-in-out infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@media(max-width:767px){.chat-panel{bottom:80px;right:12px;left:12px;width:auto;height:60vh}.chat-fab{bottom:80px;right:16px}}
 </style>
 </head>
 <body>
@@ -1447,6 +1471,113 @@ document.addEventListener('DOMContentLoaded', function() {
   initWeatherChart();
   handleHashChange();
 });
+</script>
+
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">
+  <svg id="chatFabIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1DB954,#00B4D8);display:flex;align-items:center;justify-content:center">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M16 11a4 4 0 014 4v5H4v-5a4 4 0 014-4"/></svg>
+    </div>
+    <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#E8F0FE">农场AI助手</div><div style="font-size:10px;color:#1DB954">● 在线</div></div>
+    <button onclick="toggleChat()" style="background:none;border:none;cursor:pointer;padding:4px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg bot">您好！我是邗江区无人农场AI助手，可以为您解答农情监测、设备管理、预警处置等问题。请问有什么可以帮您？</div>
+  </div>
+  <div class="chat-quick" id="chatQuick">
+    <button onclick="chatAsk('当前土壤墒情如何')">土壤墒情</button>
+    <button onclick="chatAsk('虫情监测数据')">虫情数据</button>
+    <button onclick="chatAsk('今日预警信息')">今日预警</button>
+    <button onclick="chatAsk('灌溉作业进度')">灌溉进度</button>
+    <button onclick="chatAsk('作物长势分析')">长势分析</button>
+    <button onclick="chatAsk('设备运行状态')">设备状态</button>
+    <button onclick="chatAsk('台风防范措施')">台风防范</button>
+    <button onclick="chatAsk('产量预测情况')">产量预测</button>
+  </div>
+  <div class="chat-input-wrap">
+    <input type="text" id="chatInput" placeholder="输入您的问题..." onkeydown="if(event.key==='Enter')chatSend()">
+    <button onclick="chatSend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
+
+<script>
+let chatOpen=false;
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open',chatOpen);
+  document.getElementById('chatFab').classList.toggle('open',chatOpen);
+  document.getElementById('chatFabIcon').innerHTML=chatOpen?'<line x1="18" y1="6" x2="6" y2="18" stroke="white" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke="white" stroke-width="2"/>':'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="2" fill="none"/>';
+  if(chatOpen)document.getElementById('chatInput').focus();
+}
+
+const chatResponses={
+  '土壤墒情':'📊 当前土壤墒情数据：\n\n【10cm土层】温度22.5°C，湿度32%，PH 6.8\n【20cm土层】温度21.8°C，湿度38%，PH 6.9\n【30cm土层】温度20.3°C，湿度45%，PH 7.0\n\n⚠️ 3号田块10cm土壤湿度仅18%，低于阈值25%，AI已自动启动灌溉。氮含量85mg/kg略低，建议追施穗肥。',
+  '虫情数据':'🐛 当前虫情监测数据：\n\n【稻纵卷叶螟】580头/亩 ⚠️超标（阈值300头/亩）\n【二化螟】120头/亩 ✅正常\n【白背飞虱】210头/百丛 ✅正常\n【褐飞虱】180头/百丛 ✅正常\n\n⚠️ 稻纵卷叶螟连续3日上升趋势，AI已生成防治处方：5%甲维盐20g/亩，明日06:00无人机飞防。',
+  '今日预警':'🚨 今日预警信息（5条）：\n\n🔴 紧急：3号田块土壤湿度18%，中度干旱\n🔴 紧急：台风"梅花"48h内影响扬州\n🟠 警告：稻纵卷叶螟580头/亩超标\n🟠 警告：明日高温38°C橙色预警\n🟡 提示：5号监控球机离线\n\n建议优先处理干旱和台风预警，点击预警中心查看详情。',
+  '灌溉进度':'💧 灌溉作业进度：\n\n【1号田】85% 灌溉中 流量15m³/h\n【2号田】60% 灌溉中 流量12m³/h\n【3号田】0% 待灌溉 优先级高（AI已自动排程）\n【4号田】100% 已完成 用水1,100m³\n【5号田】0% 计划中\n\n3号田因干旱预警已自动启动灌溉，预计2小时完成。',
+  '长势分析':'🌾 作物长势分析：\n\n【LAI指数】3.8（正常范围3.5-4.5）✅\n【叶层氮含量】2.1%（最优2.3-2.5%）⚠️偏低\n【叶龄】9.2叶 ✅\n【SPAD值】38.5（正常40-45）⚠️偏低\n【亩穗数】18.5万 ✅\n\n综合评价：长势良好，但氮营养不足。AI建议追施尿素5kg/亩，明日08:00无人机喷施。',
+  '设备状态':'📡 设备运行状态：\n\n✅ 在线：42台（96.5%）\n⭕ 离线：3台\n❌ 故障：2台\n\n主要在线设备：气象站、墒情仪、虫情灯、鹰眼摄像机、巡检无人车、赶蛾杆、亩穗数测量仪、长势感知设备、机器狗等\n\n⚠️ 5号监控球机离线，已派单维修。',
+  '台风防范':'🌀 台风"梅花"防范措施：\n\n【台风信息】12级，965hPa，48h内影响扬州\n【预计降雨】80-120mm\n【预计风力】7-9级阵风\n\nAI已启动应急预案：\n1️⃣ 抢收成熟田块（收割机已调度）\n2️⃣ 排涝泵站全部检查（6座正常运行）\n3️⃣ 田间水位预降至0cm\n4️⃣ 户外设备收拢固定\n5️⃣ 无人车/机器狗入库\n6️⃣ 人员撤离至安全区域\n\n点击AI智能体查看完整应急方案。',
+  '产量预测':'📈 产量预测数据：\n\n【亩穗数】18.5万穗/亩\n【穗粒数】132.6粒/穗\n【千粒重】26.8g\n【预估亩产】658kg/亩\n【总产预估】842吨（1280亩）\n\n较2025年增产2.0%，主要得益于：\n• 精准灌溉管理，水分利用效率提升12%\n• 病虫害及时防治，损失率降低8%\n• 科学追肥，千粒重提高1.5g\n\n当前处于抽穗期，预计6月中旬成熟收割。',
+  '干旱':'💧 干旱预警处置：\n\n3号田块土壤湿度18%（阈值25%），AI判定为中度干旱。\n\n已自动执行：\n1. 启动3号田灌溉阀门\n2. 灌溉量1,500m³，分2次执行\n3. 第1次800m³已开始（进度18%）\n4. 第2次700m³排程18:00启动\n\n预计灌溉后土壤湿度恢复至35%以上。点击AI智能体查看完整决策过程。',
+  '高温':'🌡️ 高温热害预警：\n\n明日预报38°C，已连续3日≥35°C。\n\nAI降温方案：\n1. 所有田块灌深水5-8cm降温\n2. 11:00-14:00喷灌降温3次\n3. 喷施0.2%磷酸二氢钾增强抗性\n\n预计穗部温度降低2-3°C，结实率损失从12%降至3%。点击AI智能体查看完整方案。',
+  '收割':'🌾 成熟度与收割计划：\n\n当前成熟度评分88/100（可收割标准≥80）\n籽粒含水率22.5%（≤25%可收割）\n\n因台风影响，AI建议提前收割：\n• 时间：明日05:30-18:00\n• 面积：1280亩全部\n• 设备：无人收割机-01+02\n• 预估产量：842吨\n\n点击AI智能体查看完整收割方案。',
+};
+
+function chatAsk(q){
+  addChatMsg(q,'user');
+  const input=document.getElementById('chatInput');
+  input.value='';
+  showTyping();
+  setTimeout(()=>{
+    removeTyping();
+    let reply='抱歉，我暂时无法回答这个问题。您可以尝试问我关于土壤墒情、虫情数据、预警信息、灌溉进度、作物长势、设备状态、台风防范、产量预测等方面的问题。';
+    for(const key in chatResponses){
+      if(q.includes(key)||key.includes(q)){
+        reply=chatResponses[key];
+        break;
+      }
+    }
+    if(q.includes('你好')||q.includes('您好'))reply='您好！我是邗江区无人农场AI助手，可以为您解答农情监测、设备管理、预警处置等问题。请问有什么可以帮您？';
+    if(q.includes('谢谢')||q.includes('感谢'))reply='不客气！随时为您服务，如有其他问题请随时提问。🌾';
+    if(q.includes('帮助')||q.includes('help'))reply='我可以帮您解答以下问题：\n1. 土壤墒情数据\n2. 虫情监测数据\n3. 今日预警信息\n4. 灌溉作业进度\n5. 作物长势分析\n6. 设备运行状态\n7. 台风防范措施\n8. 产量预测情况\n9. 干旱/高温/收割方案\n\n您也可以直接输入关键词提问。';
+    addChatMsg(reply,'bot');
+  },800+Math.random()*600);
+}
+
+function chatSend(){
+  const input=document.getElementById('chatInput');
+  const q=input.value.trim();
+  if(!q)return;
+  chatAsk(q);
+}
+
+function addChatMsg(text,type){
+  const container=document.getElementById('chatMessages');
+  const div=document.createElement('div');
+  div.className='chat-msg '+type;
+  div.textContent=text;
+  container.appendChild(div);
+  container.scrollTop=container.scrollHeight;
+}
+
+function showTyping(){
+  const container=document.getElementById('chatMessages');
+  const div=document.createElement('div');
+  div.className='chat-msg bot';
+  div.id='typingIndicator';
+  div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  container.appendChild(div);
+  container.scrollTop=container.scrollHeight;
+}
+
+function removeTyping(){
+  const el=document.getElementById('typingIndicator');
+  if(el)el.remove();
+}
 </script>
 </body>
 </html>
