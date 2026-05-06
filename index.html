@@ -1657,8 +1657,19 @@ function switchMonitorTab(tab) {
   document.getElementById('monitor-' + tab).style.display = 'block';
   document.querySelectorAll('#section-monitor .tab-btn').forEach((btn, i) => {
     const tabs = ['weather', 'soil', 'pest', 'seedling'];
-    if (tabs[i] === tab) { btn.classList.add('active'); btn.classList.remove('text-farm-muted'); }
-    else { btn.classList.remove('active'); btn.classList.add('text-farm-muted'); }
+    if (tabs[i] === tab) {
+      btn.classList.add('active');
+      btn.classList.remove('text-farm-muted');
+      btn.style.color = '#1DB954';
+      btn.style.borderColor = '#1DB954';
+      btn.style.background = 'rgba(29, 185, 84, 0.15)';
+    } else {
+      btn.classList.remove('active');
+      btn.classList.add('text-farm-muted');
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.style.background = '';
+    }
   });
   setTimeout(() => {
     if (tab === 'weather') { initTempHumidityChart(); }
@@ -1673,8 +1684,19 @@ function switchOperationTab(tab) {
   document.getElementById('op-' + tab).style.display = 'block';
   document.querySelectorAll('#section-operation .tab-btn').forEach((btn, i) => {
     const tabs = ['irrigation', 'machinery', 'drone'];
-    if (tabs[i] === tab) { btn.classList.add('active'); btn.classList.remove('text-farm-muted'); }
-    else { btn.classList.remove('active'); btn.classList.add('text-farm-muted'); }
+    if (tabs[i] === tab) {
+      btn.classList.add('active');
+      btn.classList.remove('text-farm-muted');
+      btn.style.color = '#1DB954';
+      btn.style.borderColor = '#1DB954';
+      btn.style.background = 'rgba(29, 185, 84, 0.15)';
+    } else {
+      btn.classList.remove('active');
+      btn.classList.add('text-farm-muted');
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.style.background = '';
+    }
   });
   setTimeout(() => {
     if (tab === 'irrigation') { initIrrigationChart(); }
@@ -1687,8 +1709,19 @@ function switchReportTab(tab) {
   document.getElementById('report-' + tab).style.display = 'block';
   document.querySelectorAll('#section-report .tab-btn').forEach((btn, i) => {
     const tabs = ['daily', 'yield', 'phenology'];
-    if (tabs[i] === tab) { btn.classList.add('active'); btn.classList.remove('text-farm-muted'); }
-    else { btn.classList.remove('active'); btn.classList.add('text-farm-muted'); }
+    if (tabs[i] === tab) {
+      btn.classList.add('active');
+      btn.classList.remove('text-farm-muted');
+      btn.style.color = '#1DB954';
+      btn.style.borderColor = '#1DB954';
+      btn.style.background = 'rgba(29, 185, 84, 0.15)';
+    } else {
+      btn.classList.remove('active');
+      btn.classList.add('text-farm-muted');
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.style.background = '';
+    }
   });
   setTimeout(() => {
     if (tab === 'yield') { initYieldChart(); }
