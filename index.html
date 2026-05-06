@@ -36,8 +36,10 @@ tailwind.config = {
 </script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #E8F0FE; overflow-x: hidden; }
+html { scroll-behavior: smooth; height: 100%; }
+body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #E8F0FE; overflow-x: hidden; height: 100%; display: flex; flex-direction: column; }
+main { flex: 1; display: flex; flex-direction: column; }
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #0A1628; }
 ::-webkit-scrollbar-thumb { background: #1E3A5F; border-radius: 3px; }
@@ -128,8 +130,8 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #E8F
 }
 .nav-item:hover { color: #1DB954; }
 
-.section-page { display: none; }
-.section-page.active { display: block; animation: fadeIn 0.4s ease-out; }
+.section-page { display: none; flex: 1; overflow-y: auto; }
+.section-page.active { display: flex; flex-direction: column; animation: fadeIn 0.4s ease-out; }
 
 .progress-ring { transform: rotate(-90deg); }
 .progress-ring circle {
