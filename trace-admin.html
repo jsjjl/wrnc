@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邗江区无人农场农产品溯源 - 农管人员端</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'cyber-blue': '#00D4FF',
+        'deep-blue': '#0A1628',
+        'alert-orange': '#FF6B35',
+        'dark-blue': '#111D33',
+        'border-blue': '#1E3A5F',
+        'success-green': '#1DB954',
+      },
+      fontFamily: {
+        'noto': ['Noto Sans SC', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #e0e6f0; overflow-x: hidden; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #111D33; }
+::-webkit-scrollbar-thumb { background: #1E3A5F; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00D4FF; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(0,212,255,0.3); }
+  50% { box-shadow: 0 0 20px rgba(0,212,255,0.6); }
+}
+@keyframes pulse-glow-orange {
+  0%, 100% { box-shadow: 0 0 5px rgba(255,107,53,0.3); }
+  50% { box-shadow: 0 0 20px rgba(255,107,53,0.6); }
+}
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes number-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+  25% { transform: translateY(-20px) translateX(10px); opacity: 0.7; }
+  50% { transform: translateY(-40px) translateX(-5px); opacity: 0.5; }
+  75% { transform: translateY(-20px) translateX(15px); opacity: 0.6; }
+}
+
+.animate-fadeInUp { animation: fadeInUp 0.5s ease-out forwards; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-pulse-glow-orange { animation: pulse-glow-orange 2s ease-in-out infinite; }
+.animate-number-pop { animation: number-pop 0.4s ease-out; }
+
+.glow-border { border: 1px solid #1E3A5F; transition: all 0.3s ease; }
+.glow-border:hover { border-color: #00D4FF; box-shadow: 0 0 15px rgba(0,212,255,0.3); }
+
+.glass-panel {
+  background: rgba(17,29,51,0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(30,58,95,0.6);
+}
+
+.btn-cyber {
+  background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,212,255,0.05));
+  border: 1px solid #00D4FF;
+  color: #00D4FF;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+}
+.btn-cyber:hover {
+  background: rgba(0,212,255,0.25);
+  box-shadow: 0 0 15px rgba(0,212,255,0.4);
+}
+.btn-cyber:active { transform: scale(0.96); }
+
+.btn-orange {
+  background: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(255,107,53,0.05));
+  border: 1px solid #FF6B35;
+  color: #FF6B35;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+}
+.btn-orange:hover {
+  background: rgba(255,107,53,0.25);
+  box-shadow: 0 0 15px rgba(255,107,53,0.4);
+}
+
+.stat-card {
+  background: linear-gradient(145deg, rgba(17,29,51,0.9), rgba(10,22,40,0.95));
+  border: 1px solid #1E3A5F;
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  border-radius: 4px 0 0 4px;
+}
+.stat-card:hover { border-color: #00D4FF; box-shadow: 0 0 20px rgba(0,212,255,0.15); transform: translateY(-2px); }
+.stat-card.blue::before { background: #00D4FF; }
+.stat-card.green::before { background: #1DB954; }
+.stat-card.orange::before { background: #FF6B35; }
+.stat-card.cyan::before { background: #00D4FF; }
+
+#sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: 220px; z-index: 100;
+  background: linear-gradient(180deg, #0d1b30 0%, #0A1628 100%);
+  border-right: 1px solid #1E3A5F;
+  transition: width 0.3s ease;
+  display: flex; flex-direction: column;
+}
+#sidebar.collapsed { width: 64px; }
+#sidebar.collapsed .nav-text, #sidebar.collapsed .logo-text, #sidebar.collapsed .user-info-text { display: none; }
+#sidebar.collapsed .nav-item { justify-content: center; padding: 12px 0; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px; cursor: pointer;
+  color: #8899b0; transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+}
+.nav-item:hover { color: #00D4FF; background: rgba(0,212,255,0.05); }
+.nav-item.active { color: #00D4FF; background: rgba(0,212,255,0.1); border-left-color: #00D4FF; }
+
+#main-content {
+  margin-left: 220px; min-height: 100vh;
+  transition: margin-left 0.3s ease;
+  position: relative;
+}
+#main-content.sidebar-collapsed { margin-left: 64px; }
+
+.header-bar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10,22,40,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #1E3A5F;
+  padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-bar::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00D4FF, transparent);
+  overflow: hidden;
+}
+.header-bar::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.8), transparent);
+  animation: scanline 3s linear infinite;
+}
+
+.section-page { display: none; padding: 24px; }
+.section-page.active { display: block; animation: fadeInUp 0.4s ease-out; }
+
+.chart-container { position: relative; height: 220px; width: 100%; }
+
+.alert-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 6px;
+  background: rgba(17,29,51,0.6);
+  border: 1px solid #1E3A5F;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+.alert-item:hover { border-color: #00D4FF; }
+.alert-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.alert-dot.high { background: #FF6B35; animation: pulse-glow-orange 1.5s infinite; }
+.alert-dot.medium { background: #FFD600; }
+.alert-dot.low { background: #00D4FF; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  text-align: left; padding: 12px 16px;
+  background: rgba(30,58,95,0.3);
+  color: #8899b0; font-weight: 500; font-size: 13px;
+  border-bottom: 1px solid #1E3A5F;
+}
+.data-table td {
+  padding: 12px 16px; border-bottom: 1px solid rgba(30,58,95,0.3);
+  font-size: 14px;
+}
+.data-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+.status-badge {
+  display: inline-block; padding: 2px 10px; border-radius: 10px;
+  font-size: 12px; font-weight: 500;
+}
+.status-badge.pass { background: rgba(29,185,84,0.15); color: #1DB954; border: 1px solid rgba(29,185,84,0.3); }
+.status-badge.pending { background: rgba(255,214,0,0.15); color: #FFD600; border: 1px solid rgba(255,214,0,0.3); }
+.status-badge.error { background: rgba(255,107,53,0.15); color: #FF6B35; border: 1px solid rgba(255,107,53,0.3); }
+
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal-content {
+  background: linear-gradient(145deg, #111D33, #0A1628);
+  border: 1px solid #1E3A5F;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 560px; width: 90%;
+  max-height: 80vh; overflow-y: auto;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.ai-fab {
+  position: fixed; bottom: 24px; right: 24px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #00D4FF, #0088cc);
+  border: none; color: #fff; font-size: 24px;
+  cursor: pointer; z-index: 150;
+  box-shadow: 0 4px 20px rgba(0,212,255,0.4);
+  transition: all 0.3s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+.ai-fab:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(0,212,255,0.6); }
+
+.ai-panel {
+  position: fixed; bottom: 90px; right: 24px;
+  width: 380px; max-height: 520px;
+  background: rgba(17,29,51,0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid #1E3A5F;
+  border-radius: 12px;
+  z-index: 150;
+  display: none; flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  animation: fadeInUp 0.3s ease-out;
+}
+.ai-panel.show { display: flex; }
+.ai-panel.fullscreen {
+  bottom: 0; right: 0;
+  width: 100%; max-height: 100vh;
+  height: 100vh; border-radius: 0;
+}
+
+.ai-messages {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.ai-msg {
+  max-width: 85%; padding: 10px 14px;
+  border-radius: 8px; font-size: 13px; line-height: 1.6;
+}
+.ai-msg.bot {
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.2);
+  align-self: flex-start;
+}
+.ai-msg.user {
+  background: rgba(30,58,95,0.5);
+  border: 1px solid rgba(30,58,95,0.8);
+  align-self: flex-end;
+}
+
+.ai-quick-btns {
+  display: flex; gap: 8px; padding: 8px 16px;
+  overflow-x: auto; flex-shrink: 0;
+}
+.ai-quick-btn {
+  flex-shrink: 0; padding: 4px 12px;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  border-radius: 14px; color: #00D4FF;
+  font-size: 12px; cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.ai-quick-btn:hover { background: rgba(0,212,255,0.2); }
+
+.ai-input-row {
+  display: flex; gap: 8px; padding: 12px 16px;
+  border-top: 1px solid #1E3A5F; flex-shrink: 0;
+}
+.ai-input-row input {
+  flex: 1; background: rgba(10,22,40,0.8);
+  border: 1px solid #1E3A5F; border-radius: 6px;
+  padding: 8px 12px; color: #e0e6f0;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px; outline: none;
+}
+.ai-input-row input:focus { border-color: #00D4FF; }
+.ai-input-row button {
+  background: linear-gradient(135deg, #00D4FF, #0088cc);
+  border: none; color: #fff; padding: 8px 16px;
+  border-radius: 6px; cursor: pointer;
+  font-family: 'Noto Sans SC', sans-serif;
+  transition: all 0.2s ease;
+}
+.ai-input-row button:hover { box-shadow: 0 0 12px rgba(0,212,255,0.4); }
+
+.ai-card {
+  background: linear-gradient(145deg, rgba(17,29,51,0.9), rgba(10,22,40,0.95));
+  border: 1px solid #1E3A5F;
+  border-radius: 8px; padding: 20px;
+  cursor: pointer; transition: all 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.ai-card:hover { border-color: #00D4FF; box-shadow: 0 0 20px rgba(0,212,255,0.15); transform: translateY(-2px); }
+.ai-card::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle at top right, rgba(0,212,255,0.1), transparent);
+}
+
+.vehicle-card {
+  background: linear-gradient(145deg, rgba(17,29,51,0.9), rgba(10,22,40,0.95));
+  border: 1px solid #1E3A5F;
+  border-radius: 8px; padding: 16px;
+  transition: all 0.3s ease;
+}
+.vehicle-card:hover { border-color: #00D4FF; box-shadow: 0 0 15px rgba(0,212,255,0.15); }
+.vehicle-card.alert { border-color: rgba(255,107,53,0.5); }
+.vehicle-card.alert:hover { border-color: #FF6B35; box-shadow: 0 0 15px rgba(255,107,53,0.2); }
+
+.warehouse-card {
+  background: linear-gradient(145deg, rgba(17,29,51,0.9), rgba(10,22,40,0.95));
+  border: 1px solid #1E3A5F;
+  border-radius: 8px; padding: 20px;
+  transition: all 0.3s ease;
+}
+.warehouse-card:hover { border-color: #00D4FF; box-shadow: 0 0 15px rgba(0,212,255,0.15); }
+
+.progress-bar-bg {
+  width: 100%; height: 8px; background: rgba(30,58,95,0.5);
+  border-radius: 4px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 4px;
+  transition: width 1s ease-out;
+}
+
+#particle-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+.mobile-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(10,22,40,0.98);
+  border-top: 1px solid #1E3A5F;
+  z-index: 100;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.mobile-nav::-webkit-scrollbar { display: none; }
+.mobile-nav-inner {
+  display: flex; min-width: max-content;
+}
+.mobile-nav-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; padding: 8px 16px; color: #8899b0;
+  font-size: 11px; cursor: pointer; white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.mobile-nav-item.active { color: #00D4FF; }
+.mobile-nav-item svg { width: 20px; height: 20px; }
+
+.ai-step { opacity: 0; transform: translateY(10px); transition: all 0.4s ease; }
+.ai-step.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  #sidebar { width: 64px; }
+  #sidebar .nav-text, #sidebar .logo-text, #sidebar .user-info-text { display: none; }
+  #sidebar .nav-item { justify-content: center; padding: 12px 0; }
+  #main-content { margin-left: 64px; }
+}
+
+@media (max-width: 767px) {
+  #sidebar { display: none; }
+  #main-content { margin-left: 0 !important; }
+  .mobile-nav { display: block; }
+  .section-page { padding: 16px; padding-bottom: 80px; }
+  .ai-panel { width: calc(100% - 16px); right: 8px; bottom: 80px; }
+  .ai-panel.fullscreen { width: 100%; right: 0; bottom: 0; }
+  .ai-fab { bottom: 80px; }
+  .header-bar { padding: 10px 16px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<div id="sidebar">
+  <div style="padding:20px 16px; border-bottom:1px solid #1E3A5F;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="12" stroke="#00D4FF" stroke-width="2"/>
+        <path d="M8 14 L12 18 L20 10" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="logo-text" style="color:#00D4FF;font-weight:700;font-size:15px;white-space:nowrap;">邗江溯源管理</span>
+    </div>
+  </div>
+  <nav style="flex:1;padding:12px 0;">
+    <div class="nav-item active" data-section="overview" onclick="switchSection('overview',this)">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="11" y="2" width="7" height="7" rx="1"/><rect x="2" y="11" width="7" height="7" rx="1"/><rect x="11" y="11" width="7" height="7" rx="1"/></svg>
+      <span class="nav-text">溯源总览</span>
+    </div>
+    <div class="nav-item" data-section="batches" onclick="switchSection('batches',this)">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h14v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"/><path d="M3 4h14"/><path d="M7 8h6M7 11h4"/></svg>
+      <span class="nav-text">批次管理</span>
+    </div>
+    <div class="nav-item" data-section="quality" onclick="switchSection('quality',this)">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg>
+      <span class="nav-text">质量监控</span>
+    </div>
+    <div class="nav-item" data-section="supply" onclick="switchSection('supply',this)">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10h4l2-4h4l2 4h4"/><circle cx="5" cy="14" r="2"/><circle cx="15" cy="14" r="2"/></svg>
+      <span class="nav-text">供应链追踪</span>
+    </div>
+    <div class="nav-item" data-section="ai" onclick="switchSection('ai',this)">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4z"/></svg>
+      <span class="nav-text">AI分析</span>
+    </div>
+  </nav>
+  <div style="padding:16px;border-top:1px solid #1E3A5F;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00D4FF,#0088cc);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;">管</div>
+      <div class="user-info-text">
+        <div style="font-size:13px;color:#e0e6f0;">管理员</div>
+        <div style="font-size:11px;color:#8899b0;">在线</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <div class="mobile-nav-item active" data-section="overview" onclick="switchSection('overview',this)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="11" y="2" width="7" height="7" rx="1"/><rect x="2" y="11" width="7" height="7" rx="1"/><rect x="11" y="11" width="7" height="7" rx="1"/></svg>
+      <span>溯源总览</span>
+    </div>
+    <div class="mobile-nav-item" data-section="batches" onclick="switchSection('batches',this)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h14v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"/><path d="M3 4h14"/><path d="M7 8h6M7 11h4"/></svg>
+      <span>批次管理</span>
+    </div>
+    <div class="mobile-nav-item" data-section="quality" onclick="switchSection('quality',this)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg>
+      <span>质量监控</span>
+    </div>
+    <div class="mobile-nav-item" data-section="supply" onclick="switchSection('supply',this)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10h4l2-4h4l2 4h4"/><circle cx="5" cy="14" r="2"/><circle cx="15" cy="14" r="2"/></svg>
+      <span>供应链追踪</span>
+    </div>
+    <div class="mobile-nav-item" data-section="ai" onclick="switchSection('ai',this)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4z"/></svg>
+      <span>AI分析</span>
+    </div>
+  </div>
+</div>
+
+<div id="main-content">
+  <div class="header-bar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <h1 id="page-title" style="font-size:18px;font-weight:700;color:#e0e6f0;">溯源总览</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#1DB954;display:inline-block;animation:pulse-glow 2s infinite;"></span>
+        <span style="font-size:12px;color:#8899b0;">系统正常</span>
+      </div>
+      <span id="current-time" style="font-size:13px;color:#8899b0;font-variant-numeric:tabular-nums;"></span>
+      <div style="position:relative;cursor:pointer;" onclick="toggleNotif()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8899b0" stroke-width="1.5"><path d="M10 2a5 5 0 015 5v3l2 2H3l2-2V7a5 5 0 015-5z"/><path d="M8 15a2 2 0 004 0"/></svg>
+        <span style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:#FF6B35;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-overview" class="section-page active">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;">
+      <div class="stat-card blue animate-fadeInUp" style="animation-delay:0s;">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">溯源总量</div>
+        <div class="counter" data-target="1286" style="font-size:32px;font-weight:900;color:#00D4FF;">0</div>
+        <div style="font-size:12px;color:#1DB954;margin-top:4px;">↑ 12.3% 较上月</div>
+      </div>
+      <div class="stat-card cyan animate-fadeInUp" style="animation-delay:0.1s;">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">今日新增</div>
+        <div class="counter" data-target="23" style="font-size:32px;font-weight:900;color:#00D4FF;">0</div>
+        <div style="font-size:12px;color:#1DB954;margin-top:4px;">↑ 8.5% 较昨日</div>
+      </div>
+      <div class="stat-card orange animate-fadeInUp" style="animation-delay:0.2s;">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">异常批次</div>
+        <div class="counter" data-target="3" style="font-size:32px;font-weight:900;color:#FF6B35;">0</div>
+        <div style="font-size:12px;color:#FF6B35;margin-top:4px;">需及时处理</div>
+      </div>
+      <div class="stat-card green animate-fadeInUp" style="animation-delay:0.3s;">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">合格率</div>
+        <div style="font-size:32px;font-weight:900;color:#1DB954;"><span class="counter" data-target="99" data-suffix=".2%">0</span></div>
+        <div style="font-size:12px;color:#1DB954;margin-top:4px;">高于行业均值</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:24px;">
+      <div class="glass-panel" style="border-radius:8px;padding:20px;">
+        <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">合格率趋势（近7天）</h3>
+        <div class="chart-container"><canvas id="chart-passRate"></canvas></div>
+      </div>
+      <div class="glass-panel" style="border-radius:8px;padding:20px;">
+        <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">批次分布</h3>
+        <div class="chart-container"><canvas id="chart-batchDist"></canvas></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;">
+      <div class="glass-panel" style="border-radius:8px;padding:20px;">
+        <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">实时预警</h3>
+        <div id="alert-list"></div>
+      </div>
+      <div class="glass-panel" style="border-radius:8px;padding:20px;">
+        <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">最近批次</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>批次号</th><th>产品</th><th>状态</th><th>日期</th></tr></thead>
+            <tbody id="recent-batches"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-batches" class="section-page">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center;">
+      <div style="flex:1;min-width:200px;position:relative;">
+        <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.5;" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#8899b0" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+        <input id="batch-search" type="text" placeholder="搜索批次号或产品名称..." oninput="filterBatches()" style="width:100%;background:rgba(10,22,40,0.8);border:1px solid #1E3A5F;border-radius:6px;padding:10px 12px 10px 36px;color:#e0e6f0;font-family:'Noto Sans SC',sans-serif;font-size:14px;outline:none;">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-cyber filter-btn active-filter" data-filter="all" onclick="setFilter('all',this)">全部</button>
+        <button class="btn-cyber filter-btn" data-filter="合格" onclick="setFilter('合格',this)">合格</button>
+        <button class="btn-cyber filter-btn" data-filter="待检" onclick="setFilter('待检',this)">待检</button>
+        <button class="btn-cyber filter-btn" data-filter="异常" onclick="setFilter('异常',this)">异常</button>
+      </div>
+    </div>
+    <div class="glass-panel" style="border-radius:8px;overflow:hidden;">
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>批次号</th><th>产品</th><th>状态</th><th>日期</th><th>评分</th><th>操作</th></tr></thead>
+          <tbody id="batch-table"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;padding:16px;border-top:1px solid #1E3A5F;">
+        <button class="btn-cyber" onclick="changePage(-1)" style="padding:4px 12px;">上一页</button>
+        <span id="page-info" style="font-size:13px;color:#8899b0;"></span>
+        <button class="btn-cyber" onclick="changePage(1)" style="padding:4px 12px;">下一页</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-quality" class="section-page">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+      <div class="stat-card blue animate-fadeInUp">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">总检测数</div>
+        <div class="counter" data-target="1580" style="font-size:28px;font-weight:900;color:#00D4FF;">0</div>
+      </div>
+      <div class="stat-card green animate-fadeInUp" style="animation-delay:0.1s;">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">合格数</div>
+        <div class="counter" data-target="1567" style="font-size:28px;font-weight:900;color:#1DB954;">0</div>
+      </div>
+      <div class="stat-card orange animate-fadeInUp" style="animation-delay:0.2s;">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">不合格数</div>
+        <div class="counter" data-target="8" style="font-size:28px;font-weight:900;color:#FF6B35;">0</div>
+      </div>
+      <div class="stat-card cyan animate-fadeInUp" style="animation-delay:0.3s;">
+        <div style="font-size:13px;color:#8899b0;margin-bottom:8px;">待检测数</div>
+        <div class="counter" data-target="5" style="font-size:28px;font-weight:900;color:#00D4FF;">0</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:24px;">
+      <div class="glass-panel" style="border-radius:8px;padding:20px;">
+        <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">检测项目合格率</h3>
+        <div class="chart-container"><canvas id="chart-qualityBar"></canvas></div>
+      </div>
+      <div class="glass-panel" style="border-radius:8px;padding:20px;">
+        <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">温控监测（24小时）</h3>
+        <div class="chart-container"><canvas id="chart-tempLine"></canvas></div>
+      </div>
+    </div>
+    <div class="glass-panel" style="border-radius:8px;padding:20px;">
+      <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">不合格预警</h3>
+      <div id="quality-alerts"></div>
+    </div>
+  </div>
+
+  <div id="section-supply" class="section-page">
+    <div class="glass-panel" style="border-radius:8px;padding:24px;margin-bottom:24px;">
+      <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:20px;">物流节点追踪</h3>
+      <svg id="supply-svg" viewBox="0 0 800 120" style="width:100%;height:auto;max-height:140px;">
+        <defs>
+          <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:0.2"/>
+            <stop offset="50%" style="stop-color:#00D4FF;stop-opacity:0.8"/>
+            <stop offset="100%" style="stop-color:#00D4FF;stop-opacity:0.2"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <line x1="80" y1="60" x2="720" y2="60" stroke="url(#lineGrad)" stroke-width="2"/>
+        <circle cx="80" cy="60" r="8" fill="#0A1628" stroke="#00D4FF" stroke-width="2" filter="url(#glow)"/>
+        <circle cx="240" cy="60" r="8" fill="#0A1628" stroke="#00D4FF" stroke-width="2" filter="url(#glow)"/>
+        <circle cx="400" cy="60" r="8" fill="#0A1628" stroke="#00D4FF" stroke-width="2" filter="url(#glow)"/>
+        <circle cx="560" cy="60" r="8" fill="#0A1628" stroke="#00D4FF" stroke-width="2" filter="url(#glow)"/>
+        <circle cx="720" cy="60" r="8" fill="#0A1628" stroke="#1DB954" stroke-width="2" filter="url(#glow)"/>
+        <text x="80" y="90" text-anchor="middle" fill="#8899b0" font-size="12" font-family="Noto Sans SC">农场</text>
+        <text x="240" y="90" text-anchor="middle" fill="#8899b0" font-size="12" font-family="Noto Sans SC">加工</text>
+        <text x="400" y="90" text-anchor="middle" fill="#8899b0" font-size="12" font-family="Noto Sans SC">仓库</text>
+        <text x="560" y="90" text-anchor="middle" fill="#8899b0" font-size="12" font-family="Noto Sans SC">配送</text>
+        <text x="720" y="90" text-anchor="middle" fill="#8899b0" font-size="12" font-family="Noto Sans SC">门店</text>
+        <circle cx="80" cy="60" r="4" fill="#00D4FF"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="240" cy="60" r="4" fill="#00D4FF"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.4s"/></circle>
+        <circle cx="400" cy="60" r="4" fill="#00D4FF"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.8s"/></circle>
+        <circle cx="560" cy="60" r="4" fill="#00D4FF"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="1.2s"/></circle>
+        <circle cx="720" cy="60" r="4" fill="#1DB954"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="1.6s"/></circle>
+        <rect x="140" y="52" width="40" height="16" rx="4" fill="rgba(0,212,255,0.2)" stroke="#00D4FF" stroke-width="1">
+          <animate attributeName="x" values="100;200;100" dur="4s" repeatCount="indefinite"/>
+        </rect>
+      </svg>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">冷链车辆状态</h3>
+    <div id="vehicle-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px;"></div>
+
+    <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">仓储状态概览</h3>
+    <div id="warehouse-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;"></div>
+  </div>
+
+  <div id="section-ai" class="section-page">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:24px;" id="ai-cards"></div>
+    <div class="glass-panel" style="border-radius:8px;padding:24px;">
+      <h3 style="font-size:14px;font-weight:500;color:#8899b0;margin-bottom:16px;">AI分析报告</h3>
+      <div id="ai-report" style="color:#8899b0;font-size:14px;">点击上方卡片查看AI分析详情</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="batch-modal">
+  <div class="modal-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="font-size:18px;font-weight:700;color:#00D4FF;">批次详情</h2>
+      <button onclick="closeModal()" style="background:none;border:none;color:#8899b0;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="ai-modal">
+  <div class="modal-content" style="max-width:640px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="font-size:18px;font-weight:700;color:#00D4FF;" id="ai-modal-title">AI分析</h2>
+      <button onclick="closeAiModal()" style="background:none;border:none;color:#8899b0;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="ai-modal-body"></div>
+  </div>
+</div>
+
+<button class="ai-fab" onclick="toggleAiPanel()" title="AI助手">🤖</button>
+
+<div class="ai-panel" id="ai-panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1E3A5F;">
+    <span style="font-size:14px;font-weight:700;color:#00D4FF;">AI溯源助手</span>
+    <div style="display:flex;gap:8px;">
+      <button onclick="toggleAiFullscreen()" style="background:none;border:1px solid #1E3A5F;color:#8899b0;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:12px;font-family:'Noto Sans SC',sans-serif;">全屏</button>
+      <button onclick="toggleAiPanel()" style="background:none;border:none;color:#8899b0;font-size:16px;cursor:pointer;">✕</button>
+    </div>
+  </div>
+  <div class="ai-messages" id="ai-messages">
+    <div class="ai-msg bot">您好！我是邗江溯源AI助手，可以帮您分析溯源数据、检测异常、预测风险。请问有什么需要帮助的？</div>
+  </div>
+  <div class="ai-quick-btns">
+    <button class="ai-quick-btn" onclick="sendAiQuestion('风险预测')">风险预测</button>
+    <button class="ai-quick-btn" onclick="sendAiQuestion('异常检测')">异常检测</button>
+    <button class="ai-quick-btn" onclick="sendAiQuestion('批次分析')">批次分析</button>
+    <button class="ai-quick-btn" onclick="sendAiQuestion('质量趋势')">质量趋势</button>
+  </div>
+  <div class="ai-input-row">
+    <input id="ai-input" type="text" placeholder="输入问题..." onkeydown="if(event.key==='Enter')sendAiMsg()">
+    <button onclick="sendAiMsg()">发送</button>
+  </div>
+</div>
+
+<script>
+var adminData = {
+  stats: { totalBatches: 1286, todayNew: 23, alertBatches: 3, passRate: 99.2 },
+  batches: [
+    { id: "HJ20250507001", product: "有机大米", status: "合格", date: "2025-05-07", score: 98.5 },
+    { id: "HJ20250506002", product: "绿色蔬菜", status: "合格", date: "2025-05-06", score: 97.8 },
+    { id: "HJ20250505003", product: "有机小麦", status: "待检", date: "2025-05-05", score: null },
+    { id: "HJ20250504004", product: "生态水果", status: "异常", date: "2025-05-04", score: 85.2 },
+    { id: "HJ20250503005", product: "有机大米", status: "合格", date: "2025-05-03", score: 99.1 },
+    { id: "HJ20250502006", product: "绿色蔬菜", status: "合格", date: "2025-05-02", score: 96.5 },
+    { id: "HJ20250501007", product: "生态水果", status: "合格", date: "2025-05-01", score: 97.2 },
+    { id: "HJ20250430008", product: "有机小麦", status: "待检", date: "2025-04-30", score: null }
+  ],
+  alerts: [
+    { level: "high", msg: "批次HJ20250504004农残检测超标", time: "10分钟前" },
+    { level: "medium", msg: "冷链3号车温度异常波动", time: "30分钟前" },
+    { level: "low", msg: "批次HJ20250505003待质检超24h", time: "1小时前" }
+  ],
+  vehicles: [
+    { plate: "苏K·A8801", temp: "4.2°C", location: "扬州市区", status: "运输中" },
+    { plate: "苏K·A8802", temp: "3.8°C", location: "南京方向", status: "运输中" },
+    { plate: "苏K·A8803", temp: "8.5°C", location: "扬州西郊", status: "异常" },
+    { plate: "苏K·A8804", temp: "4.0°C", location: "农场仓库", status: "装货中" },
+    { plate: "苏K·A8805", temp: "3.5°C", location: "配送中心", status: "卸货中" }
+  ],
+  warehouses: [
+    { name: "1号冷库", capacity: 78, temp: "-2°C", humidity: "65%" },
+    { name: "2号常温库", capacity: 45, temp: "18°C", humidity: "55%" },
+    { name: "3号保鲜库", capacity: 62, temp: "4°C", humidity: "70%" }
+  ],
+  aiInsights: [
+    { type: "risk", title: "风险预测", content: "近期高温天气，建议加强仓储温控监测，预计影响3个批次" },
+    { type: "anomaly", title: "异常检测", content: "检测到2号生产线产出率下降5%，建议排查设备状态" },
+    { type: "trend", title: "趋势分析", content: "本月溯源查询量环比增长23%，消费者关注度持续上升" },
+    { type: "decision", title: "决策建议", content: "建议增加有机蔬菜批次抽检频率，当前抽检率低于行业均值" }
+  ]
+};
+
+var currentSection = 'overview';
+var currentFilter = 'all';
+var currentPage = 1;
+var pageSize = 5;
+var charts = {};
+
+var sectionTitles = {
+  overview: '溯源总览',
+  batches: '批次管理',
+  quality: '质量监控',
+  supply: '供应链追踪',
+  ai: 'AI智能分析'
+};
+
+function switchSection(section, el) {
+  currentSection = section;
+  document.querySelectorAll('.section-page').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('section-' + section).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.querySelectorAll('.mobile-nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.querySelectorAll('[data-section="' + section + '"]').forEach(function(n) { n.classList.add('active'); });
+  document.getElementById('page-title').textContent = sectionTitles[section];
+  if (section === 'overview' || section === 'quality') { animateCounters(); }
+}
+
+function updateTime() {
+  var now = new Date();
+  var str = now.getFullYear() + '-' +
+    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+    String(now.getDate()).padStart(2, '0') + ' ' +
+    String(now.getHours()).padStart(2, '0') + ':' +
+    String(now.getMinutes()).padStart(2, '0') + ':' +
+    String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('current-time').textContent = str;
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+function animateCounters() {
+  document.querySelectorAll('.counter').forEach(function(el) {
+    var target = parseInt(el.getAttribute('data-target'));
+    var suffix = el.getAttribute('data-suffix') || '';
+    var duration = 1200;
+    var start = 0;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(start + (target - start) * eased);
+      el.textContent = current + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+function renderAlerts() {
+  var html = '';
+  adminData.alerts.forEach(function(a) {
+    html += '<div class="alert-item' + (a.level === 'high' ? ' animate-pulse-glow-orange' : '') + '">' +
+      '<span class="alert-dot ' + a.level + '"></span>' +
+      '<div style="flex:1;"><div style="font-size:13px;color:#e0e6f0;">' + a.msg + '</div>' +
+      '<div style="font-size:11px;color:#8899b0;margin-top:2px;">' + a.time + '</div></div></div>';
+  });
+  document.getElementById('alert-list').innerHTML = html;
+}
+
+function renderRecentBatches() {
+  var html = '';
+  adminData.batches.slice(0, 5).forEach(function(b) {
+    html += '<tr><td style="color:#00D4FF;font-size:13px;">' + b.id + '</td>' +
+      '<td>' + b.product + '</td>' +
+      '<td><span class="status-badge ' + statusClass(b.status) + '">' + b.status + '</span></td>' +
+      '<td style="color:#8899b0;font-size:13px;">' + b.date + '</td></tr>';
+  });
+  document.getElementById('recent-batches').innerHTML = html;
+}
+
+function statusClass(s) {
+  if (s === '合格') return 'pass';
+  if (s === '待检') return 'pending';
+  return 'error';
+}
+
+function filterBatches() {
+  currentPage = 1;
+  renderBatchTable();
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  currentPage = 1;
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.classList.remove('active-filter');
+    b.style.background = '';
+    b.style.borderColor = '#00D4FF';
+    b.style.color = '#00D4FF';
+  });
+  el.classList.add('active-filter');
+  el.style.background = 'rgba(0,212,255,0.25)';
+  renderBatchTable();
+}
+
+function getFilteredBatches() {
+  var search = document.getElementById('batch-search').value.toLowerCase();
+  return adminData.batches.filter(function(b) {
+    var matchFilter = currentFilter === 'all' || b.status === currentFilter;
+    var matchSearch = !search || b.id.toLowerCase().indexOf(search) >= 0 || b.product.toLowerCase().indexOf(search) >= 0;
+    return matchFilter && matchSearch;
+  });
+}
+
+function renderBatchTable() {
+  var filtered = getFilteredBatches();
+  var total = filtered.length;
+  var totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (currentPage > totalPages) currentPage = totalPages;
+  var start = (currentPage - 1) * pageSize;
+  var pageData = filtered.slice(start, start + pageSize);
+  var html = '';
+  pageData.forEach(function(b) {
+    html += '<tr>' +
+      '<td style="color:#00D4FF;font-size:13px;">' + b.id + '</td>' +
+      '<td>' + b.product + '</td>' +
+      '<td><span class="status-badge ' + statusClass(b.status) + '">' + b.status + '</span></td>' +
+      '<td style="color:#8899b0;font-size:13px;">' + b.date + '</td>' +
+      '<td>' + (b.score !== null ? b.score : '--') + '</td>' +
+      '<td><button class="btn-cyber" onclick="showBatchDetail(\'' + b.id + '\')" style="padding:4px 12px;font-size:12px;">详情</button></td>' +
+      '</tr>';
+  });
+  document.getElementById('batch-table').innerHTML = html;
+  document.getElementById('page-info').textContent = currentPage + ' / ' + totalPages;
+}
+
+function changePage(delta) {
+  var filtered = getFilteredBatches();
+  var totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  currentPage = Math.max(1, Math.min(totalPages, currentPage + delta));
+  renderBatchTable();
+}
+
+function showBatchDetail(id) {
+  var b = adminData.batches.find(function(x) { return x.id === id; });
+  if (!b) return;
+  var html = '<div style="display:grid;gap:12px;">' +
+    '<div style="display:flex;justify-content:space-between;padding:12px;background:rgba(0,212,255,0.05);border-radius:6px;">' +
+    '<span style="color:#8899b0;">批次号</span><span style="color:#00D4FF;font-weight:700;">' + b.id + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:12px;background:rgba(0,212,255,0.05);border-radius:6px;">' +
+    '<span style="color:#8899b0;">产品名称</span><span>' + b.product + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:12px;background:rgba(0,212,255,0.05);border-radius:6px;">' +
+    '<span style="color:#8899b0;">检测状态</span><span class="status-badge ' + statusClass(b.status) + '">' + b.status + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:12px;background:rgba(0,212,255,0.05);border-radius:6px;">' +
+    '<span style="color:#8899b0;">生产日期</span><span>' + b.date + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:12px;background:rgba(0,212,255,0.05);border-radius:6px;">' +
+    '<span style="color:#8899b0;">质量评分</span><span style="color:' + (b.score !== null && b.score >= 90 ? '#1DB954' : '#FF6B35') + ';font-weight:700;">' + (b.score !== null ? b.score + '分' : '待检测') + '</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:12px;background:rgba(0,212,255,0.05);border-radius:6px;">' +
+    '<span style="color:#8899b0;">产地</span><span>邗江区无人农场</span></div>' +
+    '<div style="display:flex;justify-content:space-between;padding:12px;background:rgba(0,212,255,0.05);border-radius:6px;">' +
+    '<span style="color:#8899b0;">认证</span><span style="color:#1DB954;">有机认证 / 绿色食品</span></div>' +
+    '</div>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('batch-modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('batch-modal').classList.remove('show');
+}
+
+function renderVehicles() {
+  var html = '';
+  adminData.vehicles.forEach(function(v) {
+    var isAlert = v.status === '异常';
+    html += '<div class="vehicle-card' + (isAlert ? ' alert' : '') + '">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
+      '<span style="font-weight:700;color:#e0e6f0;">' + v.plate + '</span>' +
+      '<span class="status-badge ' + (isAlert ? 'error' : 'pass') + '">' + v.status + '</span></div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+      '<div><div style="font-size:11px;color:#8899b0;">温度</div><div style="font-size:16px;font-weight:700;color:' + (isAlert ? '#FF6B35' : '#00D4FF') + ';">' + v.temp + '</div></div>' +
+      '<div><div style="font-size:11px;color:#8899b0;">位置</div><div style="font-size:14px;color:#e0e6f0;">' + v.location + '</div></div>' +
+      '</div></div>';
+  });
+  document.getElementById('vehicle-list').innerHTML = html;
+}
+
+function renderWarehouses() {
+  var html = '';
+  adminData.warehouses.forEach(function(w) {
+    var capColor = w.capacity > 70 ? '#FF6B35' : w.capacity > 50 ? '#FFD600' : '#1DB954';
+    html += '<div class="warehouse-card">' +
+      '<div style="font-weight:700;color:#e0e6f0;margin-bottom:12px;">' + w.name + '</div>' +
+      '<div style="margin-bottom:8px;">' +
+      '<div style="display:flex;justify-content:space-between;font-size:12px;color:#8899b0;margin-bottom:4px;">' +
+      '<span>容量使用率</span><span style="color:' + capColor + ';">' + w.capacity + '%</span></div>' +
+      '<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:' + w.capacity + '%;background:' + capColor + ';"></div></div></div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">' +
+      '<div><div style="font-size:11px;color:#8899b0;">温度</div><div style="font-size:15px;font-weight:700;color:#00D4FF;">' + w.temp + '</div></div>' +
+      '<div><div style="font-size:11px;color:#8899b0;">湿度</div><div style="font-size:15px;font-weight:700;color:#00D4FF;">' + w.humidity + '</div></div>' +
+      '</div></div>';
+  });
+  document.getElementById('warehouse-list').innerHTML = html;
+}
+
+function renderAiCards() {
+  var icons = { risk: '⚠️', anomaly: '🔍', trend: '📈', decision: '💡' };
+  var html = '';
+  adminData.aiInsights.forEach(function(item, idx) {
+    html += '<div class="ai-card" onclick="showAiDetail(' + idx + ')">' +
+      '<div style="font-size:28px;margin-bottom:12px;">' + icons[item.type] + '</div>' +
+      '<div style="font-size:16px;font-weight:700;color:#e0e6f0;margin-bottom:8px;">' + item.title + '</div>' +
+      '<div style="font-size:13px;color:#8899b0;line-height:1.6;">' + item.content + '</div>' +
+      '</div>';
+  });
+  document.getElementById('ai-cards').innerHTML = html;
+}
+
+function showAiDetail(idx) {
+  var item = adminData.aiInsights[idx];
+  document.getElementById('ai-modal-title').textContent = item.title;
+  var steps = [
+    { label: '数据采集', desc: '正在从溯源系统采集相关数据...' },
+    { label: '特征提取', desc: '提取关键特征指标，构建分析维度...' },
+    { label: '模型推理', desc: 'AI模型进行深度推理分析...' },
+    { label: '结果生成', desc: '生成分析结论与建议...' },
+    { label: '报告输出', desc: item.content }
+  ];
+  var html = '<div id="ai-steps">';
+  steps.forEach(function(s, i) {
+    html += '<div class="ai-step" id="ai-step-' + i + '" style="padding:12px;margin-bottom:8px;background:rgba(0,212,255,0.05);border:1px solid #1E3A5F;border-radius:6px;">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">' +
+      '<span style="width:24px;height:24px;border-radius:50%;background:rgba(0,212,255,0.15);display:flex;align-items:center;justify-content:center;font-size:12px;color:#00D4FF;flex-shrink:0;">' + (i + 1) + '</span>' +
+      '<span style="font-weight:700;color:#00D4FF;font-size:14px;">' + s.label + '</span></div>' +
+      '<div style="color:#8899b0;font-size:13px;padding-left:32px;">' + s.desc + '</div></div>';
+  });
+  html += '</div>';
+  document.getElementById('ai-modal-body').innerHTML = html;
+  document.getElementById('ai-modal').classList.add('show');
+  steps.forEach(function(s, i) {
+    setTimeout(function() {
+      var el = document.getElementById('ai-step-' + i);
+      if (el) el.classList.add('visible');
+    }, (i + 1) * 600);
+  });
+}
+
+function closeAiModal() {
+  document.getElementById('ai-modal').classList.remove('show');
+}
+
+function renderQualityAlerts() {
+  var alerts = [
+    { msg: '批次HJ20250504004 农残检测超标，有机磷含量0.12mg/kg（标准≤0.05）', level: 'high' },
+    { msg: '批次HJ20250505003 质检超时未完成，已超24小时', level: 'medium' },
+    { msg: '3号保鲜库温度波动，当前8.5°C（标准4±2°C）', level: 'high' }
+  ];
+  var html = '';
+  alerts.forEach(function(a) {
+    html += '<div class="alert-item' + (a.level === 'high' ? ' animate-pulse-glow-orange' : '') + '">' +
+      '<span class="alert-dot ' + a.level + '"></span>' +
+      '<div style="flex:1;font-size:13px;color:#e0e6f0;">' + a.msg + '</div></div>';
+  });
+  document.getElementById('quality-alerts').innerHTML = html;
+}
+
+var chartDefaults = {
+  color: '#8899b0',
+  borderColor: 'rgba(30,58,95,0.5)',
+  font: { family: 'Noto Sans SC' }
+};
+
+function initCharts() {
+  Chart.defaults.color = '#8899b0';
+  Chart.defaults.font.family = 'Noto Sans SC';
+
+  var ctx1 = document.getElementById('chart-passRate').getContext('2d');
+  charts.passRate = new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: ['5/1', '5/2', '5/3', '5/4', '5/5', '5/6', '5/7'],
+      datasets: [{
+        label: '合格率(%)',
+        data: [98.5, 99.1, 98.8, 97.2, 99.0, 99.3, 99.2],
+        borderColor: '#00D4FF',
+        backgroundColor: 'rgba(0,212,255,0.1)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#00D4FF',
+        pointBorderColor: '#00D4FF',
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+      scales: {
+        x: { grid: { color: 'rgba(30,58,95,0.3)' }, ticks: { color: '#8899b0' } },
+        y: { min: 96, max: 100, grid: { color: 'rgba(30,58,95,0.3)' }, ticks: { color: '#8899b0' } }
+      }
+    }
+  });
+
+  var ctx2 = document.getElementById('chart-batchDist').getContext('2d');
+  charts.batchDist = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: ['合格', '待检', '异常'],
+      datasets: [{
+        data: [1180, 86, 20],
+        backgroundColor: ['rgba(29,185,84,0.7)', 'rgba(255,214,0,0.7)', 'rgba(255,107,53,0.7)'],
+        borderColor: ['#1DB954', '#FFD600', '#FF6B35'],
+        borderWidth: 2,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#8899b0', padding: 16, usePointStyle: true } },
+        tooltip: { mode: 'index' }
+      },
+      cutout: '55%'
+    }
+  });
+
+  var ctx3 = document.getElementById('chart-qualityBar').getContext('2d');
+  charts.qualityBar = new Chart(ctx3, {
+    type: 'bar',
+    data: {
+      labels: ['农残检测', '重金属', '微生物', '添加剂', '水分含量'],
+      datasets: [{
+        label: '合格率(%)',
+        data: [98.5, 99.1, 97.8, 99.5, 98.2],
+        backgroundColor: [
+          'rgba(0,212,255,0.6)', 'rgba(29,185,84,0.6)', 'rgba(0,212,255,0.6)',
+          'rgba(29,185,84,0.6)', 'rgba(0,212,255,0.6)'
+        ],
+        borderColor: ['#00D4FF', '#1DB954', '#00D4FF', '#1DB954', '#00D4FF'],
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
+      scales: {
+        x: { grid: { color: 'rgba(30,58,95,0.3)' }, ticks: { color: '#8899b0', font: { size: 11 } } },
+        y: { min: 95, max: 100, grid: { color: 'rgba(30,58,95,0.3)' }, ticks: { color: '#8899b0' } }
+      }
+    }
+  });
+
+  var ctx4 = document.getElementById('chart-tempLine').getContext('2d');
+  var tempLabels = [];
+  var tempData1 = [], tempData2 = [];
+  for (var i = 0; i < 24; i++) {
+    tempLabels.push(String(i).padStart(2, '0') + ':00');
+    tempData1.push(+(3.5 + Math.random() * 1.5).toFixed(1));
+    tempData2.push(+(-1.5 + Math.random() * 1.5).toFixed(1));
+  }
+  charts.tempLine = new Chart(ctx4, {
+    type: 'line',
+    data: {
+      labels: tempLabels,
+      datasets: [
+        {
+          label: '保鲜库温度(°C)',
+          data: tempData1,
+          borderColor: '#00D4FF',
+          backgroundColor: 'rgba(0,212,255,0.05)',
+          fill: true, tension: 0.4,
+          pointRadius: 0, pointHoverRadius: 4
+        },
+        {
+          label: '冷库温度(°C)',
+          data: tempData2,
+          borderColor: '#1DB954',
+          backgroundColor: 'rgba(29,185,84,0.05)',
+          fill: true, tension: 0.4,
+          pointRadius: 0, pointHoverRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { color: '#8899b0', usePointStyle: true, padding: 12 } }, tooltip: { mode: 'index', intersect: false } },
+      scales: {
+        x: { grid: { color: 'rgba(30,58,95,0.3)' }, ticks: { color: '#8899b0', maxTicksLimit: 8 } },
+        y: { grid: { color: 'rgba(30,58,95,0.3)' }, ticks: { color: '#8899b0' } }
+      }
+    }
+  });
+}
+
+function toggleAiPanel() {
+  var panel = document.getElementById('ai-panel');
+  panel.classList.toggle('show');
+}
+
+function toggleAiFullscreen() {
+  var panel = document.getElementById('ai-panel');
+  panel.classList.toggle('fullscreen');
+}
+
+function sendAiQuestion(text) {
+  addAiMsg(text, 'user');
+  setTimeout(function() {
+    var answer = getAiAnswer(text);
+    addAiMsg(answer, 'bot');
+  }, 800);
+}
+
+function sendAiMsg() {
+  var input = document.getElementById('ai-input');
+  var text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addAiMsg(text, 'user');
+  setTimeout(function() {
+    var answer = getAiAnswer(text);
+    addAiMsg(answer, 'bot');
+  }, 800);
+}
+
+function addAiMsg(text, type) {
+  var container = document.getElementById('ai-messages');
+  var div = document.createElement('div');
+  div.className = 'ai-msg ' + type;
+  div.textContent = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function getAiAnswer(text) {
+  var lower = text.toLowerCase();
+  if (lower.indexOf('风险') >= 0) {
+    return '根据当前数据分析，近期主要风险点包括：\n1. 高温天气导致仓储温控压力增大，3个批次可能受影响\n2. 冷链3号车温度异常波动，需紧急检修\n3. 有机蔬菜类产品农残检测合格率略有下降趋势\n建议立即加强温控监测并安排车辆检修。';
+  }
+  if (lower.indexOf('异常') >= 0) {
+    return '系统检测到以下异常情况：\n1. 批次HJ20250504004农残检测超标，有机磷含量0.12mg/kg\n2. 冷链3号车温度8.5°C，超出标准范围(4±2°C)\n3. 2号生产线产出率下降5%，疑似设备故障\n请及时处理以上异常。';
+  }
+  if (lower.indexOf('批次') >= 0) {
+    return '当前共有1286个溯源批次，其中合格1180个(91.8%)，待检86个(6.7%)，异常20个(1.5%)。今日新增23个批次，近期批次整体质量稳定，合格率维持在99%以上。';
+  }
+  if (lower.indexOf('质量') >= 0) {
+    return '本月整体质量合格率为99.2%，高于行业均值97.5%。各检测项目中，添加剂检测合格率最高(99.5%)，微生物检测合格率相对较低(97.8%)。建议关注微生物检测环节的流程优化。';
+  }
+  if (lower.indexOf('供应链') >= 0 || lower.indexOf('物流') >= 0) {
+    return '目前5辆冷链车运行中，其中3号车温度异常需关注。3个仓库整体运行正常，1号冷库容量使用率78%较高。建议优化仓储调度，避免冷库超载。';
+  }
+  return '感谢您的提问。根据溯源系统数据分析，当前系统运行正常，整体溯源合格率99.2%。如需了解具体批次、质量趋势或供应链状态，请继续提问。';
+}
+
+function toggleNotif() {
+  alert('您有3条未读通知：\n1. 批次HJ20250504004农残检测超标\n2. 冷链3号车温度异常波动\n3. 批次HJ20250505003待质检超24h');
+}
+
+function initParticles() {
+  var canvas = document.getElementById('particle-canvas');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var particleCount = 40;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (var i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.5 + 0.5,
+      alpha: Math.random() * 0.3 + 0.1
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(function(p) {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,212,255,' + p.alpha + ')';
+      ctx.fill();
+    });
+    for (var i = 0; i < particles.length; i++) {
+      for (var j = i + 1; j < particles.length; j++) {
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(0,212,255,' + (0.08 * (1 - dist / 150)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+document.getElementById('batch-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.getElementById('ai-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeAiModal();
+});
+
+function init() {
+  renderAlerts();
+  renderRecentBatches();
+  renderBatchTable();
+  renderVehicles();
+  renderWarehouses();
+  renderAiCards();
+  renderQualityAlerts();
+  initCharts();
+  initParticles();
+  animateCounters();
+
+  document.querySelector('.filter-btn.active-filter').style.background = 'rgba(0,212,255,0.25)';
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邗江溯源 - 从田间到餐桌</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2D8B4E',
+        'primary-dark': '#1E6B3A',
+        'primary-light': '#E8F5E9',
+        gold: '#D4A843',
+        'gold-light': '#F0E6C8',
+        cream: '#FAFAF5',
+        'warm-gray': '#F5F0EB',
+        'deep-brown': '#5D4037',
+      },
+      fontFamily: {
+        serif: ['Noto Serif SC', 'serif'],
+        sans: ['Noto Sans SC', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes drawCircle {
+  from { stroke-dashoffset: 314; }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.animate-fadeInUp { animation: fadeInUp 0.7s ease-out forwards; opacity: 0; }
+.animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+.animate-scaleIn { animation: scaleIn 0.5s ease-out forwards; }
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(45, 139, 78, 0.12);
+}
+
+.capsule-btn {
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(45, 139, 78, 0.2);
+}
+.capsule-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45, 139, 78, 0.3);
+}
+.capsule-btn:active {
+  transform: translateY(0);
+}
+
+.nav-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.hero-pattern {
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(45, 139, 78, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(212, 168, 67, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 60% 80%, rgba(45, 139, 78, 0.05) 0%, transparent 50%);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.timeline-line {
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #2D8B4E, #D4A843);
+}
+
+.timeline-node {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.5s ease;
+}
+.timeline-node.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.score-ring {
+  transition: stroke-dashoffset 1.5s ease-out;
+}
+
+.ai-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.chat-bubble-ai {
+  background: linear-gradient(135deg, #E8F5E9, #FAFAF5);
+  border: 1px solid rgba(45, 139, 78, 0.1);
+}
+
+.chat-bubble-user {
+  background: linear-gradient(135deg, #2D8B4E, #1E6B3A);
+  color: white;
+}
+
+.quick-btn {
+  transition: all 0.2s ease;
+  border: 1px solid rgba(45, 139, 78, 0.2);
+}
+.quick-btn:hover {
+  background: #E8F5E9;
+  border-color: #2D8B4E;
+  transform: scale(1.02);
+}
+
+.section-visible .animate-fadeInUp {
+  animation: fadeInUp 0.7s ease-out forwards;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(45, 139, 78, 0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(45, 139, 78, 0.4); }
+
+.product-img-placeholder {
+  background: linear-gradient(135deg, #E8F5E9, #F5F0EB);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-badge {
+  background: linear-gradient(135deg, #FFF8E1, #FAFAF5);
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  border-radius: 12px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #5D4037;
+}
+
+.logistics-done { border-left: 3px solid #2D8B4E; }
+.logistics-current { border-left: 3px solid #D4A843; background: rgba(212, 168, 67, 0.05); }
+
+.ai-fab {
+  animation: float 3s ease-in-out infinite;
+}
+
+.ai-fab-ripple {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #2D8B4E;
+  animation: ripple 2s ease-out infinite;
+}
+</style>
+</head>
+<body class="bg-cream min-h-screen">
+
+<!-- Navigation -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur bg-white/80 border-b border-primary-light/50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-9-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.5-4c-3.5 0-6.5 2-8 5 1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+        </div>
+        <span class="font-serif font-bold text-lg text-primary">邗江溯源</span>
+      </div>
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+        <a href="#hero" class="hover:text-primary transition-colors">溯源查询</a>
+        <a href="#products" class="hover:text-primary transition-colors">热门产品</a>
+        <a href="#farm" class="hover:text-primary transition-colors">农场故事</a>
+        <a href="#trace-detail" class="hover:text-primary transition-colors">溯源详情</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="document.getElementById('traceInput').focus();document.getElementById('hero').scrollIntoView({behavior:'smooth'})" class="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm rounded-full hover:bg-primary-dark transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          溯源查询
+        </button>
+        <button onclick="toggleAI()" class="flex items-center gap-1.5 px-3 py-2 bg-gold/10 text-gold text-sm rounded-full hover:bg-gold/20 transition-colors border border-gold/20">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          <span class="hidden sm:inline">AI助手</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="hero" class="hero-pattern relative pt-24 pb-16 sm:pt-32 sm:pb-24 overflow-hidden">
+  <svg class="absolute top-10 left-10 w-32 h-32 text-primary/5 animate-float" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M50 10 C50 10, 20 40, 50 70 C80 40, 50 10, 50 10Z M50 70 C50 70, 30 80, 50 95 C70 80, 50 70, 50 70Z"/>
+  </svg>
+  <svg class="absolute bottom-20 right-16 w-24 h-24 text-gold/8" viewBox="0 0 100 100" fill="currentColor">
+    <circle cx="50" cy="30" r="8"/><path d="M50 38 C50 38, 30 60, 50 80 C70 60, 50 38, 50 38Z"/>
+  </svg>
+  <svg class="absolute top-1/3 right-1/4 w-16 h-16 text-primary/5" viewBox="0 0 100 100" fill="currentColor">
+    <path d="M50 5 C50 5, 10 35, 50 65 C90 35, 50 5, 50 5Z"/>
+  </svg>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+    <div class="animate-fadeInUp">
+      <span class="inline-block px-4 py-1.5 bg-primary-light text-primary text-xs font-medium rounded-full mb-6 tracking-wide">🌱 科技溯源 · 品质保障</span>
+    </div>
+    <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-deep-brown leading-tight mb-4 animate-fadeInUp delay-100">
+      从田间到餐桌<br class="sm:hidden"><span class="text-primary">，每一步都可追溯</span>
+    </h1>
+    <p class="text-gray-500 text-base sm:text-lg mb-10 max-w-2xl mx-auto animate-fadeInUp delay-200">
+      输入溯源码，一键查看农产品从播种到上架的完整旅程，让每一口都安心
+    </p>
+
+    <div class="max-w-xl mx-auto animate-fadeInUp delay-300">
+      <div class="flex flex-col sm:flex-row gap-3 bg-white rounded-2xl p-2 shadow-lg shadow-primary/5 border border-primary-light/50">
+        <div class="flex-1 relative">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
+          <input id="traceInput" type="text" placeholder="请输入溯源码，如 HJ20250507001" class="w-full pl-12 pr-4 py-3.5 bg-warm-gray/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" onkeydown="if(event.key==='Enter')doTrace()">
+        </div>
+        <button onclick="doTrace()" class="capsule-btn px-8 py-3.5 bg-gradient-to-r from-primary to-primary-dark text-white font-medium text-sm whitespace-nowrap">
+          立即查询
+        </button>
+      </div>
+      <div class="flex flex-wrap justify-center gap-2 mt-4">
+        <span class="text-xs text-gray-400">热门溯源码：</span>
+        <button onclick="document.getElementById('traceInput').value='HJ20250507001';doTrace()" class="text-xs text-primary/70 hover:text-primary bg-primary-light/50 px-2.5 py-1 rounded-full transition-colors">HJ20250507001</button>
+        <button onclick="document.getElementById('traceInput').value='HJ20250506002';doTrace()" class="text-xs text-primary/70 hover:text-primary bg-primary-light/50 px-2.5 py-1 rounded-full transition-colors">HJ20250506002</button>
+        <button onclick="document.getElementById('traceInput').value='HJ20250505003';doTrace()" class="text-xs text-primary/70 hover:text-primary bg-primary-light/50 px-2.5 py-1 rounded-full transition-colors">HJ20250505003</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Section -->
+<section id="products" class="py-16 sm:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <span class="inline-block px-3 py-1 bg-gold/10 text-gold text-xs font-medium rounded-full mb-3">🌿 精选好物</span>
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-deep-brown">热门溯源产品</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="productGrid"></div>
+  </div>
+</section>
+
+<!-- Farm Story Section -->
+<section id="farm" class="py-16 sm:py-20 bg-warm-gray/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div>
+        <span class="inline-block px-3 py-1 bg-primary-light text-primary text-xs font-medium rounded-full mb-4">🌾 农场故事</span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-deep-brown mb-4">邗江无人农场示范基地</h2>
+        <p class="text-gray-600 leading-relaxed mb-6">
+          坐落于江苏省扬州市邗江区，占地2000余亩，是国家级智慧农业示范基地。我们以"科技赋能农业，数据守护品质"为理念，通过物联网、人工智能、大数据等前沿技术，实现从播种到收割的全流程无人化作业，确保每一粒粮食都达到最高品质标准。
+        </p>
+        <p class="text-gray-600 leading-relaxed mb-8">
+          农场采用有机种植标准，拒绝化学农药与合成肥料，依托生物防治与智能监控，打造真正安全、健康、可持续的农产品供应链。
+        </p>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center p-4 bg-white rounded-2xl shadow-sm">
+            <div class="text-2xl sm:text-3xl font-bold text-primary font-serif">98.6<span class="text-base">%</span></div>
+            <div class="text-xs text-gray-500 mt-1">空气优良率</div>
+          </div>
+          <div class="text-center p-4 bg-white rounded-2xl shadow-sm">
+            <div class="text-2xl sm:text-3xl font-bold text-primary font-serif">100<span class="text-base">%</span></div>
+            <div class="text-xs text-gray-500 mt-1">水质达标率</div>
+          </div>
+          <div class="text-center p-4 bg-white rounded-2xl shadow-sm">
+            <div class="text-2xl sm:text-3xl font-bold text-gold font-serif">3.8<span class="text-base">%</span></div>
+            <div class="text-xs text-gray-500 mt-1">土壤有机质</div>
+          </div>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-primary-light to-warm-gray aspect-[4/3] flex items-center justify-center">
+          <svg class="w-32 h-32 text-primary/20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-9-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.5-4c-3.5 0-6.5 2-8 5 1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+        </div>
+        <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-lg p-4 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center">
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-deep-brown">国家级示范基地</div>
+            <div class="text-xs text-gray-400">智慧农业认证</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trace Detail Section (hidden by default) -->
+<section id="trace-detail" class="py-16 sm:py-20 bg-cream hidden">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Product Info Card -->
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 mb-8 animate-fadeInUp">
+      <div class="flex flex-col sm:flex-row gap-6">
+        <div class="w-full sm:w-48 h-48 rounded-2xl product-img-placeholder flex-shrink-0">
+          <svg class="w-16 h-16 text-primary/30" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-9-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.5-4c-3.5 0-6.5 2-8 5 1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-start justify-between mb-3">
+            <h3 id="traceName" class="font-serif text-xl sm:text-2xl font-bold text-deep-brown"></h3>
+            <span id="traceCategory" class="px-3 py-1 bg-primary-light text-primary text-xs rounded-full"></span>
+          </div>
+          <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+            <div><span class="text-gray-400">溯源码：</span><span id="traceCode" class="text-deep-brown font-medium"></span></div>
+            <div><span class="text-gray-400">产地：</span><span id="traceOrigin" class="text-deep-brown font-medium"></span></div>
+            <div><span class="text-gray-400">农场：</span><span id="traceFarm" class="text-deep-brown font-medium"></span></div>
+            <div><span class="text-gray-400">保质期：</span><span id="traceShelfLife" class="text-deep-brown font-medium"></span></div>
+            <div><span class="text-gray-400">种植日期：</span><span id="tracePlantDate" class="text-deep-brown font-medium"></span></div>
+            <div><span class="text-gray-400">收割日期：</span><span id="traceHarvestDate" class="text-deep-brown font-medium"></span></div>
+          </div>
+          <div id="certBadges" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quality Score -->
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 mb-8 animate-fadeInUp delay-100">
+      <h3 class="font-serif text-lg font-bold text-deep-brown mb-6">品质评分</h3>
+      <div class="flex flex-col sm:flex-row items-center gap-8">
+        <div class="relative w-40 h-40 flex-shrink-0">
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#E8F5E9" stroke-width="8"/>
+            <circle id="scoreCircle" cx="60" cy="60" r="50" fill="none" stroke="url(#scoreGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" class="score-ring"/>
+            <defs>
+              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#2D8B4E"/>
+                <stop offset="100%" stop-color="#D4A843"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span id="scoreNum" class="text-3xl font-bold text-primary font-serif">0</span>
+            <span class="text-xs text-gray-400">综合评分</span>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-gray-600">安全性</span><span class="text-primary font-medium">99.2</span></div>
+              <div class="h-2 bg-primary-light rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-primary to-primary-dark rounded-full" style="width:99.2%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-gray-600">新鲜度</span><span class="text-primary font-medium">98.0</span></div>
+              <div class="h-2 bg-primary-light rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-primary to-primary-dark rounded-full" style="width:98%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-gray-600">营养价值</span><span class="text-gold font-medium">97.8</span></div>
+              <div class="h-2 bg-gold-light/50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-gold to-gold/80 rounded-full" style="width:97.8%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1"><span class="text-gray-600">口感评价</span><span class="text-gold font-medium">99.0</span></div>
+              <div class="h-2 bg-gold-light/50 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-gold to-gold/80 rounded-full" style="width:99%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 mb-8 animate-fadeInUp delay-200">
+      <h3 class="font-serif text-lg font-bold text-deep-brown mb-8">种植过程追溯</h3>
+      <div id="timelineContainer" class="relative pl-12"></div>
+    </div>
+
+    <!-- Quality Reports -->
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 mb-8 animate-fadeInUp delay-300">
+      <h3 class="font-serif text-lg font-bold text-deep-brown mb-6">质检报告</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-100">
+              <th class="text-left py-3 px-4 text-gray-500 font-medium">检测项目</th>
+              <th class="text-left py-3 px-4 text-gray-500 font-medium">检测结果</th>
+              <th class="text-left py-3 px-4 text-gray-500 font-medium">标准值</th>
+              <th class="text-center py-3 px-4 text-gray-500 font-medium">状态</th>
+            </tr>
+          </thead>
+          <tbody id="reportTable"></tbody>
+        </table>
+      </div>
+      <div class="mt-4 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs text-gray-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        检测机构：江苏省农产品质量检测中心 | 报告编号：JC20250503001
+      </div>
+    </div>
+
+    <!-- Logistics -->
+    <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 animate-fadeInUp delay-400">
+      <h3 class="font-serif text-lg font-bold text-deep-brown mb-6">物流追踪</h3>
+      <div id="logisticsContainer" class="space-y-4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-deep-brown text-white/60 py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="flex items-center justify-center gap-2 mb-3">
+      <div class="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center">
+        <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-9-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.5-4c-3.5 0-6.5 2-8 5 1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+      </div>
+      <span class="font-serif font-bold text-white/80">邗江溯源</span>
+    </div>
+    <p class="text-sm mb-2">邗江无人农场示范基地 · 科技赋能农业，数据守护品质</p>
+    <p class="text-xs text-white/30">© 2025 邗江溯源平台 All Rights Reserved</p>
+  </div>
+</footer>
+
+<!-- AI Assistant -->
+<div id="aiOverlay" class="fixed inset-0 z-[60] ai-overlay hidden" onclick="toggleAI()"></div>
+<div id="aiPanel" class="fixed bottom-0 right-0 z-[70] w-full sm:w-[400px] h-[70vh] sm:h-[600px] bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 ease-out sm:bottom-6 sm:right-6 sm:max-h-[600px]">
+  <div class="flex items-center justify-between p-4 border-b border-gray-100">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+      </div>
+      <div>
+        <div class="text-sm font-bold text-deep-brown">AI溯源助手</div>
+        <div class="text-xs text-primary">在线</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="toggleAIFullscreen()" class="p-2 hover:bg-gray-100 rounded-full transition-colors" title="全屏">
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+      </button>
+      <button onclick="toggleAI()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4">
+    <div class="chat-bubble-ai rounded-2xl rounded-tl-sm p-4 max-w-[85%]">
+      <p class="text-sm text-deep-brown leading-relaxed">你好！👋 我是邗江溯源AI助手，可以帮你解答关于产品营养、食用建议、存储方法和真伪验证等问题。有什么想了解的吗？😊</p>
+    </div>
+  </div>
+
+  <div class="p-4 border-t border-gray-100">
+    <div class="flex flex-wrap gap-2 mb-3">
+      <button onclick="sendQuick('营养分析')" class="quick-btn px-3 py-1.5 bg-white rounded-full text-xs text-primary">🥗 营养分析</button>
+      <button onclick="sendQuick('食用建议')" class="quick-btn px-3 py-1.5 bg-white rounded-full text-xs text-primary">🍳 食用建议</button>
+      <button onclick="sendQuick('存储方法')" class="quick-btn px-3 py-1.5 bg-white rounded-full text-xs text-primary">📦 存储方法</button>
+      <button onclick="sendQuick('真伪验证')" class="quick-btn px-3 py-1.5 bg-white rounded-full text-xs text-primary">🔍 真伪验证</button>
+    </div>
+    <div class="flex gap-2">
+      <input id="chatInput" type="text" placeholder="输入你的问题..." class="flex-1 px-4 py-2.5 bg-warm-gray/50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" onkeydown="if(event.key==='Enter')sendChat()">
+      <button onclick="sendChat()" class="w-10 h-10 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center text-white flex-shrink-0 hover:shadow-lg transition-shadow">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- AI FAB -->
+<button id="aiFab" onclick="toggleAI()" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/30 ai-fab sm:hidden">
+  <div class="ai-fab-ripple"></div>
+  <svg class="w-6 h-6 relative z-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+</button>
+
+<script>
+var products = [
+  { id: "HJ20250507001", name: "邗江有机大米", category: "粮食", origin: "江苏扬州邗江", score: 98.5, img: "rice" },
+  { id: "HJ20250506002", name: "邗江绿色蔬菜", category: "蔬菜", origin: "江苏扬州邗江", score: 97.8, img: "vegetable" },
+  { id: "HJ20250505003", name: "邗江生态水果", category: "水果", origin: "江苏扬州邗江", score: 96.5, img: "fruit" }
+];
+
+var traceData = {
+  traceCode: "HJ20250507001",
+  name: "邗江有机大米",
+  category: "粮食",
+  origin: "江苏省扬州市邗江区",
+  farm: "邗江无人农场示范基地",
+  plantDate: "2025-03-15",
+  harvestDate: "2025-05-01",
+  shelfLife: "12个月",
+  certifications: ["有机认证", "绿色食品", "ISO22000"],
+  qualityScore: 98.5,
+  timeline: [
+    { stage: "播种", date: "2025-03-15", desc: "精选南粳46号种子，智能精量播种", icon: "seed" },
+    { stage: "施肥", date: "2025-03-20", desc: "有机肥施用，AI精准配比", icon: "fertilizer" },
+    { stage: "灌溉", date: "2025-04-01", desc: "智能灌溉系统，节水30%", icon: "water" },
+    { stage: "植保", date: "2025-04-10", desc: "无人机植保，生物防治", icon: "shield" },
+    { stage: "收割", date: "2025-05-01", desc: "无人收割机自动作业", icon: "harvest" },
+    { stage: "加工", date: "2025-05-02", desc: "低温烘干，精细加工", icon: "process" },
+    { stage: "质检", date: "2025-05-03", desc: "农残/重金属全项检测合格", icon: "check" },
+    { stage: "物流", date: "2025-05-05", desc: "冷链运输，全程温控", icon: "truck" }
+  ],
+  qualityReports: [
+    { item: "农药残留", result: "未检出", standard: "GB 2763-2021", status: "pass" },
+    { item: "铅(Pb)", result: "0.02mg/kg", standard: "≤0.2mg/kg", status: "pass" },
+    { item: "镉(Cd)", result: "0.01mg/kg", standard: "≤0.2mg/kg", status: "pass" },
+    { item: "黄曲霉毒素B1", result: "未检出", standard: "≤5μg/kg", status: "pass" }
+  ],
+  logistics: [
+    { node: "农场仓库", time: "05-05 08:00", temp: "15°C", status: "done" },
+    { node: "冷链运输", time: "05-05 10:00", temp: "4°C", status: "done" },
+    { node: "区域配送中心", time: "05-06 06:00", temp: "4°C", status: "done" },
+    { node: "门店上架", time: "05-06 14:00", temp: "18°C", status: "current" }
+  ]
+};
+
+var iconMap = {
+  seed: '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-9-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.5-4c-3.5 0-6.5 2-8 5 1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>',
+  fertilizer: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>',
+  water: '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z"/></svg>',
+  shield: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+  harvest: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"/></svg>',
+  process: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>',
+  check: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+  truck: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>'
+};
+
+var imgPlaceholder = {
+  rice: { bg: 'from-amber-50 to-primary-light', emoji: '🌾', label: '有机大米' },
+  vegetable: { bg: 'from-green-50 to-primary-light', emoji: '🥬', label: '绿色蔬菜' },
+  fruit: { bg: 'from-red-50 to-orange-50', emoji: '🍎', label: '生态水果' }
+};
+
+function renderProducts() {
+  var grid = document.getElementById('productGrid');
+  grid.innerHTML = products.map(function(p, i) {
+    var ph = imgPlaceholder[p.img];
+    return '<div class="card-hover bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 animate-fadeInUp delay-' + (i * 100) + '">' +
+      '<div class="h-48 bg-gradient-to-br ' + ph.bg + ' flex items-center justify-center">' +
+        '<span class="text-6xl">' + ph.emoji + '</span>' +
+      '</div>' +
+      '<div class="p-5">' +
+        '<div class="flex items-start justify-between mb-2">' +
+          '<h3 class="font-serif font-bold text-deep-brown text-lg">' + p.name + '</h3>' +
+          '<span class="px-2 py-0.5 bg-primary-light text-primary text-xs rounded-full">' + p.category + '</span>' +
+        '</div>' +
+        '<div class="flex items-center gap-1 mb-3">' +
+          '<svg class="w-3.5 h-3.5 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
+          '<span class="text-sm font-bold text-gold">' + p.score + '</span>' +
+          '<span class="text-xs text-gray-400 ml-1">溯源评分</span>' +
+        '</div>' +
+        '<div class="flex items-center gap-1 mb-4 text-xs text-gray-400">' +
+          '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>' +
+          p.origin +
+        '</div>' +
+        '<button onclick="document.getElementById(\'traceInput\').value=\'' + p.id + '\';doTrace()" class="w-full py-2.5 bg-gradient-to-r from-primary to-primary-dark text-white text-sm rounded-full hover:shadow-lg transition-shadow font-medium">查看溯源详情</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function doTrace() {
+  var code = document.getElementById('traceInput').value.trim();
+  if (!code) {
+    document.getElementById('traceInput').classList.add('ring-2', 'ring-red-300');
+    setTimeout(function() { document.getElementById('traceInput').classList.remove('ring-2', 'ring-red-300'); }, 1500);
+    return;
+  }
+
+  var found = products.find(function(p) { return p.id === code; });
+  if (!found) {
+    document.getElementById('traceInput').classList.add('ring-2', 'ring-red-300');
+    setTimeout(function() { document.getElementById('traceInput').classList.remove('ring-2', 'ring-red-300'); }, 1500);
+    return;
+  }
+
+  var section = document.getElementById('trace-detail');
+  section.classList.remove('hidden');
+
+  document.getElementById('traceName').textContent = traceData.name;
+  document.getElementById('traceCode').textContent = traceData.traceCode;
+  document.getElementById('traceOrigin').textContent = traceData.origin;
+  document.getElementById('traceFarm').textContent = traceData.farm;
+  document.getElementById('tracePlantDate').textContent = traceData.plantDate;
+  document.getElementById('traceHarvestDate').textContent = traceData.harvestDate;
+  document.getElementById('traceShelfLife').textContent = traceData.shelfLife;
+  document.getElementById('traceCategory').textContent = traceData.category;
+
+  var certHTML = traceData.certifications.map(function(c) {
+    return '<span class="cert-badge"><svg class="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' + c + '</span>';
+  }).join('');
+  document.getElementById('certBadges').innerHTML = certHTML;
+
+  animateScore(traceData.qualityScore);
+
+  renderTimeline();
+  renderReports();
+  renderLogistics();
+
+  setTimeout(function() {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function animateScore(target) {
+  var circle = document.getElementById('scoreCircle');
+  var numEl = document.getElementById('scoreNum');
+  var offset = 314 - (314 * target / 100);
+  circle.style.strokeDashoffset = offset;
+
+  var current = 0;
+  var step = target / 60;
+  var timer = setInterval(function() {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    numEl.textContent = current.toFixed(1);
+  }, 16);
+}
+
+function renderTimeline() {
+  var container = document.getElementById('timelineContainer');
+  var html = '<div class="absolute left-[19px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary via-gold to-primary-light"></div>';
+
+  traceData.timeline.forEach(function(t, i) {
+    html += '<div class="timeline-node relative mb-8 last:mb-0" style="transition-delay:' + (i * 0.1) + 's">' +
+      '<div class="absolute left-[-30px] top-1 w-10 h-10 rounded-full bg-white border-2 border-primary flex items-center justify-center text-primary z-10 shadow-sm">' +
+        iconMap[t.icon] +
+      '</div>' +
+      '<div class="ml-4 bg-warm-gray/30 rounded-2xl p-4">' +
+        '<div class="flex items-center justify-between mb-1">' +
+          '<span class="font-bold text-deep-brown">' + t.stage + '</span>' +
+          '<span class="text-xs text-gray-400">' + t.date + '</span>' +
+        '</div>' +
+        '<p class="text-sm text-gray-600">' + t.desc + '</p>' +
+      '</div>' +
+    '</div>';
+  });
+
+  container.innerHTML = html;
+
+  setTimeout(function() {
+    var nodes = container.querySelectorAll('.timeline-node');
+    nodes.forEach(function(node, i) {
+      setTimeout(function() { node.classList.add('visible'); }, i * 120);
+    });
+  }, 300);
+}
+
+function renderReports() {
+  var tbody = document.getElementById('reportTable');
+  tbody.innerHTML = traceData.qualityReports.map(function(r) {
+    var statusHTML = r.status === 'pass'
+      ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-primary-light text-primary text-xs rounded-full"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>合格</span>'
+      : '<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-500 text-xs rounded-full"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>不合格</span>';
+    return '<tr class="border-b border-gray-50 hover:bg-warm-gray/20 transition-colors">' +
+      '<td class="py-3 px-4 font-medium text-deep-brown">' + r.item + '</td>' +
+      '<td class="py-3 px-4 text-primary font-medium">' + r.result + '</td>' +
+      '<td class="py-3 px-4 text-gray-500">' + r.standard + '</td>' +
+      '<td class="py-3 px-4 text-center">' + statusHTML + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function renderLogistics() {
+  var container = document.getElementById('logisticsContainer');
+  container.innerHTML = traceData.logistics.map(function(l, i) {
+    var cls = l.status === 'current' ? 'logistics-current' : 'logistics-done';
+    var dot = l.status === 'current'
+      ? '<div class="w-3 h-3 rounded-full bg-gold animate-pulse"></div>'
+      : '<div class="w-3 h-3 rounded-full bg-primary"></div>';
+    return '<div class="' + cls + ' pl-6 py-4 rounded-r-xl relative animate-fadeInUp" style="animation-delay:' + (i * 0.1) + 's">' +
+      '<div class="absolute left-[-5px] top-5">' + dot + '</div>' +
+      '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">' +
+        '<div>' +
+          '<div class="font-bold text-deep-brown text-sm">' + l.node + '</div>' +
+          '<div class="text-xs text-gray-400">' + l.time + '</div>' +
+        '</div>' +
+        '<div class="flex items-center gap-2">' +
+          '<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-600 text-xs rounded-full">' +
+            '<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z"/></svg>' +
+            l.temp +
+          '</span>' +
+          (l.status === 'current' ? '<span class="inline-flex items-center px-2.5 py-1 bg-gold/10 text-gold text-xs rounded-full font-medium">当前位置</span>' : '<span class="inline-flex items-center px-2.5 py-1 bg-primary-light text-primary text-xs rounded-full">已到达</span>') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+var aiOpen = false;
+var aiFullscreen = false;
+
+function toggleAI() {
+  aiOpen = !aiOpen;
+  var panel = document.getElementById('aiPanel');
+  var overlay = document.getElementById('aiOverlay');
+  var fab = document.getElementById('aiFab');
+
+  if (aiOpen) {
+    overlay.classList.remove('hidden');
+    panel.style.transform = 'translateY(0)';
+    fab.style.display = 'none';
+    setTimeout(function() { document.getElementById('chatInput').focus(); }, 300);
+  } else {
+    overlay.classList.add('hidden');
+    panel.style.transform = 'translateY(100%)';
+    if (window.innerWidth < 640) fab.style.display = 'flex';
+    if (aiFullscreen) toggleAIFullscreen();
+  }
+}
+
+function toggleAIFullscreen() {
+  aiFullscreen = !aiFullscreen;
+  var panel = document.getElementById('aiPanel');
+  if (aiFullscreen) {
+    panel.style.width = '100%';
+    panel.style.height = '100%';
+    panel.style.maxHeight = '100%';
+    panel.style.borderRadius = '0';
+    panel.style.bottom = '0';
+    panel.style.right = '0';
+  } else {
+    panel.style.width = '';
+    panel.style.height = '';
+    panel.style.maxHeight = '';
+    panel.style.borderRadius = '';
+    panel.style.bottom = '';
+    panel.style.right = '';
+  }
+}
+
+var aiResponses = {
+  '营养': '🌾 **邗江有机大米营养分析**\n\n🥇 大米富含多种营养成分：\n\n• **碳水化合物**：约75g/100g，提供持久能量\n• **蛋白质**：约7.5g/100g，含人体必需氨基酸\n• **B族维生素**：B1、B2、B6丰富，促进新陈代谢\n• **矿物质**：含钙、铁、锌等微量元素\n• **膳食纤维**：约1.8g/100g，助消化\n\n💡 南粳46号品种特色：\n直链淀粉含量适中(15-16%)，口感软糯，胶稠度高，是优质食味米品种。\n\n📊 每100g热量约346千卡，适合日常主食搭配。',
+  '食用': '🍳 **邗江有机大米食用建议**\n\n✨ 推荐烹饪方法：\n\n1️⃣ **蒸煮前**：建议浸泡30分钟，让米粒充分吸水\n2️⃣ **水米比**：1:1.2为黄金比例，口感最佳\n3️⃣ **火候**：大火煮沸后转小火焖15分钟\n4️⃣ **焖饭**：关火后焖5分钟再开盖，米粒更饱满\n\n🍽️ 搭配建议：\n• 清蒸搭配时令蔬菜 🥬\n• 煮粥搭配红枣枸杞 🍵\n• 炒饭使用隔夜冷饭更香 🍚\n\n⚠️ 小贴士：\n避免反复淘洗(1-2次即可)，以免营养流失哦！',
+  '存储': '📦 **邗江有机大米存储方法**\n\n🏠 最佳存储条件：\n\n• **温度**：阴凉处，15°C以下最佳\n• **湿度**：相对湿度60%以下\n• **避光**：避免阳光直射\n• **通风**：保持存储环境通风干燥\n\n🔒 开封后保存技巧：\n\n1️⃣ 密封保存，推荐使用密封罐\n2️⃣ 可放入食品干燥剂防潮\n3️⃣ 夏季建议冷藏保存(0-5°C)\n4️⃣ 避免与气味重的食物同存\n\n⏰ 保质期：12个月\n开封后建议3个月内食用完毕\n\n🐛 防虫小妙招：\n可在米缸中放入几瓣大蒜或花椒包，天然驱虫效果棒！',
+  '真伪': '🔍 **邗江有机大米真伪验证**\n\n✅ 如何辨别正品：\n\n1️⃣ **溯源码验证**：\n每袋产品均有唯一溯源码(如HJ20250507001)，可通过本页面输入溯源码查询完整信息\n\n2️⃣ **包装识别**：\n• 正品包装印有"邗江无人农场"标识\n• 有机认证标志清晰可见\n• 防伪标签可刮开验证\n\n3️⃣ **外观鉴别**：\n• 米粒饱满均匀，色泽自然\n• 南粳46号品种米粒偏短圆\n• 无异味，有自然米香\n\n4️⃣ **购买渠道**：\n请通过官方授权渠道购买，谨防假冒\n\n📞 如有疑问，可拨打客服热线：400-XXX-XXXX\n\n🛡️ 我们承诺：每袋产品均可追溯到具体田块和种植批次！'
+};
+
+function getAIResponse(msg) {
+  var keys = Object.keys(aiResponses);
+  for (var i = 0; i < keys.length; i++) {
+    if (msg.indexOf(keys[i]) !== -1) return aiResponses[keys[i]];
+  }
+  return '🤔 感谢你的提问！\n\n关于"' + msg + '"，我目前还不太确定具体答案。\n\n不过你可以试试以下问题，我更擅长哦：\n• 🥗 营养分析 — 了解产品营养价值\n• 🍳 食用建议 — 最佳烹饪方法\n• 📦 存储方法 — 如何保存更持久\n• 🔍 真伪验证 — 辨别正品小技巧\n\n也可以输入溯源码查询产品的完整溯源信息！😊';
+}
+
+function formatMessage(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
+function addMessage(content, isUser) {
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div');
+  div.className = isUser ? 'flex justify-end' : 'flex justify-start';
+
+  var bubble = document.createElement('div');
+  bubble.className = isUser
+    ? 'chat-bubble-user rounded-2xl rounded-tr-sm p-4 max-w-[85%]'
+    : 'chat-bubble-ai rounded-2xl rounded-tl-sm p-4 max-w-[85%]';
+
+  var p = document.createElement('p');
+  p.className = 'text-sm leading-relaxed ' + (isUser ? '' : 'text-deep-brown');
+  p.innerHTML = isUser ? content : formatMessage(content);
+
+  bubble.appendChild(p);
+  div.appendChild(bubble);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendChat() {
+  var input = document.getElementById('chatInput');
+  var msg = input.value.trim();
+  if (!msg) return;
+
+  addMessage(msg, true);
+  input.value = '';
+
+  setTimeout(function() {
+    var typing = document.createElement('div');
+    typing.id = 'typingIndicator';
+    typing.className = 'flex justify-start';
+    typing.innerHTML = '<div class="chat-bubble-ai rounded-2xl rounded-tl-sm p-4"><div class="flex gap-1"><span class="w-2 h-2 bg-primary/40 rounded-full animate-bounce" style="animation-delay:0s"></span><span class="w-2 h-2 bg-primary/40 rounded-full animate-bounce" style="animation-delay:0.15s"></span><span class="w-2 h-2 bg-primary/40 rounded-full animate-bounce" style="animation-delay:0.3s"></span></div></div>';
+    document.getElementById('chatMessages').appendChild(typing);
+    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+
+    setTimeout(function() {
+      var el = document.getElementById('typingIndicator');
+      if (el) el.remove();
+      addMessage(getAIResponse(msg), false);
+    }, 800 + Math.random() * 500);
+  }, 300);
+}
+
+function sendQuick(text) {
+  document.getElementById('chatInput').value = text;
+  sendChat();
+}
+
+var lastScroll = 0;
+window.addEventListener('scroll', function() {
+  var navbar = document.getElementById('navbar');
+  var current = window.pageYOffset;
+  if (current > 50) {
+    navbar.classList.add('shadow-md');
+  } else {
+    navbar.classList.remove('shadow-md');
+  }
+  lastScroll = current;
+
+  var sections = ['hero', 'products', 'farm'];
+  sections.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.85) {
+      el.classList.add('section-visible');
+    }
+  });
+});
+
+renderProducts();
+
+if (window.innerWidth < 640) {
+  document.getElementById('aiFab').style.display = 'flex';
+}
+</script>
+</body>
+</html>
