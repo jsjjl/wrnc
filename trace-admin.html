@@ -229,9 +229,20 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #e0e
   position: fixed; inset: 0; z-index: 200;
   background: rgba(0,0,0,0.7);
   backdrop-filter: blur(4px);
-  display: none; align-items: center; justify-content: center;
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
-.modal-overlay.show { display: flex; }
+.modal-overlay.show {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  align-items: center;
+  justify-content: center;
+}
 .modal-content {
   background: linear-gradient(145deg, #111D33, #0A1628);
   border: 1px solid #1E3A5F;
@@ -414,7 +425,7 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #e0e
 }
 
 @media (max-width: 767px) {
-  #sidebar { display: none; }
+  #sidebar { display: none !important; visibility: hidden; height: 0; overflow: hidden; }
   #main-content { margin-left: 0 !important; }
   .mobile-nav { display: block; }
   .section-page { padding: 16px; padding-bottom: 80px; }
@@ -684,7 +695,7 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #e0e
   </div>
 </div>
 
-<div class="modal-overlay" id="scan-modal" style="z-index:210;">
+<div class="modal-overlay" id="scan-modal" style="z-index:210;display:none;">
   <div style="background:linear-gradient(145deg,#0d1f3c,#0A1628);border:1px solid #00D4FF;border-radius:16px;padding:32px;width:320px;max-width:90%;box-shadow:0 0 40px rgba(0,212,255,0.3),0 0 80px rgba(0,212,255,0.1);animation:fadeInUp 0.3s ease-out;text-align:center;">
     <div style="font-size:15px;font-weight:700;color:#00D4FF;margin-bottom:20px;">扫描二维码</div>
     <div style="position:relative;width:200px;height:200px;margin:0 auto 16px;background:rgba(10,22,40,0.9);border-radius:8px;overflow:hidden;">
@@ -702,7 +713,7 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #e0e
   </div>
 </div>
 
-<div class="modal-overlay" id="batch-modal">
+<div class="modal-overlay" id="batch-modal" style="display:none;">
   <div class="modal-content">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
       <h2 style="font-size:18px;font-weight:700;color:#00D4FF;">批次详情</h2>
@@ -712,7 +723,7 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #0A1628; color: #e0e
   </div>
 </div>
 
-<div class="modal-overlay" id="ai-modal">
+<div class="modal-overlay" id="ai-modal" style="display:none;">
   <div class="modal-content" style="max-width:640px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
       <h2 style="font-size:18px;font-weight:700;color:#00D4FF;" id="ai-modal-title">AI分析</h2>
@@ -948,11 +959,15 @@ function showBatchDetail(id) {
     '<span style="color:#8899b0;">认证</span><span style="color:#1DB954;">有机认证 / 绿色食品</span></div>' +
     '</div>';
   document.getElementById('modal-body').innerHTML = html;
-  document.getElementById('batch-modal').classList.add('show');
+  var m = document.getElementById('batch-modal');
+  m.style.display = 'flex';
+  m.classList.add('show');
 }
 
 function closeModal() {
-  document.getElementById('batch-modal').classList.remove('show');
+  var m = document.getElementById('batch-modal');
+  m.classList.remove('show');
+  m.style.display = 'none';
 }
 
 function renderVehicles() {
@@ -1022,7 +1037,9 @@ function showAiDetail(idx) {
   });
   html += '</div>';
   document.getElementById('ai-modal-body').innerHTML = html;
-  document.getElementById('ai-modal').classList.add('show');
+  var m = document.getElementById('ai-modal');
+  m.style.display = 'flex';
+  m.classList.add('show');
   steps.forEach(function(s, i) {
     setTimeout(function() {
       var el = document.getElementById('ai-step-' + i);
@@ -1032,7 +1049,9 @@ function showAiDetail(idx) {
 }
 
 function closeAiModal() {
-  document.getElementById('ai-modal').classList.remove('show');
+  var m = document.getElementById('ai-modal');
+  m.classList.remove('show');
+  m.style.display = 'none';
 }
 
 function renderQualityAlerts() {
@@ -1188,11 +1207,13 @@ function openScanModal() {
   var modal = document.getElementById('scan-modal');
   var status = document.getElementById('scan-status');
   status.style.display = 'none';
+  modal.style.display = 'flex';
   modal.classList.add('show');
   setTimeout(function() {
     status.style.display = 'block';
     setTimeout(function() {
       modal.classList.remove('show');
+      modal.style.display = 'none';
       document.getElementById('batch-search').value = 'HJ20250507001';
       filterBatches();
     }, 500);
