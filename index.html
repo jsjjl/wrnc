@@ -1503,38 +1503,38 @@ function initMachineryChart() {
 }
 
 var homeMapFields = [
-  { id:'w1', name:'W1', variety:'扬麦25', area:15, status:'green', points:'100,80 260,60 270,140 110,160', cx:185, cy:118 },
-  { id:'w2', name:'W2', variety:'扬麦25', area:14, status:'green', points:'270,60 430,40 440,120 280,140', cx:355, cy:98 },
-  { id:'w3', name:'W3', variety:'宁麦13', area:16, status:'red', points:'440,40 580,30 590,110 450,120', cx:515, cy:78 },
-  { id:'w4', name:'W4', variety:'宁麦13', area:12, status:'yellow', points:'110,160 280,140 290,220 120,240', cx:205, cy:200 },
-  { id:'w5', name:'W5', variety:'扬麦25', area:15, status:'green', points:'290,140 450,120 460,200 300,220', cx:375, cy:180 },
-  { id:'w6', name:'W6', variety:'镇麦12', area:14, status:'green', points:'460,120 620,100 630,180 470,200', cx:545, cy:160 },
-  { id:'m1', name:'M1', variety:'镇麦12', area:18, status:'green', points:'120,240 320,220 330,320 130,340', cx:225, cy:290 },
-  { id:'m2', name:'M2', variety:'扬麦25', area:16, status:'green', points:'330,220 520,200 530,300 340,320', cx:430, cy:260 },
-  { id:'m3', name:'M3', variety:'宁麦13', area:14, status:'yellow', points:'530,200 700,180 710,280 540,300', cx:620, cy:240 },
-  { id:'m4', name:'M4', variety:'镇麦12', area:15, status:'green', points:'130,340 330,320 340,420 140,440', cx:235, cy:390 },
-  { id:'m5', name:'M5', variety:'扬麦25', area:14, status:'red', points:'340,320 540,300 550,400 350,420', cx:445, cy:360 },
-  { id:'m6', name:'M6', variety:'宁麦13', area:16, status:'yellow', points:'550,300 730,280 740,380 560,400', cx:645, cy:340 },
-  { id:'g1', name:'G1', variety:'镇麦12', area:12, status:'green', points:'140,440 300,420 310,500 150,520', cx:225, cy:480 },
-  { id:'g2', name:'G2', variety:'扬麦25', area:14, status:'green', points:'310,420 470,400 480,480 320,500', cx:395, cy:460 },
-  { id:'g3', name:'G3', variety:'宁麦13', area:15, status:'green', points:'480,400 640,380 650,460 490,480', cx:565, cy:440 }
+  { id:'w1', name:'W1', variety:'扬麦25', area:15, status:'green', points:'50,55 240,45 250,135 60,145', cx:155, cy:95 },
+  { id:'w2', name:'W2', variety:'扬麦25', area:14, status:'green', points:'255,45 420,35 430,125 260,135', cx:345, cy:85 },
+  { id:'w3', name:'W3', variety:'宁麦13', area:16, status:'red', points:'435,35 590,28 598,115 440,125', cx:520, cy:72 },
+  { id:'w4', name:'W4', variety:'宁麦13', area:12, status:'yellow', points:'50,150 245,140 255,230 62,238', cx:155, cy:190 },
+  { id:'w5', name:'W5', variety:'扬麦25', area:15, status:'green', points:'265,135 430,125 438,215 268,225', cx:353, cy:175 },
+  { id:'w6', name:'W6', variety:'镇麦12', area:14, status:'green', points:'448,115 598,108 606,198 450,205', cx:528, cy:157 },
+  { id:'m1', name:'M1', variety:'镇麦12', area:18, status:'green', points:'58,248 255,238 265,330 70,338', cx:162, cy:290 },
+  { id:'m2', name:'M2', variety:'扬麦25', area:16, status:'green', points:'275,228 442,218 450,310 278,320', cx:363, cy:270 },
+  { id:'m3', name:'M3', variety:'宁麦13', area:14, status:'yellow', points:'460,200 610,190 618,280 462,290', cx:540, cy:245 },
+  { id:'m4', name:'M4', variety:'镇麦12', area:15, status:'green', points:'68,346 268,336 278,428 80,436', cx:173, cy:388 },
+  { id:'m5', name:'M5', variety:'扬麦25', area:14, status:'red', points:'288,326 456,316 464,408 290,418', cx:377, cy:364 },
+  { id:'m6', name:'M6', variety:'宁麦13', area:16, status:'yellow', points:'474,296 630,286 638,378 476,388', cx:557, cy:340 },
+  { id:'g1', name:'G1', variety:'镇麦12', area:12, status:'green', points:'78,444 278,434 288,518 88,526', cx:183, cy:480 },
+  { id:'g2', name:'G2', variety:'扬麦25', area:14, status:'green', points:'298,424 466,414 474,498 300,508', cx:387, cy:462 },
+  { id:'g3', name:'G3', variety:'宁麦13', area:15, status:'green', points:'484,394 650,384 658,468 486,478', cx:572, cy:432 }
 ];
 
 var homeMapDevices = [
-  { id:'eagle-01', name:'鹰眼-01', type:'鹰眼', status:'online', x:185, y:118, angle:0 },
-  { id:'eagle-02', name:'鹰眼-02', type:'鹰眼', status:'online', x:430, y:260, angle:0 },
-  { id:'eagle-03', name:'鹰眼-03', type:'鹰眼', status:'online', x:565, y:440, angle:0 },
-  { id:'ball-01', name:'球机-01', type:'球机', status:'online', x:355, y:98, angle:0 },
-  { id:'ball-02', name:'球机-02', type:'球机', status:'alert', x:515, y:78, angle:0 },
-  { id:'ball-03', name:'球机-03', type:'球机', status:'online', x:225, y:290, angle:0 },
-  { id:'moisture-01', name:'墒情仪-01', type:'墒情仪', status:'online', x:205, y:200 },
-  { id:'moisture-02', name:'墒情仪-02', type:'墒情仪', status:'alert', x:445, y:360 },
-  { id:'moisture-03', name:'墒情仪-03', type:'墒情仪', status:'online', x:395, y:460 },
-  { id:'pest-01', name:'虫情灯-01', type:'虫情灯', status:'online', x:375, y:180 },
-  { id:'pest-02', name:'虫情灯-02', type:'虫情灯', status:'alert', x:515, y:78 },
-  { id:'growth-01', name:'长势仪-01', type:'长势仪', status:'online', x:225, y:390 },
-  { id:'growth-02', name:'长势仪-02', type:'长势仪', status:'alert', x:445, y:360 },
-  { id:'weather-01', name:'气象站-01', type:'气象站', status:'online', x:700, y:520 }
+  { id:'eagle-01', name:'鹰眼-01', type:'鹰眼', status:'online', x:155, y:95, angle:0 },
+  { id:'eagle-02', name:'鹰眼-02', type:'鹰眼', status:'online', x:363, y:270, angle:0 },
+  { id:'eagle-03', name:'鹰眼-03', type:'鹰眼', status:'online', x:572, y:432, angle:0 },
+  { id:'ball-01', name:'球机-01', type:'球机', status:'online', x:345, y:85, angle:0 },
+  { id:'ball-02', name:'球机-02', type:'球机', status:'alert', x:520, y:72, angle:0 },
+  { id:'ball-03', name:'球机-03', type:'球机', status:'online', x:162, y:290, angle:0 },
+  { id:'moisture-01', name:'墒情仪-01', type:'墒情仪', status:'online', x:155, y:190 },
+  { id:'moisture-02', name:'墒情仪-02', type:'墒情仪', status:'alert', x:377, y:364 },
+  { id:'moisture-03', name:'墒情仪-03', type:'墒情仪', status:'online', x:387, y:462 },
+  { id:'pest-01', name:'虫情灯-01', type:'虫情灯', status:'online', x:353, y:175 },
+  { id:'pest-02', name:'虫情灯-02', type:'虫情灯', status:'alert', x:520, y:72 },
+  { id:'growth-01', name:'长势仪-01', type:'长势仪', status:'online', x:173, y:388 },
+  { id:'growth-02', name:'长势仪-02', type:'长势仪', status:'alert', x:377, y:364 },
+  { id:'weather-01', name:'气象站-01', type:'气象站', status:'online', x:720, y:500 }
 ];
 
 var homeMapMode = 'status';
@@ -1551,12 +1551,12 @@ function renderHomeFarmMap() {
   html += '<circle cx="400" cy="300" r="250" fill="none" stroke="rgba(0,180,216,0.1)" stroke-width="1" stroke-dasharray="4,4"/>';
   html += '<circle cx="400" cy="300" r="180" fill="none" stroke="rgba(0,180,216,0.06)" stroke-width="0.5" stroke-dasharray="2,4"/>';
 
-  html += '<line x1="0" y1="290" x2="800" y2="290" stroke="rgba(0,180,216,0.15)" stroke-width="1" stroke-dasharray="8,4"/>';
-  html += '<line x1="380" y1="0" x2="380" y2="600" stroke="rgba(0,180,216,0.15)" stroke-width="1" stroke-dasharray="8,4"/>';
-  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.3)" stroke-width="6" stroke-linecap="round" filter="url(#hglow)"/>';
-  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.1)" stroke-width="14" stroke-linecap="round"/>';
-
-  html += '<line x1="380" y1="0" x2="380" y2="600" stroke="rgba(0,180,216,0.03)" stroke-width="40"/>';
+  html += '<line x1="258" y1="20" x2="268" y2="580" stroke="rgba(100,120,140,0.25)" stroke-width="3.5" stroke-linecap="round"/>';
+  html += '<line x1="258" y1="20" x2="268" y2="580" stroke="rgba(60,80,100,0.12)" stroke-width="14" stroke-linecap="round"/>';
+  html += '<path d="M30,180 Q200,280 400,320 Q550,350 680,420" fill="none" stroke="rgba(100,120,140,0.22)" stroke-width="3" stroke-linecap="round" filter="url(#hglow)"/>';
+  html += '<path d="M30,180 Q200,280 400,320 Q550,350 680,420" fill="none" stroke="rgba(60,80,100,0.08)" stroke-width="10" stroke-linecap="round"/>';
+  html += '<path d="M665,480 L790,440 L795,555 L670,585 Z" fill="rgba(0,80,140,0.18)" stroke="rgba(0,130,200,0.35)" stroke-width="1.5"/>';
+  html += '<text x="725" y="508" text-anchor="middle" fill="rgba(0,150,220,0.4)" font-size="9" font-family="Noto Sans SC,sans-serif">河道</text>';
 
   homeMapFields.forEach(function(f) {
     var style = '';
