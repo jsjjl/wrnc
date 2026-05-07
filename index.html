@@ -350,6 +350,9 @@ main { flex: 1; display: flex; flex-direction: column; }
 <div class="dispatch-overlay" id="dispatchOverlay" onclick="if(event.target===this)closeDispatchModal()">
   <div class="dispatch-modal" id="dispatchModal"></div>
 </div>
+<div class="dispatch-overlay" id="anomalyOverlay" onclick="if(event.target===this)closeAnomalyModal()">
+  <div class="dispatch-modal" id="anomalyModalContent" style="max-width:560px;max-height:90vh"></div>
+</div>
 
 <aside class="desktop-sidebar fixed left-0 top-0 h-full w-56 bg-farm-card border-r border-farm-border z-40 flex flex-col" style="display:flex">
   <div class="p-4 border-b border-farm-border">
@@ -507,39 +510,63 @@ main { flex: 1; display: flex; flex-direction: column; }
         </div>
       </div>
 
+      <div class="bg-farm-surface/50 rounded-lg p-3 mb-3 border border-farm-border/30">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-farm-text">🔄 农场巡检进度跟踪</span>
+            <span class="text-xs text-farm-muted" id="patrolStartTime">开始时间：--</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-farm-green font-bold" id="patrolPercent">0%</span>
+            <span class="text-xs text-farm-muted" id="patrolCount">已巡检 0/8 项</span>
+          </div>
+        </div>
+        <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
+          <div class="h-full rounded-full transition-all duration-700 ease-out" id="patrolProgressBar" style="width:0%;background:linear-gradient(90deg,#1DB954,#00B4D8)"></div>
+        </div>
+        <div class="flex justify-between mt-1.5">
+          <span class="text-xs text-farm-muted">📹 摄像头 <span class="text-farm-green" id="patrolCameraDone">0</span>/3</span>
+          <span class="text-xs text-farm-muted">💡 虫情 <span class="text-farm-green" id="patrolPestDone">0</span>/2</span>
+          <span class="text-xs text-farm-muted">💧 墒情 <span class="text-farm-green" id="patrolMoistureDone">0</span>/1</span>
+          <span class="text-xs text-farm-muted">🌤 气象 <span class="text-farm-green" id="patrolWeatherDone">0</span>/1</span>
+          <span class="text-xs text-farm-muted">📹 鹰眼 <span class="text-farm-green" id="patrolEagleDone">0</span>/1</span>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
         <div class="lg:col-span-3">
-          <div class="relative bg-farm-surface rounded-lg overflow-hidden" style="height:420px">
+          <div class="relative rounded-lg overflow-hidden" style="height:440px;background:radial-gradient(ellipse at center, rgba(0,40,80,0.3) 0%, rgba(10,22,40,1) 100%)">
             <svg viewBox="0 0 800 600" class="w-full h-full" id="homeFarmMap">
               <defs>
                 <pattern id="hgrid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(30,58,95,0.3)" stroke-width="0.5"/>
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,180,216,0.08)" stroke-width="0.5"/>
                 </pattern>
-                <filter id="hglow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="hglow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="hglowStrong"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <radialGradient id="scanGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(0,180,216,0.15)"/><stop offset="100%" stop-color="rgba(0,180,216,0)"/></radialGradient>
               </defs>
               <rect width="800" height="600" fill="url(#hgrid)"/>
             </svg>
             <div class="absolute top-2 left-2 flex gap-1.5">
-              <button onclick="setHomeMapMode('status',this)" class="home-map-mode active text-xs px-2 py-1 rounded bg-farm-card/80 text-farm-text border border-farm-border">状态</button>
-              <button onclick="setHomeMapMode('variety',this)" class="home-map-mode text-xs px-2 py-1 rounded bg-farm-card/80 text-farm-muted border border-farm-border">品种</button>
-              <button onclick="setHomeMapMode('device',this)" class="home-map-mode text-xs px-2 py-1 rounded bg-farm-card/80 text-farm-muted border border-farm-border">设备</button>
+              <button onclick="setHomeMapMode('status',this)" class="home-map-mode active text-xs px-2.5 py-1 rounded-md bg-farm-card/90 text-farm-text border border-farm-border backdrop-blur-sm">状态</button>
+              <button onclick="setHomeMapMode('variety',this)" class="home-map-mode text-xs px-2.5 py-1 rounded-md bg-farm-card/90 text-farm-muted border border-farm-border backdrop-blur-sm">品种</button>
+              <button onclick="setHomeMapMode('device',this)" class="home-map-mode text-xs px-2.5 py-1 rounded-md bg-farm-card/90 text-farm-muted border border-farm-border backdrop-blur-sm">设备</button>
             </div>
-            <div class="absolute bottom-2 left-2 flex gap-2 text-xs">
-              <span class="flex items-center gap-1"><span class="w-2 h-2 bg-farm-green rounded-full"></span>正常</span>
-              <span class="flex items-center gap-1"><span class="w-2 h-2 bg-yellow-500 rounded-full"></span>预警</span>
-              <span class="flex items-center gap-1"><span class="w-2 h-2 bg-red-500 rounded-full"></span>异常</span>
+            <div class="absolute bottom-2 left-2 flex gap-3 text-xs bg-farm-card/60 backdrop-blur-sm rounded-md px-2.5 py-1.5">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-farm-green"></span>正常</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-yellow-500"></span>预警</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span>异常</span>
             </div>
-            <div class="absolute bottom-2 right-2 text-xs text-farm-muted" id="homeMapDeviceLabel"></div>
+            <div class="absolute bottom-2 right-2 text-xs text-farm-blue bg-farm-card/60 backdrop-blur-sm rounded-md px-2 py-1" id="homeMapDeviceLabel"></div>
           </div>
         </div>
 
-        <div class="lg:col-span-2 flex flex-col" style="height:420px">
+        <div class="lg:col-span-2 flex flex-col" style="height:440px">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xs font-bold text-farm-text flex items-center gap-1.5">
               <span class="w-1.5 h-3 bg-farm-blue rounded-full"></span>
               🔍 巡检实时数据
             </h3>
-            <span class="text-xs text-farm-muted" id="patrolCount">已巡检 0 项</span>
           </div>
           <div class="flex-1 overflow-hidden relative">
             <div class="absolute inset-0 overflow-y-auto space-y-2 pr-1 patrol-scroll" id="patrolFeed">
@@ -551,174 +578,203 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div class="glass-card rounded-xl p-5">
-        <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
-          <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-          🔥 异常田块紧急处方（按危急程度排序）
-        </h3>
-        
-        <div class="space-y-3">
-          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-            <div class="flex items-start justify-between mb-2">
-              <span class="font-bold text-farm-text">东区-03号田 <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded ml-2">重度</span></span>
-              <span class="text-xs text-farm-muted">扬麦25</span>
-            </div>
-            <p class="text-xs text-farm-muted mb-2">
-              <b class="text-farm-text">异常：</b>鹰眼识别到东北角有约2亩面积异常发黄。
-              <b class="text-farm-text">交叉验证：</b>履带车近地确认，长势仪显示LNC（氮含量）极低。
-            </p>
-            <p class="text-xs text-farm-orange mb-2">
-              <b>预估影响：</b>若不处理，该2亩区域千粒重将下降15%，预估损失约300斤产量。
-            </p>
-            <div class="flex items-center justify-between">
-              <p class="text-xs text-farm-green">
-                <b>智能处方：</b>调度植保无人机，仅对03号田东北角进行高浓度叶面肥喷洒。
-              </p>
-              <button onclick="openDispatchModal('东区-03号田','扬麦25','重度','调度植保无人机，仅对03号田东北角进行高浓度叶面肥（尿素+磷酸二氢钾）变量喷洒','叶面肥喷洒','植保无人机')" class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors flex-shrink-0 ml-2">
-                一键派单
-              </button>
-            </div>
-          </div>
-          
-          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-            <div class="flex items-start justify-between mb-2">
-              <span class="font-bold text-farm-text">王庄-01号田 <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded ml-2">重度</span></span>
+    <div class="glass-card rounded-xl p-5">
+      <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+        🔥 异常情况跟踪处理（按危急程度排序）
+      </h3>
+      <div class="space-y-3" id="anomalyTrackList">
+        <div class="bg-red-500/8 border border-red-500/20 rounded-lg p-4 cursor-pointer hover:bg-red-500/12 hover:border-red-500/30 transition-all" onclick="openAnomalyModal(0)">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+              <span class="font-bold text-farm-text text-sm">W3号田</span>
+              <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded">重度</span>
               <span class="text-xs text-farm-muted">宁麦13</span>
             </div>
-            <p class="text-xs text-farm-muted mb-2">
-              <b class="text-farm-text">异常：</b>自动赶蛾杆+球机联动报警，发现麦蚜密度超标（50头/百株）。
-            </p>
-            <p class="text-xs text-farm-orange mb-2">
-              <b>预估影响：</b>蚜虫正处于暴发初期，2天内可能蔓延至相邻的02号田，导致大面积减产和煤污病。
-            </p>
-            <div class="flex items-center justify-between">
-              <p class="text-xs text-farm-green">
-                <b>智能处方：</b>立即下发飞防任务，使用吡虫啉进行封锁式打药。
-              </p>
-              <button onclick="openDispatchModal('王庄-01号田','宁麦13','重度','立即下发飞防任务，使用吡虫啉对王庄01、02号田进行封锁式打药','飞防打药','植保无人机')" class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors flex-shrink-0 ml-2">
-                一键派单
-              </button>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-orange/15 text-farm-orange">处方已生成</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </div>
           </div>
-          
-          <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
-            <div class="flex items-start justify-between mb-2">
-              <span class="font-bold text-farm-text">河东-05号田 <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded ml-2">轻度</span></span>
-              <span class="text-xs text-farm-muted">镇麦12</span>
+          <p class="text-xs text-farm-muted">麦蚜密度超标（50头/百株），蚜虫暴发初期，2天内可能蔓延至相邻田块</p>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:33%"></div></div>
+            <span class="text-xs text-farm-muted">2/6 步骤完成</span>
+          </div>
+        </div>
+
+        <div class="bg-red-500/8 border border-red-500/20 rounded-lg p-4 cursor-pointer hover:bg-red-500/12 hover:border-red-500/30 transition-all" onclick="openAnomalyModal(1)">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+              <span class="font-bold text-farm-text text-sm">M5号田</span>
+              <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded">重度</span>
+              <span class="text-xs text-farm-muted">扬麦25</span>
             </div>
-            <p class="text-xs text-farm-muted mb-2">
-              <b class="text-farm-text">异常：</b>土壤墒情仪显示20cm深度相对湿度仅55%（偏旱）。
-            </p>
-            <p class="text-xs text-farm-orange mb-2">
-              <b>预估影响：</b>处于灌浆初期，轻度缺水会影响灌浆速率，出粉率降低。
-            </p>
-            <div class="flex items-center justify-between">
-              <p class="text-xs text-farm-green">
-                <b>智能处方：</b>开启河东区智能灌溉电磁阀，补水2小时后自动关闭。
-              </p>
-              <button onclick="openDispatchModal('河东-05号田','镇麦12','轻度','开启河东区智能灌溉电磁阀，补水2小时后自动关闭','智能灌溉','灌溉系统')" class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors flex-shrink-0 ml-2">
-                一键派单
-              </button>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-blue/15 text-farm-blue">工单已下发</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </div>
+          </div>
+          <p class="text-xs text-farm-muted">严重缺水，墒情仪显示湿度42%（标准70%+），灌浆期缺水影响千粒重</p>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:50%"></div></div>
+            <span class="text-xs text-farm-muted">3/6 步骤完成</span>
+          </div>
+        </div>
+
+        <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(2)">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full animate-pulse"></span>
+              <span class="font-bold text-farm-text text-sm">W4号田</span>
+              <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
+              <span class="text-xs text-farm-muted">宁麦13</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-green/15 text-farm-green">作业验收中</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          </div>
+          <p class="text-xs text-farm-muted">土壤偏旱，墒情仪显示20cm深度湿度58%，轻度缺水影响灌浆速率</p>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:83%"></div></div>
+            <span class="text-xs text-farm-muted">5/6 步骤完成</span>
+          </div>
+        </div>
+
+        <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(3)">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
+              <span class="font-bold text-farm-text text-sm">M3号田</span>
+              <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
+              <span class="text-xs text-farm-muted">宁麦13</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-orange/15 text-farm-orange">异常发现</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          </div>
+          <p class="text-xs text-farm-muted">蚜虫蔓延风险，与W3号田相邻，可能被蚜虫感染</p>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:17%"></div></div>
+            <span class="text-xs text-farm-muted">1/6 步骤完成</span>
+          </div>
+        </div>
+
+        <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(4)">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
+              <span class="font-bold text-farm-text text-sm">M6号田</span>
+              <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
+              <span class="text-xs text-farm-muted">宁麦13</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-green/15 text-farm-green">持续跟踪中</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          </div>
+          <p class="text-xs text-farm-muted">局部倒伏风险，长势仪检测到茎秆倾斜，大风可能导致倒伏</p>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:100%"></div></div>
+            <span class="text-xs text-farm-green">6/6 已完成</span>
           </div>
         </div>
       </div>
-      
-      <div class="space-y-4">
-        <div class="glass-card rounded-xl p-5">
-          <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
-            <span class="w-1 h-4 bg-farm-blue rounded-full"></span>
-            🛡️ 农场安全卫士播报
-          </h3>
-          
-          <div class="space-y-3">
-            <div class="flex items-start gap-3">
-              <div class="w-8 h-8 rounded-lg bg-farm-green/15 flex items-center justify-center flex-shrink-0">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-              </div>
-              <div>
-                <p class="text-xs text-farm-text">过去24小时内，鹰眼已完成 <span class="font-bold text-farm-green">12次</span> 全景巡航，球机完成 <span class="font-bold text-farm-green">85个</span> 预置点微距抓拍</p>
-                <p class="text-xs text-farm-green mt-1">✅ 全场300亩未发现任何病虫害与长势异常</p>
-              </div>
-            </div>
-            
-            <div class="flex items-start gap-3">
-              <div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center flex-shrink-0">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
-              </div>
-              <div>
-                <p class="text-xs text-farm-text">6个土壤墒情站数据均处于最佳吸收区间</p>
-                <p class="text-xs text-farm-green mt-1">湿度范围：70%-80%</p>
-              </div>
-            </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-5">
+      <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+        <span class="w-1 h-4 bg-farm-blue rounded-full"></span>
+        🛡️ 农场安全卫士播报
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-farm-green/15 flex items-center justify-center flex-shrink-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div>
+            <p class="text-xs text-farm-text">过去24小时内，鹰眼已完成 <span class="font-bold text-farm-green">12次</span> 全景巡航，球机完成 <span class="font-bold text-farm-green">85个</span> 预置点微距抓拍</p>
+            <p class="text-xs text-farm-green mt-1">✅ 全场300亩未发现任何病虫害与长势异常</p>
           </div>
         </div>
-        
-        <div class="glass-card rounded-xl p-5">
-          <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
-            <span class="w-1 h-4 bg-farm-green rounded-full"></span>
-            📈 核心品种长势对标
-          </h3>
-          
-          <div class="space-y-3">
-            <div>
-              <div class="flex justify-between text-xs mb-1">
-                <span class="text-farm-text font-medium">扬麦25 (东区/河东区)</span>
-                <span class="text-farm-green">达标率 98%</span>
-              </div>
-              <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
-                <div class="h-full bg-blue-500 rounded-full" style="width:98%"></div>
-              </div>
-              <p class="text-xs text-farm-muted mt-1">当前LAI均值5.2，完全贴合该品种高产标准曲线</p>
-            </div>
-            
-            <div>
-              <div class="flex justify-between text-xs mb-1">
-                <span class="text-farm-text font-medium">宁麦13 (王庄/季庄区)</span>
-                <span class="text-farm-green">达标率 92%</span>
-              </div>
-              <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
-                <div class="h-full bg-green-500 rounded-full" style="width:92%"></div>
-              </div>
-              <p class="text-xs text-farm-muted mt-1">长势强健，叶层氮含量充足，无需额外补肥</p>
-            </div>
-            
-            <div>
-              <div class="flex justify-between text-xs mb-1">
-                <span class="text-farm-text font-medium">镇麦12 (河东/季庄区)</span>
-                <span class="text-farm-green">达标率 90%</span>
-              </div>
-              <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
-                <div class="h-full bg-yellow-500 rounded-full" style="width:90%"></div>
-              </div>
-              <p class="text-xs text-farm-muted mt-1">整体长势良好，注意灌溉管理</p>
-            </div>
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center flex-shrink-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+          </div>
+          <div>
+            <p class="text-xs text-farm-text">6个土壤墒情站数据均处于最佳吸收区间</p>
+            <p class="text-xs text-farm-green mt-1">湿度范围：70%-80%</p>
           </div>
         </div>
-        
-        <div class="glass-card rounded-xl p-5">
-          <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
-            <span class="w-1 h-4 bg-farm-orange rounded-full"></span>
-            📅 下一阶段农事预告
-          </h3>
-          
-          <div class="space-y-3">
-            <div class="flex items-start gap-3 p-3 bg-farm-orange/10 rounded-lg">
-              <div class="text-farm-orange font-bold">⚠</div>
-              <div>
-                <p class="text-xs text-farm-text font-medium">气象预警：预计5月14日有7级阵风伴随短时强降水</p>
-                <p class="text-xs text-farm-muted mt-1">宁麦13品种抗倒伏能力稍弱，建议明后两天检查沟渠通畅度</p>
-              </div>
-            </div>
-            
-            <div class="flex items-start gap-3 p-3 bg-farm-green/10 rounded-lg">
-              <div class="text-farm-green font-bold">📌</div>
-              <div>
-                <p class="text-xs text-farm-text font-medium">预防处方：确保雨后能迅速排水，降低倒伏风险</p>
-              </div>
-            </div>
+      </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-5">
+      <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+        <span class="w-1 h-4 bg-farm-green rounded-full"></span>
+        📈 核心品种长势对标
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-farm-text font-medium">扬麦25</span>
+            <span class="text-farm-green">达标率 98%</span>
           </div>
+          <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
+            <div class="h-full bg-blue-500 rounded-full" style="width:98%"></div>
+          </div>
+          <p class="text-xs text-farm-muted mt-1">LAI 5.2 · 完全贴合高产标准曲线</p>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-farm-text font-medium">宁麦13</span>
+            <span class="text-farm-green">达标率 92%</span>
+          </div>
+          <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
+            <div class="h-full bg-green-500 rounded-full" style="width:92%"></div>
+          </div>
+          <p class="text-xs text-farm-muted mt-1">LNC充足 · 上一轮追肥吸收率极佳</p>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-farm-text font-medium">镇麦12</span>
+            <span class="text-farm-orange">达标率 90%</span>
+          </div>
+          <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
+            <div class="h-full bg-yellow-500 rounded-full" style="width:90%"></div>
+          </div>
+          <p class="text-xs text-farm-muted mt-1">LAI 4.8 · 略低于标准曲线，建议关注</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-5">
+      <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+        <span class="w-1 h-4 bg-farm-blue rounded-full"></span>
+        📅 农事预告
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="bg-farm-orange/10 border border-farm-orange/20 rounded-lg p-3">
+          <p class="text-xs font-bold text-farm-orange mb-1">⚠️ 气象预警</p>
+          <p class="text-xs text-farm-text">预计5月14日（4天后）有7级阵风伴随短时强降水</p>
+        </div>
+        <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+          <p class="text-xs font-bold text-blue-400 mb-1">💧 灌溉建议</p>
+          <p class="text-xs text-farm-text">宁麦13田块建议明后两天检查沟渠通畅度</p>
+        </div>
+        <div class="bg-farm-green/10 border border-farm-green/20 rounded-lg p-3">
+          <p class="text-xs font-bold text-farm-green mb-1">🌾 长势跟踪</p>
+          <p class="text-xs text-farm-text">扬麦25进入灌浆关键期，持续监测千粒重变化</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 bg-farm-green/10 rounded-lg mt-3">
+        <div class="text-farm-green font-bold">📌</div>
+        <div>
+          <p class="text-xs text-farm-text font-medium">预防处方：确保雨后能迅速排水，降低倒伏风险</p>
         </div>
       </div>
     </div>
@@ -1494,27 +1550,34 @@ function renderHomeFarmMap() {
   var html = '';
   html += '<rect width="800" height="600" fill="url(#hgrid)"/>';
 
-  html += '<line x1="0" y1="290" x2="800" y2="290" stroke="rgba(30,58,95,0.6)" stroke-width="2" stroke-dasharray="8,4"/>';
-  html += '<line x1="380" y1="0" x2="380" y2="600" stroke="rgba(30,58,95,0.6)" stroke-width="2" stroke-dasharray="8,4"/>';
-  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.25)" stroke-width="8" stroke-linecap="round"/>';
-  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.1)" stroke-width="16" stroke-linecap="round"/>';
+  html += '<circle cx="400" cy="300" r="250" fill="url(#scanGrad)" opacity="0.5"/>';
+  html += '<circle cx="400" cy="300" r="250" fill="none" stroke="rgba(0,180,216,0.1)" stroke-width="1" stroke-dasharray="4,4"/>';
+  html += '<circle cx="400" cy="300" r="180" fill="none" stroke="rgba(0,180,216,0.06)" stroke-width="0.5" stroke-dasharray="2,4"/>';
+
+  html += '<line x1="0" y1="290" x2="800" y2="290" stroke="rgba(0,180,216,0.15)" stroke-width="1" stroke-dasharray="8,4"/>';
+  html += '<line x1="380" y1="0" x2="380" y2="600" stroke="rgba(0,180,216,0.15)" stroke-width="1" stroke-dasharray="8,4"/>';
+  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.3)" stroke-width="6" stroke-linecap="round" filter="url(#hglow)"/>';
+  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.1)" stroke-width="14" stroke-linecap="round"/>';
+
+  html += '<line x1="380" y1="0" x2="380" y2="600" stroke="rgba(0,180,216,0.03)" stroke-width="40"/>';
 
   homeMapFields.forEach(function(f) {
     var style = '';
+    var filterAttr = '';
     if (f.status === 'pond') {
-      style = 'fill:rgba(0,100,180,0.3);stroke:rgba(0,150,220,0.5);';
+      style = 'fill:rgba(0,100,180,0.25);stroke:rgba(0,150,220,0.4);';
     } else if (f.status === 'river') {
-      style = 'fill:rgba(0,120,200,0.25);stroke:rgba(0,150,220,0.4);';
+      style = 'fill:rgba(0,120,200,0.2);stroke:rgba(0,150,220,0.35);';
     } else if (homeMapMode === 'variety') {
-      if (f.variety === '扬麦25') style = 'fill:rgba(0,212,255,0.25);stroke:rgba(0,212,255,0.5);';
-      else if (f.variety === '宁麦13') style = 'fill:rgba(29,185,84,0.25);stroke:rgba(29,185,84,0.5);';
-      else if (f.variety === '镇麦12') style = 'fill:rgba(212,168,67,0.25);stroke:rgba(212,168,67,0.5);';
+      if (f.variety === '扬麦25') { style = 'fill:rgba(0,212,255,0.15);stroke:rgba(0,212,255,0.5);'; filterAttr = ' filter="url(#hglow)"'; }
+      else if (f.variety === '宁麦13') { style = 'fill:rgba(29,185,84,0.15);stroke:rgba(29,185,84,0.5);'; filterAttr = ' filter="url(#hglow)"'; }
+      else if (f.variety === '镇麦12') { style = 'fill:rgba(212,168,67,0.15);stroke:rgba(212,168,67,0.5);'; filterAttr = ' filter="url(#hglow)"'; }
     } else {
-      if (f.status === 'green') style = 'fill:rgba(29,185,84,0.2);stroke:rgba(29,185,84,0.4);';
-      else if (f.status === 'yellow') style = 'fill:rgba(234,179,8,0.2);stroke:rgba(234,179,8,0.5);';
-      else if (f.status === 'red') style = 'fill:rgba(239,68,68,0.2);stroke:rgba(239,68,68,0.5);';
+      if (f.status === 'green') { style = 'fill:rgba(29,185,84,0.12);stroke:rgba(29,185,84,0.35);'; }
+      else if (f.status === 'yellow') { style = 'fill:rgba(234,179,8,0.15);stroke:rgba(234,179,8,0.5);'; filterAttr = ' filter="url(#hglow)"'; }
+      else if (f.status === 'red') { style = 'fill:rgba(239,68,68,0.15);stroke:rgba(239,68,68,0.5);'; filterAttr = ' filter="url(#hglowStrong)"'; }
     }
-    html += '<polygon points="' + f.points + '" style="' + style + 'stroke-width:1.5;" class="transition-all duration-300"/>';
+    html += '<polygon points="' + f.points + '" style="' + style + 'stroke-width:1.5;" class="transition-all duration-300"' + filterAttr + '/>';
     if (f.status !== 'pond' && f.status !== 'river') {
       html += '<text x="' + f.cx + '" y="' + (f.cy - 4) + '" text-anchor="middle" fill="#E8F0FE" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">' + f.name + '</text>';
       html += '<text x="' + f.cx + '" y="' + (f.cy + 10) + '" text-anchor="middle" fill="#7B93B0" font-size="8" font-family="Noto Sans SC,sans-serif">' + f.variety + '</text>';
@@ -1524,40 +1587,35 @@ function renderHomeFarmMap() {
   if (homeMapMode === 'device' || homeMapMode === 'status') {
     homeMapDevices.forEach(function(d) {
       var color = d.status === 'online' ? '#1DB954' : d.status === 'alert' ? '#EF4444' : '#555';
-      var icon = '';
-      if (d.type === '鹰眼') icon = '📹';
-      else if (d.type === '球机') icon = '📷';
-      else if (d.type === '墒情仪') icon = '💧';
-      else if (d.type === '虫情灯') icon = '💡';
-      else if (d.type === '长势仪') icon = '🌿';
-      else if (d.type === '气象站') icon = '🌤';
 
       if (d.type === '鹰眼' || d.type === '球机') {
         var fovAngle = d.angle || 0;
         var rad = fovAngle * Math.PI / 180;
-        var fovLen = 40;
+        var fovLen = 50;
         var fovSpread = 25;
         var x1 = d.x + fovLen * Math.cos(rad - fovSpread * Math.PI / 180);
         var y1 = d.y + fovLen * Math.sin(rad - fovSpread * Math.PI / 180);
         var x2 = d.x + fovLen * Math.cos(rad + fovSpread * Math.PI / 180);
         var y2 = d.y + fovLen * Math.sin(rad + fovSpread * Math.PI / 180);
-        html += '<polygon class="camera-fov" points="' + d.x + ',' + d.y + ' ' + x1 + ',' + y1 + ' ' + x2 + ',' + y2 + '" id="fov-' + d.id + '"/>';
+        html += '<polygon class="camera-fov" points="' + d.x + ',' + d.y + ' ' + x1 + ',' + y1 + ' ' + x2 + ',' + y2 + '" id="fov-' + d.id + '" filter="url(#hglow)"/>';
       }
 
       html += '<g class="cursor-pointer" id="dev-' + d.id + '">';
-      html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="4" fill="' + color + '" opacity="0.8">';
-      if (d.status === 'alert') html += '<animate attributeName="r" values="4;7;4" dur="1.5s" repeatCount="indefinite"/>';
+      html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="8" fill="' + color + '" opacity="0.1"/>';
+      html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="5" fill="none" stroke="' + color + '" stroke-width="1" opacity="0.4"/>';
+      html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="3" fill="' + color + '" opacity="0.9">';
+      if (d.status === 'alert') html += '<animate attributeName="r" values="3;5;3" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0.4;0.9" dur="1.5s" repeatCount="indefinite"/>';
       html += '</circle>';
       if (homeMapMode === 'device') {
-        html += '<text x="' + d.x + '" y="' + (d.y - 10) + '" text-anchor="middle" fill="#7B93B0" font-size="8" font-family="Noto Sans SC,sans-serif">' + d.name + '</text>';
+        html += '<text x="' + d.x + '" y="' + (d.y - 12) + '" text-anchor="middle" fill="#7B93B0" font-size="8" font-family="Noto Sans SC,sans-serif">' + d.name + '</text>';
       }
       html += '</g>';
     });
   }
 
-  html += '<text x="30" y="98" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">W</text>';
-  html += '<text x="30" y="260" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">M</text>';
-  html += '<text x="30" y="460" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">G</text>';
+  html += '<text x="30" y="98" fill="rgba(0,180,216,0.3)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">W</text>';
+  html += '<text x="30" y="260" fill="rgba(0,180,216,0.3)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">M</text>';
+  html += '<text x="30" y="460" fill="rgba(0,180,216,0.3)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">G</text>';
 
   svg.innerHTML = html;
 }
@@ -1709,6 +1767,23 @@ function addPatrolItem(patrol) {
   patrolIndex++;
   var countEl = document.getElementById('patrolCount');
   if (countEl) countEl.textContent = '已巡检 ' + patrolIndex + ' 项';
+
+  var bar = document.getElementById('patrolProgressBar');
+  var pctEl = document.getElementById('patrolPercent');
+  var startEl = document.getElementById('patrolStartTime');
+  if (bar) { var pct = Math.min(100, Math.round(patrolIndex / 8 * 100)); bar.style.width = pct + '%'; }
+  if (pctEl) pctEl.textContent = Math.min(100, Math.round(patrolIndex / 8 * 100)) + '%';
+  if (startEl && patrolIndex === 1) startEl.textContent = '开始时间：' + getNowStr();
+  var typeCounts = { camera:0, pest:0, moisture:0, weather:0, eagle:0 };
+  patrolData.forEach(function(p) { if (p.type === 'camera' && !p.deviceId.startsWith('eagle')) typeCounts.camera++; else if (p.type === 'pest') typeCounts.pest++; else if (p.type === 'moisture') typeCounts.moisture++; else if (p.type === 'weather') typeCounts.weather++; else if (p.deviceId && p.deviceId.startsWith('eagle')) typeCounts.eagle++; });
+  var done = { camera:0, pest:0, moisture:0, weather:0, eagle:0 };
+  for (var i = 0; i < Math.min(patrolIndex, patrolData.length); i++) { var p = patrolData[i]; if (p.type === 'camera' && !p.deviceId.startsWith('eagle')) done.camera++; else if (p.type === 'pest') done.pest++; else if (p.type === 'moisture') done.moisture++; else if (p.type === 'weather') done.weather++; else if (p.deviceId && p.deviceId.startsWith('eagle')) done.eagle++; }
+  var el;
+  el = document.getElementById('patrolCameraDone'); if (el) el.textContent = done.camera;
+  el = document.getElementById('patrolPestDone'); if (el) el.textContent = done.pest;
+  el = document.getElementById('patrolMoistureDone'); if (el) el.textContent = done.moisture;
+  el = document.getElementById('patrolWeatherDone'); if (el) el.textContent = done.weather;
+  el = document.getElementById('patrolEagleDone'); if (el) el.textContent = done.eagle;
 
   highlightHomeDevice(patrol.deviceId);
   if (patrol.angles && patrol.angles.length > 0) {
@@ -2353,6 +2428,212 @@ function updateDispatchButton(field) {
 function closeDispatchModal() {
   document.getElementById('dispatchOverlay').classList.remove('active');
   if (dispatchTimer) { clearTimeout(dispatchTimer); dispatchTimer = null; }
+}
+
+var anomalyData = [
+  { field:'W3号田', variety:'宁麦13', severity:'重度', step:2,
+    discovery: { time:'2026-05-07 08:32:15', desc:'自动赶蛾杆+球机联动报警，发现麦蚜密度超标（50头/百株），蚜虫正处于暴发初期',
+      evidence:[
+        { type:'image', label:'球机-02拍摄叶片蚜虫', prompt:'aphid-pest-wheat-leaf-closeup' },
+        { type:'data', label:'虫情灯-02数据', value:'今日诱虫127头，较昨日+67头' },
+        { type:'data', label:'赶蛾杆数据', value:'亩蛾量580头，超防治指标300头/亩' }
+      ]
+    },
+    prescription: { time:'2026-05-07 08:35:42', content:'立即下发飞防任务，使用吡虫啉对W3及相邻M3号田进行封锁式打药', device:'植保无人机X2', drug:'10%吡虫啉可湿性粉剂' },
+    workOrder: { time:'2026-05-07 08:40:10', orderId:'WO20260507001', status:'待下发', assignee:'植保无人机编队' },
+    tracking: { status:'未开始', progress:0 },
+    acceptance: { status:'未开始' },
+    continuousTracking: { status:'未开始' }
+  },
+  { field:'M5号田', variety:'扬麦25', severity:'重度', step:3,
+    discovery: { time:'2026-05-07 07:15:30', desc:'墒情仪-02数据回传，20cm深度湿度42%，严重低于阈值70%，灌浆期缺水将直接影响千粒重',
+      evidence:[
+        { type:'image', label:'鹰眼-02拍摄M5号田全景', prompt:'dry-wheat-field-aerial-view' },
+        { type:'data', label:'墒情仪-02数据', value:'10cm:22.5°C/32%, 20cm:21.8°C/42%, 30cm:20.3°C/45%' },
+        { type:'data', label:'长势仪-02数据', value:'LAI 4.0（标准5.0）, LNC 2.8%（标准3.5%）' }
+      ]
+    },
+    prescription: { time:'2026-05-07 07:18:55', content:'应急灌溉4小时，同时检查该区域电磁阀是否故障', device:'智能灌溉系统', drug:'-' },
+    workOrder: { time:'2026-05-07 07:22:30', orderId:'WO20260507002', status:'已下发', assignee:'灌溉系统-河东区' },
+    tracking: { status:'灌溉中', progress:35, startTime:'2026-05-07 07:30:00', estimatedEnd:'2026-05-07 11:30:00' },
+    acceptance: { status:'未开始' },
+    continuousTracking: { status:'未开始' }
+  },
+  { field:'W4号田', variety:'宁麦13', severity:'轻度', step:5,
+    discovery: { time:'2026-05-06 14:20:10', desc:'土壤墒情仪显示20cm深度相对湿度仅58%（偏旱），处于灌浆初期，轻度缺水影响灌浆速率',
+      evidence:[
+        { type:'data', label:'墒情仪-01数据', value:'20cm深度湿度58%（标准70%+）' },
+        { type:'data', label:'气象站数据', value:'近3日无降雨，蒸发量偏高' }
+      ]
+    },
+    prescription: { time:'2026-05-06 14:25:33', content:'开启河东区智能灌溉电磁阀，补水2小时后自动关闭', device:'灌溉系统', drug:'-' },
+    workOrder: { time:'2026-05-06 14:30:00', orderId:'WO20260506001', status:'已完成', assignee:'灌溉系统-河东区' },
+    tracking: { status:'已完成', progress:100, startTime:'2026-05-06 14:35:00', endTime:'2026-05-06 16:35:00' },
+    acceptance: { status:'验收中', inspector:'系统自动验收', criteria:'土壤湿度恢复至70%以上' },
+    continuousTracking: { status:'未开始' }
+  },
+  { field:'M3号田', variety:'宁麦13', severity:'轻度', step:1,
+    discovery: { time:'2026-05-07 09:10:22', desc:'蚜虫蔓延风险，与W3号田相邻，可能被蚜虫感染，需预防性喷药',
+      evidence:[
+        { type:'data', label:'空间分析', value:'M3号田与W3号田相邻，距离<50m' },
+        { type:'data', label:'虫情灯-02数据', value:'M3区域诱虫量开始上升' }
+      ]
+    },
+    prescription: { status:'待生成' },
+    workOrder: { status:'待生成' },
+    tracking: { status:'未开始' },
+    acceptance: { status:'未开始' },
+    continuousTracking: { status:'未开始' }
+  },
+  { field:'M6号田', variety:'宁麦13', severity:'轻度', step:6,
+    discovery: { time:'2026-05-05 16:45:00', desc:'长势仪检测到茎秆倾斜，大风可能导致倒伏',
+      evidence:[
+        { type:'image', label:'球机拍摄M6号田', prompt:'wheat-field-tilting-stems' },
+        { type:'data', label:'长势仪数据', value:'茎秆倾斜角度12°（正常<5°）' }
+      ]
+    },
+    prescription: { time:'2026-05-05 16:50:30', content:'关注天气预报，必要时提前收割，确保沟渠通畅', device:'-', drug:'-' },
+    workOrder: { time:'2026-05-05 16:55:00', orderId:'WO20260505001', status:'已完成', assignee:'田间管理员' },
+    tracking: { status:'已完成', progress:100 },
+    acceptance: { status:'已通过', time:'2026-05-06 08:00:00', result:'沟渠已疏通，排水通畅' },
+    continuousTracking: { status:'跟踪中', lastCheck:'2026-05-07 06:00:00', nextCheck:'2026-05-08 06:00:00', finding:'茎秆倾斜角度未继续恶化，持续关注5月12日大风天气' }
+  }
+];
+
+function openAnomalyModal(idx) {
+  var a = anomalyData[idx];
+  if (!a) return;
+  var modal = document.getElementById('anomalyModalContent');
+  var sevColor = a.severity === '重度' ? '#EF4444' : '#EAB308';
+  var sevBg = a.severity === '重度' ? 'rgba(239,68,68,0.15)' : 'rgba(234,179,8,0.15)';
+
+  var steps = [
+    { name:'异常发现', icon:'🔍', done: a.step >= 1 },
+    { name:'处方生成', icon:'📋', done: a.step >= 2 },
+    { name:'工单下发', icon:'📤', done: a.step >= 3 },
+    { name:'作业跟踪', icon:'🔄', done: a.step >= 4 },
+    { name:'结束验收', icon:'✅', done: a.step >= 5 },
+    { name:'持续跟踪', icon:'📊', done: a.step >= 6 }
+  ];
+
+  var stepsHtml = '<div class="flex items-center gap-1 mb-4">';
+  steps.forEach(function(s, i) {
+    var dotColor = s.done ? '#1DB954' : (i === a.step ? '#00B4D8' : 'rgba(30,58,95,0.5)');
+    var lineColor = s.done ? '#1DB954' : 'rgba(30,58,95,0.3)';
+    stepsHtml += '<div class="flex flex-col items-center flex-1">';
+    stepsHtml += '<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs" style="background:' + (s.done ? 'rgba(29,185,84,0.2)' : i === a.step ? 'rgba(0,180,216,0.2)' : 'rgba(30,58,95,0.3)') + ';border:2px solid ' + dotColor + '">' + (s.done ? '✓' : s.icon) + '</div>';
+    stepsHtml += '<span class="text-xs mt-1 ' + (s.done ? 'text-farm-green' : i === a.step ? 'text-farm-blue' : 'text-farm-muted') + '">' + s.name + '</span>';
+    stepsHtml += '</div>';
+    if (i < steps.length - 1) {
+      stepsHtml += '<div class="flex-1 h-0.5 mt-3.5 rounded" style="background:' + lineColor + '"></div>';
+    }
+  });
+  stepsHtml += '</div>';
+
+  var detailHtml = '';
+
+  detailHtml += '<div class="bg-farm-surface rounded-lg p-3 mb-3">';
+  detailHtml += '<p class="text-xs font-bold text-farm-text mb-2">🔍 异常发现</p>';
+  detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">发现时间</span><span class="text-farm-text font-mono">' + a.discovery.time + '</span></div>';
+  detailHtml += '<p class="text-xs text-farm-text mt-2 mb-2">' + a.discovery.desc + '</p>';
+  if (a.discovery.evidence) {
+    detailHtml += '<p class="text-xs text-farm-muted mb-1.5">证明数据：</p>';
+    a.discovery.evidence.forEach(function(e) {
+      if (e.type === 'image') {
+        var imgPrompt = encodeURIComponent(e.prompt + ', agricultural monitoring, realistic');
+        detailHtml += '<div class="mb-2"><p class="text-xs text-farm-blue mb-1">' + e.label + '</p>';
+        detailHtml += '<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=' + imgPrompt + '&image_size=landscape_16_9" class="w-full rounded-lg" style="max-height:120px;object-fit:cover" alt="' + e.label + '" onerror="this.style.display=\'none\'"/></div>';
+      } else {
+        detailHtml += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-farm-muted">' + e.label + '</span><span class="text-farm-text">' + e.value + '</span></div>';
+      }
+    });
+  }
+  detailHtml += '</div>';
+
+  detailHtml += '<div class="bg-farm-surface rounded-lg p-3 mb-3">';
+  detailHtml += '<p class="text-xs font-bold text-farm-text mb-2">📋 处方生成</p>';
+  if (a.prescription.status === '待生成') {
+    detailHtml += '<p class="text-xs text-farm-orange">⏳ AI正在分析异常数据，生成处方中...</p>';
+  } else {
+    detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">生成时间</span><span class="text-farm-text font-mono">' + a.prescription.time + '</span></div>';
+    detailHtml += '<p class="text-xs text-farm-text mt-1">' + a.prescription.content + '</p>';
+    if (a.prescription.device && a.prescription.device !== '-') detailHtml += '<p class="text-xs text-farm-muted mt-1">执行设备：' + a.prescription.device + '</p>';
+    if (a.prescription.drug && a.prescription.drug !== '-') detailHtml += '<p class="text-xs text-farm-muted mt-0.5">用药：' + a.prescription.drug + '</p>';
+  }
+  detailHtml += '</div>';
+
+  detailHtml += '<div class="bg-farm-surface rounded-lg p-3 mb-3">';
+  detailHtml += '<p class="text-xs font-bold text-farm-text mb-2">📤 处方工单下发</p>';
+  if (a.workOrder.status === '待生成') {
+    detailHtml += '<p class="text-xs text-farm-muted">⏳ 等待处方生成后自动创建工单</p>';
+  } else {
+    detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">工单编号</span><span class="text-farm-text font-mono">' + a.workOrder.orderId + '</span></div>';
+    detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">下发时间</span><span class="text-farm-text font-mono">' + a.workOrder.time + '</span></div>';
+    detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">执行方</span><span class="text-farm-text">' + a.workOrder.assignee + '</span></div>';
+    detailHtml += '<div class="flex justify-between text-xs"><span class="text-farm-muted">状态</span><span class="' + (a.workOrder.status === '已完成' ? 'text-farm-green' : 'text-farm-blue') + '">' + a.workOrder.status + '</span></div>';
+  }
+  detailHtml += '</div>';
+
+  detailHtml += '<div class="bg-farm-surface rounded-lg p-3 mb-3">';
+  detailHtml += '<p class="text-xs font-bold text-farm-text mb-2">🔄 作业跟踪</p>';
+  if (a.tracking.status === '未开始') {
+    detailHtml += '<p class="text-xs text-farm-muted">⏳ 等待作业开始</p>';
+  } else {
+    detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">作业状态</span><span class="' + (a.tracking.status === '已完成' ? 'text-farm-green' : 'text-farm-blue') + '">' + a.tracking.status + '</span></div>';
+    if (a.tracking.progress !== undefined) {
+      detailHtml += '<div class="w-full h-1.5 bg-farm-surface rounded-full overflow-hidden mt-1 mb-1"><div class="h-full rounded-full" style="width:' + a.tracking.progress + '%;background:linear-gradient(90deg,#1DB954,#00B4D8)"></div></div>';
+    }
+    if (a.tracking.startTime) detailHtml += '<div class="flex justify-between text-xs"><span class="text-farm-muted">开始时间</span><span class="text-farm-text font-mono">' + a.tracking.startTime + '</span></div>';
+    if (a.tracking.endTime) detailHtml += '<div class="flex justify-between text-xs"><span class="text-farm-muted">完成时间</span><span class="text-farm-text font-mono">' + a.tracking.endTime + '</span></div>';
+    if (a.tracking.estimatedEnd) detailHtml += '<div class="flex justify-between text-xs"><span class="text-farm-muted">预计完成</span><span class="text-farm-text font-mono">' + a.tracking.estimatedEnd + '</span></div>';
+  }
+  detailHtml += '</div>';
+
+  detailHtml += '<div class="bg-farm-surface rounded-lg p-3 mb-3">';
+  detailHtml += '<p class="text-xs font-bold text-farm-text mb-2">✅ 作业结束验收</p>';
+  if (a.acceptance.status === '未开始') {
+    detailHtml += '<p class="text-xs text-farm-muted">⏳ 等待作业完成后验收</p>';
+  } else {
+    detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">验收状态</span><span class="' + (a.acceptance.status === '已通过' ? 'text-farm-green' : 'text-farm-blue') + '">' + a.acceptance.status + '</span></div>';
+    if (a.acceptance.inspector) detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">验收方</span><span class="text-farm-text">' + a.acceptance.inspector + '</span></div>';
+    if (a.acceptance.criteria) detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">验收标准</span><span class="text-farm-text">' + a.acceptance.criteria + '</span></div>';
+    if (a.acceptance.time) detailHtml += '<div class="flex justify-between text-xs"><span class="text-farm-muted">验收时间</span><span class="text-farm-text font-mono">' + a.acceptance.time + '</span></div>';
+    if (a.acceptance.result) detailHtml += '<p class="text-xs text-farm-green mt-1">✅ ' + a.acceptance.result + '</p>';
+  }
+  detailHtml += '</div>';
+
+  detailHtml += '<div class="bg-farm-surface rounded-lg p-3">';
+  detailHtml += '<p class="text-xs font-bold text-farm-text mb-2">📊 作业效果持续跟踪</p>';
+  if (a.continuousTracking.status === '未开始') {
+    detailHtml += '<p class="text-xs text-farm-muted">⏳ 验收通过后进入持续跟踪阶段</p>';
+  } else {
+    detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">跟踪状态</span><span class="text-farm-green">' + a.continuousTracking.status + '</span></div>';
+    if (a.continuousTracking.lastCheck) detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">上次检查</span><span class="text-farm-text font-mono">' + a.continuousTracking.lastCheck + '</span></div>';
+    if (a.continuousTracking.nextCheck) detailHtml += '<div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">下次检查</span><span class="text-farm-text font-mono">' + a.continuousTracking.nextCheck + '</span></div>';
+    if (a.continuousTracking.finding) detailHtml += '<p class="text-xs text-farm-text mt-1">' + a.continuousTracking.finding + '</p>';
+  }
+  detailHtml += '</div>';
+
+  modal.innerHTML =
+    '<div class="p-4 border-b border-farm-border">' +
+      '<div class="flex items-center justify-between">' +
+        '<div class="flex items-center gap-2">' +
+          '<div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:' + sevBg + ';border:2px solid ' + sevColor + '"><span style="color:' + sevColor + ';font-weight:900;font-size:10px">' + a.severity + '</span></div>' +
+          '<div><h3 class="text-sm font-bold text-farm-text">' + a.field + ' · ' + a.variety + '</h3><p class="text-xs text-farm-muted">异常情况跟踪处理</p></div>' +
+        '</div>' +
+        '<button onclick="closeAnomalyModal()" class="text-farm-muted hover:text-farm-text text-lg leading-none">&times;</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="p-4">' +
+      stepsHtml +
+      detailHtml +
+    '</div>';
+
+  document.getElementById('anomalyOverlay').classList.add('active');
+}
+
+function closeAnomalyModal() {
+  document.getElementById('anomalyOverlay').classList.remove('active');
 }
 
 var sectionTitles = {
