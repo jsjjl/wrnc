@@ -287,6 +287,17 @@ main { flex: 1; display: flex; flex-direction: column; }
   transition: width 0.6s ease-out;
 }
 
+.home-map-mode.active { background: rgba(0,180,216,0.2) !important; color: #00B4D8 !important; border-color: #00B4D8 !important; }
+.patrol-scroll::-webkit-scrollbar { width: 3px; }
+.patrol-scroll::-webkit-scrollbar-track { background: transparent; }
+.patrol-scroll::-webkit-scrollbar-thumb { background: rgba(30,58,95,0.5); border-radius: 2px; }
+.patrol-item { animation: patrolIn 0.5s ease-out; }
+@keyframes patrolIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+.patrol-item-highlight { border-color: rgba(0,180,216,0.5) !important; box-shadow: 0 0 8px rgba(0,180,216,0.2); }
+.camera-fov { fill: rgba(0,180,216,0.08); stroke: rgba(0,180,216,0.3); stroke-width: 1; stroke-dasharray: 4,2; transition: all 0.5s ease; }
+.device-pulse { animation: devicePulse 2s ease-in-out infinite; }
+@keyframes devicePulse { 0%,100% { r: 4; opacity: 0.8; } 50% { r: 6; opacity: 1; } }
+
 @media (max-width: 767px) {
   .mobile-nav { display: flex; }
   .desktop-nav { display: none; }
@@ -480,45 +491,63 @@ main { flex: 1; display: flex; flex-direction: column; }
   </div>
 
   <!-- ============ HOME ============ -->
-  <section id="section-home" class="section-page active p-4 md:p-6 space-y-5">
-    <div class="glass-card rounded-xl p-5">
-      <div class="flex items-start justify-between mb-4">
-        <div>
-          <h2 class="text-lg font-bold text-farm-text">📋 邗江区无人农场农情综合简报</h2>
-          <p class="text-xs text-farm-muted mt-1">生成时间：2026-05-10 07:00 | 覆盖面积：1,280亩</p>
-        </div>
+  <section id="section-home" class="section-page active p-4 md:p-6 space-y-4">
+    <div class="glass-card rounded-xl p-4">
+      <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
-          <span class="px-3 py-1 bg-farm-orange/15 text-farm-orange text-xs font-medium rounded-full flex items-center gap-1">
-            <span class="w-2 h-2 bg-farm-orange rounded-full animate-pulse"></span>
-            有异常预警
+          <span class="w-2 h-2 bg-farm-green rounded-full animate-pulse"></span>
+          <h2 class="text-sm font-bold text-farm-text">📡 农场实时监控</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-farm-muted" id="monitorTime"></span>
+          <span class="px-2 py-0.5 bg-farm-green/15 text-farm-green text-xs rounded-full flex items-center gap-1">
+            <span class="w-1.5 h-1.5 bg-farm-green rounded-full animate-pulse"></span>
+            实时
           </span>
         </div>
       </div>
-      
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-        <div class="text-center p-3 bg-farm-surface rounded-lg">
-          <div class="text-2xl font-black text-farm-green">300</div>
-          <div class="text-xs text-farm-muted mt-1">核心区面积(亩)</div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <div class="lg:col-span-3">
+          <div class="relative bg-farm-surface rounded-lg overflow-hidden" style="height:420px">
+            <svg viewBox="0 0 800 600" class="w-full h-full" id="homeFarmMap">
+              <defs>
+                <pattern id="hgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(30,58,95,0.3)" stroke-width="0.5"/>
+                </pattern>
+                <filter id="hglow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <rect width="800" height="600" fill="url(#hgrid)"/>
+            </svg>
+            <div class="absolute top-2 left-2 flex gap-1.5">
+              <button onclick="setHomeMapMode('status',this)" class="home-map-mode active text-xs px-2 py-1 rounded bg-farm-card/80 text-farm-text border border-farm-border">状态</button>
+              <button onclick="setHomeMapMode('variety',this)" class="home-map-mode text-xs px-2 py-1 rounded bg-farm-card/80 text-farm-muted border border-farm-border">品种</button>
+              <button onclick="setHomeMapMode('device',this)" class="home-map-mode text-xs px-2 py-1 rounded bg-farm-card/80 text-farm-muted border border-farm-border">设备</button>
+            </div>
+            <div class="absolute bottom-2 left-2 flex gap-2 text-xs">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 bg-farm-green rounded-full"></span>正常</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 bg-yellow-500 rounded-full"></span>预警</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 bg-red-500 rounded-full"></span>异常</span>
+            </div>
+            <div class="absolute bottom-2 right-2 text-xs text-farm-muted" id="homeMapDeviceLabel"></div>
+          </div>
         </div>
-        <div class="text-center p-3 bg-farm-surface rounded-lg">
-          <div class="text-2xl font-black text-farm-blue">5</div>
-          <div class="text-xs text-farm-muted mt-1">异常地块(个)</div>
+
+        <div class="lg:col-span-2 flex flex-col" style="height:420px">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold text-farm-text flex items-center gap-1.5">
+              <span class="w-1.5 h-3 bg-farm-blue rounded-full"></span>
+              🔍 巡检实时数据
+            </h3>
+            <span class="text-xs text-farm-muted" id="patrolCount">已巡检 0 项</span>
+          </div>
+          <div class="flex-1 overflow-hidden relative">
+            <div class="absolute inset-0 overflow-y-auto space-y-2 pr-1 patrol-scroll" id="patrolFeed">
+              <div class="text-center py-8 text-xs text-farm-muted">巡检数据加载中...</div>
+            </div>
+            <div class="absolute top-0 left-0 right-0 h-6 bg-gradient-to-b from-farm-card to-transparent pointer-events-none z-10"></div>
+          </div>
         </div>
-        <div class="text-center p-3 bg-farm-surface rounded-lg">
-          <div class="text-2xl font-black text-farm-text">96.5%</div>
-          <div class="text-xs text-farm-muted mt-1">设备在线率</div>
-        </div>
-        <div class="text-center p-3 bg-farm-surface rounded-lg">
-          <div class="text-2xl font-black text-farm-orange">35</div>
-          <div class="text-xs text-farm-muted mt-1">涉及面积(亩)</div>
-        </div>
-      </div>
-      
-      <div class="flex flex-wrap gap-2 mb-4">
-        <span class="px-2 py-1 text-xs bg-blue-500/10 text-blue-400 rounded">扬麦25 (120亩)</span>
-        <span class="px-2 py-1 text-xs bg-green-500/10 text-green-400 rounded">宁麦13 (100亩)</span>
-        <span class="px-2 py-1 text-xs bg-yellow-500/10 text-yellow-600 rounded">镇麦12 (80亩)</span>
-        <span class="text-xs text-farm-muted ml-auto">当前生育期：扬花-灌浆期</span>
       </div>
     </div>
 
@@ -1417,6 +1446,306 @@ function initMachineryChart() {
   });
 }
 
+var homeMapFields = [
+  { id:'w1', name:'W1', variety:'扬麦25', area:15, status:'green', points:'100,80 260,60 270,140 110,160', cx:185, cy:118 },
+  { id:'w2', name:'W2', variety:'扬麦25', area:14, status:'green', points:'270,60 430,40 440,120 280,140', cx:355, cy:98 },
+  { id:'w3', name:'W3', variety:'宁麦13', area:16, status:'red', points:'440,40 580,30 590,110 450,120', cx:515, cy:78 },
+  { id:'w4', name:'W4', variety:'宁麦13', area:12, status:'yellow', points:'110,160 280,140 290,220 120,240', cx:205, cy:200 },
+  { id:'w5', name:'W5', variety:'扬麦25', area:15, status:'green', points:'290,140 450,120 460,200 300,220', cx:375, cy:180 },
+  { id:'w6', name:'W6', variety:'镇麦12', area:14, status:'green', points:'460,120 620,100 630,180 470,200', cx:545, cy:160 },
+  { id:'m1', name:'M1', variety:'镇麦12', area:18, status:'green', points:'120,240 320,220 330,320 130,340', cx:225, cy:290 },
+  { id:'m2', name:'M2', variety:'扬麦25', area:16, status:'green', points:'330,220 520,200 530,300 340,320', cx:430, cy:260 },
+  { id:'m3', name:'M3', variety:'宁麦13', area:14, status:'yellow', points:'530,200 700,180 710,280 540,300', cx:620, cy:240 },
+  { id:'m4', name:'M4', variety:'镇麦12', area:15, status:'green', points:'130,340 330,320 340,420 140,440', cx:235, cy:390 },
+  { id:'m5', name:'M5', variety:'扬麦25', area:14, status:'red', points:'340,320 540,300 550,400 350,420', cx:445, cy:360 },
+  { id:'m6', name:'M6', variety:'宁麦13', area:16, status:'yellow', points:'550,300 730,280 740,380 560,400', cx:645, cy:340 },
+  { id:'g1', name:'G1', variety:'镇麦12', area:12, status:'green', points:'140,440 300,420 310,500 150,520', cx:225, cy:480 },
+  { id:'g2', name:'G2', variety:'扬麦25', area:14, status:'green', points:'310,420 470,400 480,480 320,500', cx:395, cy:460 },
+  { id:'g3', name:'G3', variety:'宁麦13', area:15, status:'green', points:'480,400 640,380 650,460 490,480', cx:565, cy:440 },
+  { id:'pond1', name:'池塘1', variety:'-', area:0, status:'pond', points:'280,450 380,430 390,490 290,510', cx:335, cy:480 },
+  { id:'pond2', name:'池塘2', variety:'-', area:0, status:'pond', points:'200,520 290,500 300,560 210,580', cx:250, cy:540 },
+  { id:'river', name:'河流', variety:'-', area:0, status:'river', points:'400,600 800,500 790,550 390,650', cx:600, cy:570 }
+];
+
+var homeMapDevices = [
+  { id:'eagle-01', name:'鹰眼-01', type:'鹰眼', status:'online', x:185, y:118, angle:0 },
+  { id:'eagle-02', name:'鹰眼-02', type:'鹰眼', status:'online', x:430, y:260, angle:0 },
+  { id:'eagle-03', name:'鹰眼-03', type:'鹰眼', status:'online', x:565, y:440, angle:0 },
+  { id:'ball-01', name:'球机-01', type:'球机', status:'online', x:355, y:98, angle:0 },
+  { id:'ball-02', name:'球机-02', type:'球机', status:'alert', x:515, y:78, angle:0 },
+  { id:'ball-03', name:'球机-03', type:'球机', status:'online', x:225, y:290, angle:0 },
+  { id:'moisture-01', name:'墒情仪-01', type:'墒情仪', status:'online', x:205, y:200 },
+  { id:'moisture-02', name:'墒情仪-02', type:'墒情仪', status:'alert', x:445, y:360 },
+  { id:'moisture-03', name:'墒情仪-03', type:'墒情仪', status:'online', x:395, y:460 },
+  { id:'pest-01', name:'虫情灯-01', type:'虫情灯', status:'online', x:375, y:180 },
+  { id:'pest-02', name:'虫情灯-02', type:'虫情灯', status:'alert', x:515, y:78 },
+  { id:'growth-01', name:'长势仪-01', type:'长势仪', status:'online', x:225, y:390 },
+  { id:'growth-02', name:'长势仪-02', type:'长势仪', status:'alert', x:445, y:360 },
+  { id:'weather-01', name:'气象站-01', type:'气象站', status:'online', x:700, y:520 }
+];
+
+var homeMapMode = 'status';
+var patrolTimer = null;
+var patrolIndex = 0;
+
+function renderHomeFarmMap() {
+  var svg = document.getElementById('homeFarmMap');
+  if (!svg) return;
+  var html = '';
+  html += '<rect width="800" height="600" fill="url(#hgrid)"/>';
+
+  html += '<line x1="0" y1="290" x2="800" y2="290" stroke="rgba(30,58,95,0.6)" stroke-width="2" stroke-dasharray="8,4"/>';
+  html += '<line x1="380" y1="0" x2="380" y2="600" stroke="rgba(30,58,95,0.6)" stroke-width="2" stroke-dasharray="8,4"/>';
+  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.25)" stroke-width="8" stroke-linecap="round"/>';
+  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.1)" stroke-width="16" stroke-linecap="round"/>';
+
+  homeMapFields.forEach(function(f) {
+    var style = '';
+    if (f.status === 'pond') {
+      style = 'fill:rgba(0,100,180,0.3);stroke:rgba(0,150,220,0.5);';
+    } else if (f.status === 'river') {
+      style = 'fill:rgba(0,120,200,0.25);stroke:rgba(0,150,220,0.4);';
+    } else if (homeMapMode === 'variety') {
+      if (f.variety === '扬麦25') style = 'fill:rgba(0,212,255,0.25);stroke:rgba(0,212,255,0.5);';
+      else if (f.variety === '宁麦13') style = 'fill:rgba(29,185,84,0.25);stroke:rgba(29,185,84,0.5);';
+      else if (f.variety === '镇麦12') style = 'fill:rgba(212,168,67,0.25);stroke:rgba(212,168,67,0.5);';
+    } else {
+      if (f.status === 'green') style = 'fill:rgba(29,185,84,0.2);stroke:rgba(29,185,84,0.4);';
+      else if (f.status === 'yellow') style = 'fill:rgba(234,179,8,0.2);stroke:rgba(234,179,8,0.5);';
+      else if (f.status === 'red') style = 'fill:rgba(239,68,68,0.2);stroke:rgba(239,68,68,0.5);';
+    }
+    html += '<polygon points="' + f.points + '" style="' + style + 'stroke-width:1.5;" class="transition-all duration-300"/>';
+    if (f.status !== 'pond' && f.status !== 'river') {
+      html += '<text x="' + f.cx + '" y="' + (f.cy - 4) + '" text-anchor="middle" fill="#E8F0FE" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">' + f.name + '</text>';
+      html += '<text x="' + f.cx + '" y="' + (f.cy + 10) + '" text-anchor="middle" fill="#7B93B0" font-size="8" font-family="Noto Sans SC,sans-serif">' + f.variety + '</text>';
+    }
+  });
+
+  if (homeMapMode === 'device' || homeMapMode === 'status') {
+    homeMapDevices.forEach(function(d) {
+      var color = d.status === 'online' ? '#1DB954' : d.status === 'alert' ? '#EF4444' : '#555';
+      var icon = '';
+      if (d.type === '鹰眼') icon = '📹';
+      else if (d.type === '球机') icon = '📷';
+      else if (d.type === '墒情仪') icon = '💧';
+      else if (d.type === '虫情灯') icon = '💡';
+      else if (d.type === '长势仪') icon = '🌿';
+      else if (d.type === '气象站') icon = '🌤';
+
+      if (d.type === '鹰眼' || d.type === '球机') {
+        var fovAngle = d.angle || 0;
+        var rad = fovAngle * Math.PI / 180;
+        var fovLen = 40;
+        var fovSpread = 25;
+        var x1 = d.x + fovLen * Math.cos(rad - fovSpread * Math.PI / 180);
+        var y1 = d.y + fovLen * Math.sin(rad - fovSpread * Math.PI / 180);
+        var x2 = d.x + fovLen * Math.cos(rad + fovSpread * Math.PI / 180);
+        var y2 = d.y + fovLen * Math.sin(rad + fovSpread * Math.PI / 180);
+        html += '<polygon class="camera-fov" points="' + d.x + ',' + d.y + ' ' + x1 + ',' + y1 + ' ' + x2 + ',' + y2 + '" id="fov-' + d.id + '"/>';
+      }
+
+      html += '<g class="cursor-pointer" id="dev-' + d.id + '">';
+      html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="4" fill="' + color + '" opacity="0.8">';
+      if (d.status === 'alert') html += '<animate attributeName="r" values="4;7;4" dur="1.5s" repeatCount="indefinite"/>';
+      html += '</circle>';
+      if (homeMapMode === 'device') {
+        html += '<text x="' + d.x + '" y="' + (d.y - 10) + '" text-anchor="middle" fill="#7B93B0" font-size="8" font-family="Noto Sans SC,sans-serif">' + d.name + '</text>';
+      }
+      html += '</g>';
+    });
+  }
+
+  html += '<text x="30" y="98" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">W</text>';
+  html += '<text x="30" y="260" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">M</text>';
+  html += '<text x="30" y="460" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">G</text>';
+
+  svg.innerHTML = html;
+}
+
+function setHomeMapMode(mode, btn) {
+  homeMapMode = mode;
+  document.querySelectorAll('.home-map-mode').forEach(function(b) { b.classList.remove('active'); b.classList.add('text-farm-muted'); });
+  btn.classList.add('active'); btn.classList.remove('text-farm-muted');
+  renderHomeFarmMap();
+}
+
+function highlightHomeDevice(deviceId) {
+  var el = document.getElementById('dev-' + deviceId);
+  if (el) {
+    el.style.filter = 'brightness(1.5)';
+    var circle = el.querySelector('circle');
+    if (circle) { circle.setAttribute('r', '8'); circle.classList.add('device-pulse'); }
+  }
+  var fov = document.getElementById('fov-' + deviceId);
+  if (fov) { fov.style.fill = 'rgba(0,180,216,0.2)'; fov.style.stroke = 'rgba(0,180,216,0.6)'; }
+  var label = document.getElementById('homeMapDeviceLabel');
+  var dev = homeMapDevices.find(function(d) { return d.id === deviceId; });
+  if (label && dev) label.textContent = dev.name + ' · ' + dev.type;
+}
+
+function unhighlightHomeDevice(deviceId) {
+  var el = document.getElementById('dev-' + deviceId);
+  if (el) {
+    el.style.filter = '';
+    var circle = el.querySelector('circle');
+    if (circle) { circle.setAttribute('r', '4'); circle.classList.remove('device-pulse'); }
+  }
+  var fov = document.getElementById('fov-' + deviceId);
+  if (fov) { fov.style.fill = 'rgba(0,180,216,0.08)'; fov.style.stroke = 'rgba(0,180,216,0.3)'; }
+  var label = document.getElementById('homeMapDeviceLabel');
+  if (label) label.textContent = '';
+}
+
+function rotateHomeCamera(deviceId, angle) {
+  var dev = homeMapDevices.find(function(d) { return d.id === deviceId; });
+  if (dev && (dev.type === '鹰眼' || dev.type === '球机')) {
+    dev.angle = angle;
+    renderHomeFarmMap();
+    highlightHomeDevice(deviceId);
+  }
+}
+
+var patrolData = [
+  { type:'camera', deviceId:'ball-01', name:'球机-01号', field:'W2号田', variety:'扬麦25',
+    messages:[
+      '球机-01号机开始巡检，当前为广角拍摄巡田模式',
+      '摄像头自动转动，扫描W2号田东南方向',
+      'W2号田扬麦25长势正常，叶色浓绿，未发现异常'
+    ], angles:[30, 90, 150], imgPrompt:'wheat-field-aerial' },
+  { type:'pest', deviceId:'pest-02', name:'虫情测报灯-02', field:'W3号田', variety:'宁麦13',
+    messages:[
+      '虫情测报灯-02正在监测虫情情况，当前虫情数量为5，昨天为3，较昨天多了2',
+      '现触发虫情监测初步预警，将与关联设备巡检结果进行交叉验证',
+      '交叉验证：球机-02确认W3号田叶片有蚜虫活动迹象，建议关注'
+    ], imgPrompt:'pest-monitoring-insect' },
+  { type:'camera', deviceId:'ball-03', name:'球机-03号', field:'M1号田', variety:'镇麦12',
+    messages:[
+      '球机-03号机开始巡检，当前为预置点巡航模式',
+      '摄像头转向M1号田中央区域，检查灌浆期长势',
+      'M1号田镇麦12长势良好，穗部饱满，无病虫害迹象'
+    ], angles:[200, 260, 320], imgPrompt:'wheat-grain-filling' },
+  { type:'weather', deviceId:'weather-01', name:'气象站-01', field:'全域', variety:'-',
+    messages:[
+      '气象站-01实时数据采集：温度26.3°C，湿度68%，风速3.2m/s，光照42000Lux',
+      '过去1小时温度上升0.8°C，湿度下降2%，符合午后气象变化规律',
+      '未来3小时预计温度升至28°C，建议关注蒸腾作用对墒情的影响'
+    ], imgPrompt:'weather-station-farm' },
+  { type:'camera', deviceId:'eagle-01', name:'鹰眼-01', field:'W1号田', variety:'扬麦25',
+    messages:[
+      '鹰眼-01号全景巡检启动，270°广角扫描W区',
+      '发现W3号田东北角有约2亩面积颜色偏黄，已标记异常区域',
+      'W1、W2号田长势正常，W4号田墒情仪数据显示偏旱，已同步标记'
+    ], angles:[0, 45, 90], imgPrompt:'eagle-eye-farm-panorama' },
+  { type:'pest', deviceId:'pest-01', name:'虫情测报灯-01', field:'W5号田', variety:'扬麦25',
+    messages:[
+      '虫情测报灯-01正在监测虫情情况，当前虫情数量为2，昨天为2，与昨日持平',
+      '虫情密度处于正常范围，无需预警',
+      '诱捕种类：稻纵卷叶螟1头、二化螟1头，均低于防治指标'
+    ], imgPrompt:'pest-light-normal' },
+  { type:'moisture', deviceId:'moisture-02', name:'墒情仪-02', field:'M5号田', variety:'扬麦25',
+    messages:[
+      '墒情仪-02数据回传：20cm深度湿度42%，严重低于阈值70%',
+      'M5号田处于严重缺水状态，已触发红色预警',
+      '建议立即启动应急灌溉，持续补水4小时'
+    ], imgPrompt:'soil-moisture-sensor' },
+  { type:'camera', deviceId:'ball-02', name:'球机-02', field:'W3号田', variety:'宁麦13',
+    messages:[
+      '球机-02号机开始巡检，当前为定点监控模式，聚焦W3号田',
+      '摄像头放大拍摄W3号田叶片细节，确认蚜虫活动',
+      '蚜虫密度约50头/百株，已超过防治指标，建议立即飞防作业'
+    ], angles:[120, 160, 200], imgPrompt:'aphid-wheat-leaf' }
+];
+
+function getNowStr() {
+  var n = new Date();
+  return n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') + '-' + String(n.getDate()).padStart(2,'0') + ' ' + String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0') + ':' + String(n.getSeconds()).padStart(2,'0');
+}
+
+function addPatrolItem(patrol) {
+  var feed = document.getElementById('patrolFeed');
+  if (!feed) return;
+
+  if (feed.querySelector('.text-center')) feed.innerHTML = '';
+
+  var typeIcon = '', typeColor = '', typeBg = '';
+  if (patrol.type === 'camera') { typeIcon = '📹'; typeColor = '#00B4D8'; typeBg = 'rgba(0,180,216,0.08)'; }
+  else if (patrol.type === 'pest') { typeIcon = '💡'; typeColor = '#EAB308'; typeBg = 'rgba(234,179,8,0.08)'; }
+  else if (patrol.type === 'weather') { typeIcon = '🌤'; typeColor = '#3B82F6'; typeBg = 'rgba(59,130,246,0.08)'; }
+  else if (patrol.type === 'moisture') { typeIcon = '💧'; typeColor = '#00B4D8'; typeBg = 'rgba(0,180,216,0.08)'; }
+
+  var msgHtml = '';
+  patrol.messages.forEach(function(m, i) {
+    var delay = i * 2000;
+    msgHtml += '<p class="text-xs text-farm-muted patrol-msg" style="animation-delay:' + delay + 'ms;opacity:0;animation:patrolIn 0.4s ease-out ' + delay + 'ms forwards;">' + m + '</p>';
+  });
+
+  var imgHtml = '';
+  if (patrol.type === 'pest' || patrol.type === 'camera') {
+    var imgSize = patrol.type === 'pest' ? 'portrait_4_3' : 'landscape_16_9';
+    var prompt = encodeURIComponent(patrol.imgPrompt + ', agricultural monitoring, realistic, high detail');
+    imgHtml += '<div class="mt-2 rounded-lg overflow-hidden" style="max-height:120px"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=' + prompt + '&image_size=' + imgSize + '" class="w-full h-full object-cover" style="max-height:120px" alt="巡检图片" onerror="this.style.display=\'none\'"/></div>';
+  }
+
+  var itemHtml =
+    '<div class="patrol-item rounded-lg p-3 border border-farm-border/50" style="background:' + typeBg + '" data-device="' + patrol.deviceId + '">' +
+      '<div class="flex items-center justify-between mb-1.5">' +
+        '<div class="flex items-center gap-1.5">' +
+          '<span class="text-sm">' + typeIcon + '</span>' +
+          '<span class="text-xs font-bold" style="color:' + typeColor + '">' + patrol.name + '</span>' +
+          '<span class="text-xs text-farm-muted">· ' + patrol.field + '</span>' +
+        '</div>' +
+        '<span class="text-xs text-farm-muted font-mono">' + getNowStr() + '</span>' +
+      '</div>' +
+      '<div class="space-y-1">' + msgHtml + '</div>' +
+      imgHtml +
+    '</div>';
+
+  feed.insertAdjacentHTML('afterbegin', itemHtml);
+
+  while (feed.children.length > 15) {
+    feed.removeChild(feed.lastChild);
+  }
+
+  patrolIndex++;
+  var countEl = document.getElementById('patrolCount');
+  if (countEl) countEl.textContent = '已巡检 ' + patrolIndex + ' 项';
+
+  highlightHomeDevice(patrol.deviceId);
+  if (patrol.angles && patrol.angles.length > 0) {
+    var angleIdx = 0;
+    var angleTimer = setInterval(function() {
+      if (angleIdx >= patrol.angles.length) { clearInterval(angleTimer); return; }
+      rotateHomeCamera(patrol.deviceId, patrol.angles[angleIdx]);
+      angleIdx++;
+    }, 2500);
+  }
+
+  setTimeout(function() {
+    unhighlightHomeDevice(patrol.deviceId);
+  }, 8000);
+}
+
+function startPatrol() {
+  if (patrolTimer) return;
+  var idx = 0;
+  addPatrolItem(patrolData[idx]);
+  idx++;
+  patrolTimer = setInterval(function() {
+    if (idx >= patrolData.length) idx = 0;
+    addPatrolItem(patrolData[idx]);
+    idx++;
+  }, 10000);
+}
+
+function stopPatrol() {
+  if (patrolTimer) { clearInterval(patrolTimer); patrolTimer = null; }
+}
+
+function updateMonitorTime() {
+  var el = document.getElementById('monitorTime');
+  if (el) el.textContent = getNowStr();
+}
+
 function initHomeYieldChart() {
   var ctx = document.getElementById('homeYieldChart'); if (!ctx) return; destroyChart('homeYieldChart');
   chartInstances['homeYieldChart'] = new Chart(ctx, {
@@ -2032,6 +2361,7 @@ var sectionTitles = {
 };
 
 function switchSection(section) {
+  stopPatrol();
   document.querySelectorAll('.section-page').forEach(function(el){ el.classList.remove('active'); });
   document.getElementById('section-' + section).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(function(el){ el.classList.remove('active'); el.classList.add('text-farm-muted'); });
@@ -2048,7 +2378,7 @@ function switchSection(section) {
     }
   }
   setTimeout(function() {
-    if (section === 'home') { initWeatherChart(); initHomeYieldChart(); }
+    if (section === 'home') { initWeatherChart(); initHomeYieldChart(); renderHomeFarmMap(); startPatrol(); updateMonitorTime(); }
     if (section === 'monitor') switchMonitorTab('weather');
     if (section === 'device') renderDevices('all');
     if (section === 'operation') switchOperationTab('irrigation');
@@ -2288,6 +2618,10 @@ document.addEventListener('DOMContentLoaded', function() {
   setInterval(updateTime, 1000);
   initWeatherChart();
   initHomeYieldChart();
+  renderHomeFarmMap();
+  startPatrol();
+  updateMonitorTime();
+  setInterval(updateMonitorTime, 1000);
   handleHashChange();
   renderVarietyTable();
   renderPlanTab('prep');
