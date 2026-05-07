@@ -313,6 +313,10 @@ main { flex: 1; display: flex; flex-direction: column; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2h2a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8a2 2 0 012-2h2V6a4 4 0 014-4z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>
       <span class="nav-text">AI智能体</span>
     </a>
+    <a href="#plan" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="plan" onclick="switchSection('plan')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span class="nav-text">生产规划</span>
+    </a>
     <a href="#report" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="report" onclick="switchSection('report')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       <span class="nav-text">数据报告</span>
@@ -351,6 +355,10 @@ main { flex: 1; display: flex; flex-direction: column; }
   <a href="#alert" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="alert" onclick="switchSection('alert')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
     <span class="text-[10px]">预警</span>
+  </a>
+  <a href="#plan" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="plan" onclick="switchSection('plan')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <span class="text-[10px]">规划</span>
   </a>
   <a href="#report" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="report" onclick="switchSection('report')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -884,6 +892,213 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="aiScenarios"></div>
+  </section>
+
+  <!-- ============ PRODUCTION PLAN ============ -->
+  <section id="section-plan" class="section-page p-4 md:p-6 space-y-5">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-farm-green to-farm-blue flex items-center justify-center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </div>
+      <div>
+        <h3 class="text-base font-bold">生产规划中心</h3>
+        <p class="text-xs text-farm-muted">基于AI分析的年度生产计划与品种推荐系统</p>
+      </div>
+    </div>
+
+    <!-- 总体计划概要 -->
+    <div class="glass-card rounded-xl p-4 gradient-border">
+      <h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+        <span class="w-1 h-4 bg-farm-green rounded-full"></span>
+        2026年度生产计划概要
+      </h4>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-4">
+        <div class="bg-farm-surface rounded-lg p-3 text-center">
+          <div class="text-lg font-black text-farm-green">1,280</div>
+          <div class="text-xs text-farm-muted">总种植面积(亩)</div>
+        </div>
+        <div class="bg-farm-surface rounded-lg p-3 text-center">
+          <div class="text-lg font-black text-farm-blue">5</div>
+          <div class="text-xs text-farm-muted">规划田块数</div>
+        </div>
+        <div class="bg-farm-surface rounded-lg p-3 text-center">
+          <div class="text-lg font-black text-farm-text">3</div>
+          <div class="text-xs text-farm-muted">主栽品种</div>
+        </div>
+        <div class="bg-farm-surface rounded-lg p-3 text-center">
+          <div class="text-lg font-black text-farm-orange">2</div>
+          <div class="text-xs text-farm-muted">轮作模式</div>
+        </div>
+        <div class="bg-farm-surface rounded-lg p-3 text-center">
+          <div class="text-lg font-black text-farm-green">842</div>
+          <div class="text-xs text-farm-muted">目标产量(吨)</div>
+        </div>
+        <div class="bg-farm-surface rounded-lg p-3 text-center">
+          <div class="text-lg font-black text-farm-blue">+2.0%</div>
+          <div class="text-xs text-farm-muted">预期增产</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+        <div class="bg-farm-surface rounded-lg p-3">
+          <div class="font-bold text-farm-text mb-1">🌾 种植结构</div>
+          <div class="text-farm-muted">水稻1,080亩（84.4%）、小麦200亩（15.6%）</div>
+        </div>
+        <div class="bg-farm-surface rounded-lg p-3">
+          <div class="font-bold text-farm-text mb-1">🔄 轮作方案</div>
+          <div class="text-farm-muted">稻麦轮作：水稻(6-11月)→小麦(11-5月)，3号/5号田执行</div>
+        </div>
+        <div class="bg-farm-surface rounded-lg p-3">
+          <div class="font-bold text-farm-text mb-1">📅 关键节点</div>
+          <div class="text-farm-muted">播种3月中旬、插秧3月下旬、抽穗5月上旬、收割6月中旬</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 地图与田块规划 -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+      <div class="glass-card rounded-xl p-4 lg:col-span-3">
+        <h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+          <span class="w-1 h-4 bg-farm-blue rounded-full"></span>
+          田块分布地图
+        </h4>
+        <div class="relative bg-farm-surface rounded-lg overflow-hidden" style="height:320px">
+          <svg viewBox="0 0 800 400" class="w-full h-full" id="farmMap">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(30,58,95,0.3)" stroke-width="0.5"/>
+              </pattern>
+              <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <rect width="800" height="400" fill="url(#grid)"/>
+            <text x="400" y="25" text-anchor="middle" fill="#7B93B0" font-size="14" font-weight="bold">邗江区无人农场田块分布图</text>
+            <text x="400" y="42" text-anchor="middle" fill="#5A6F8A" font-size="10">经度119.42°E 纬度32.38°N | 总面积1,280亩</text>
+            <!-- Roads -->
+            <line x1="0" y1="200" x2="800" y2="200" stroke="#1E3A5F" stroke-width="2" stroke-dasharray="8,4"/>
+            <line x1="400" y1="50" x2="400" y2="400" stroke="#1E3A5F" stroke-width="2" stroke-dasharray="8,4"/>
+            <text x="790" y="195" text-anchor="end" fill="#5A6F8A" font-size="9">农垦路 →</text>
+            <text x="410" y="60" fill="#5A6F8A" font-size="9" transform="rotate(90,410,60)">灌溉渠 ↓</text>
+            <!-- Field 1 -->
+            <g class="cursor-pointer" onclick="showFieldDetail(0)">
+              <rect x="30" y="55" width="220" height="130" rx="8" fill="rgba(29,185,84,0.15)" stroke="#1DB954" stroke-width="2" filter="url(#glow)"/>
+              <text x="140" y="105" text-anchor="middle" fill="#1DB954" font-size="16" font-weight="bold">1号田</text>
+              <text x="140" y="125" text-anchor="middle" fill="#7B93B0" font-size="11">280亩 | 南粳9108</text>
+              <text x="140" y="145" text-anchor="middle" fill="#1DB954" font-size="10">● 抽穗期</text>
+              <circle cx="50" cy="75" r="4" fill="#1DB954"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+            </g>
+            <!-- Field 2 -->
+            <g class="cursor-pointer" onclick="showFieldDetail(1)">
+              <rect x="270" y="55" width="120" height="130" rx="8" fill="rgba(0,180,216,0.15)" stroke="#00B4D8" stroke-width="2" filter="url(#glow)"/>
+              <text x="330" y="105" text-anchor="middle" fill="#00B4D8" font-size="16" font-weight="bold">2号田</text>
+              <text x="330" y="125" text-anchor="middle" fill="#7B93B0" font-size="11">240亩 | 南粳46</text>
+              <text x="330" y="145" text-anchor="middle" fill="#1DB954" font-size="10">● 抽穗期</text>
+              <circle cx="290" cy="75" r="4" fill="#1DB954"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+            </g>
+            <!-- Field 3 -->
+            <g class="cursor-pointer" onclick="showFieldDetail(2)">
+              <rect x="410" y="55" width="180" height="130" rx="8" fill="rgba(255,140,0,0.15)" stroke="#FF8C00" stroke-width="2" filter="url(#glow)"/>
+              <text x="500" y="105" text-anchor="middle" fill="#FF8C00" font-size="16" font-weight="bold">3号田</text>
+              <text x="500" y="125" text-anchor="middle" fill="#7B93B0" font-size="11">300亩 | 南粳9108</text>
+              <text x="500" y="145" text-anchor="middle" fill="#FF8C00" font-size="10">⚠ 干旱预警</text>
+              <circle cx="430" cy="75" r="4" fill="#FF8C00"><animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/></circle>
+            </g>
+            <!-- Field 4 -->
+            <g class="cursor-pointer" onclick="showFieldDetail(3)">
+              <rect x="30" y="210" width="340" height="130" rx="8" fill="rgba(29,185,84,0.15)" stroke="#1DB954" stroke-width="2" filter="url(#glow)"/>
+              <text x="200" y="260" text-anchor="middle" fill="#1DB954" font-size="16" font-weight="bold">4号田</text>
+              <text x="200" y="280" text-anchor="middle" fill="#7B93B0" font-size="11">260亩 | 扬麦25</text>
+              <text x="200" y="300" text-anchor="middle" fill="#1DB954" font-size="10">● 灌浆期</text>
+              <circle cx="50" cy="230" r="4" fill="#1DB954"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+            </g>
+            <!-- Field 5 -->
+            <g class="cursor-pointer" onclick="showFieldDetail(4)">
+              <rect x="390" y="210" width="200" height="130" rx="8" fill="rgba(139,105,20,0.15)" stroke="#8B6914" stroke-width="2" filter="url(#glow)"/>
+              <text x="490" y="260" text-anchor="middle" fill="#8B6914" font-size="16" font-weight="bold">5号田</text>
+              <text x="490" y="280" text-anchor="middle" fill="#7B93B0" font-size="11">200亩 | 宁麦13</text>
+              <text x="490" y="300" text-anchor="middle" fill="#1DB954" font-size="10">● 灌浆期</text>
+              <circle cx="410" cy="230" r="4" fill="#1DB954"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+            </g>
+            <!-- Facilities -->
+            <rect x="620" y="55" width="160" height="285" rx="8" fill="rgba(30,58,95,0.3)" stroke="#1E3A5F" stroke-width="1"/>
+            <text x="700" y="80" text-anchor="middle" fill="#7B93B0" font-size="11" font-weight="bold">设施区</text>
+            <text x="700" y="100" text-anchor="middle" fill="#5A6F8A" font-size="9">🏠 综合农情监测站</text>
+            <text x="700" y="118" text-anchor="middle" fill="#5A6F8A" font-size="9">📹 鹰眼摄像机</text>
+            <text x="700" y="136" text-anchor="middle" fill="#5A6F8A" font-size="9">💡 虫情测报灯</text>
+            <text x="700" y="154" text-anchor="middle" fill="#5A6F8A" font-size="9">🚰 灌溉泵站</text>
+            <text x="700" y="172" text-anchor="middle" fill="#5A6F8A" font-size="9">🔋 前沿智慧农业站</text>
+            <text x="700" y="190" text-anchor="middle" fill="#5A6F8A" font-size="9">🤖 无人车库</text>
+            <text x="700" y="208" text-anchor="middle" fill="#5A6F8A" font-size="9">📺 指挥中心</text>
+            <text x="700" y="226" text-anchor="middle" fill="#5A6F8A" font-size="9">🌾 烘干仓储中心</text>
+            <text x="700" y="244" text-anchor="middle" fill="#5A6F8A" font-size="9">💧 蓄水池(2,000m³)</text>
+            <text x="700" y="262" text-anchor="middle" fill="#5A6F8A" font-size="9">⚡ 配电房</text>
+            <text x="700" y="280" text-anchor="middle" fill="#5A6F8A" font-size="9">🅿️ 农机停放场</text>
+            <text x="700" y="298" text-anchor="middle" fill="#5A6F8A" font-size="9">🧪 土壤检测室</text>
+            <!-- Water channels -->
+            <path d="M30 190 L600 190" stroke="#00B4D8" stroke-width="1.5" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+            <text x="300" y="186" text-anchor="middle" fill="#00B4D8" font-size="8" opacity="0.7">灌溉水渠</text>
+            <!-- Legend -->
+            <rect x="620" y="350" width="160" height="40" rx="4" fill="rgba(10,22,40,0.8)"/>
+            <circle cx="640" cy="365" r="4" fill="#1DB954"/><text x="650" y="369" fill="#7B93B0" font-size="8">正常</text>
+            <circle cx="690" cy="365" r="4" fill="#FF8C00"/><text x="700" y="369" fill="#7B93B0" font-size="8">预警</text>
+            <circle cx="740" cy="365" r="4" fill="#8B6914"/><text x="750" y="369" fill="#7B93B0" font-size="8">轮作</text>
+            <text x="700" y="383" text-anchor="middle" fill="#5A6F8A" font-size="8">点击田块查看详情</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 田块详情面板 -->
+      <div class="glass-card rounded-xl p-4 lg:col-span-2" id="fieldDetailPanel">
+        <h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+          <span class="w-1 h-4 bg-farm-green rounded-full"></span>
+          田块详情
+        </h4>
+        <div id="fieldDetailContent">
+          <div class="text-center py-8 text-farm-muted text-xs">← 点击地图中的田块查看详情</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 品种推荐表格 -->
+    <div class="glass-card rounded-xl p-4">
+      <h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+        <span class="w-1 h-4 bg-farm-orange rounded-full"></span>
+        品种推荐与适配分析
+      </h4>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="border-b border-farm-border">
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">品种名称</th>
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">类型</th>
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">适配田块</th>
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">全生育期(天)</th>
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">亩产潜力(kg)</th>
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">抗性评价</th>
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">米质等级</th>
+              <th class="text-left py-2 px-3 text-farm-muted font-medium">AI推荐指数</th>
+            </tr>
+          </thead>
+          <tbody id="varietyTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 分步骤生产计划 -->
+    <div class="glass-card rounded-xl p-4">
+      <h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+        <span class="w-1 h-4 bg-farm-blue rounded-full"></span>
+        分阶段生产计划
+      </h4>
+      <div class="flex gap-2 overflow-x-auto pb-2 mb-3">
+        <button class="tab-btn active text-xs px-4 py-2 rounded-full border border-farm-border whitespace-nowrap" onclick="switchPlanTab('prep')">备耕阶段</button>
+        <button class="tab-btn text-xs px-4 py-2 rounded-full border border-farm-border whitespace-nowrap text-farm-muted" onclick="switchPlanTab('sow')">播种插秧</button>
+        <button class="tab-btn text-xs px-4 py-2 rounded-full border border-farm-border whitespace-nowrap text-farm-muted" onclick="switchPlanTab('grow')">田间管理</button>
+        <button class="tab-btn text-xs px-4 py-2 rounded-full border border-farm-border whitespace-nowrap text-farm-muted" onclick="switchPlanTab('harvest')">收获仓储</button>
+      </div>
+      <div id="plan-prep" class="plan-tab"></div>
+      <div id="plan-sow" class="plan-tab" style="display:none"></div>
+      <div id="plan-grow" class="plan-tab" style="display:none"></div>
+      <div id="plan-harvest" class="plan-tab" style="display:none"></div>
+    </div>
   </section>
 
   <!-- ============ REPORT ============ -->
@@ -1545,7 +1760,7 @@ function confirmAI(title) {
 
 var sectionTitles = {
   home:'首页总览', monitor:'农情监测', video:'视频监控', device:'智能设备',
-  operation:'作业管理', alert:'预警中心', ai:'AI智能体', report:'数据报告'
+  operation:'作业管理', alert:'预警中心', ai:'AI智能体', plan:'生产规划', report:'数据报告'
 };
 
 function switchSection(section) {
@@ -1625,16 +1840,160 @@ function updateTime() {
 
 function handleHashChange() {
   var hash = window.location.hash.replace('#','') || 'home';
-  var valid = ['home','monitor','video','device','operation','alert','ai','report'];
+  var valid = ['home','monitor','video','device','operation','alert','ai','plan','report'];
   if (valid.indexOf(hash) >= 0) switchSection(hash);
 }
 
 window.addEventListener('hashchange', handleHashChange);
+
+var fieldData = [
+  { name:'1号田', area:280, crop:'南粳9108', type:'水稻', stage:'抽穗期', status:'正常', color:'#1DB954', soil:'黏壤土', ph:'6.8', organic:'2.1%', prevCrop:'小麦', yieldTarget:'680kg/亩', yield2025:'645kg/亩', irrigation:'滴灌', planted:'3月15日', estimated:'6月15日', devices:['气象站','墒情仪','1号球机','赶蛾杆'], notes:'长势良好，LAI 3.8，叶龄9.2叶' },
+  { name:'2号田', area:240, crop:'南粳46', type:'水稻', stage:'抽穗期', status:'正常', color:'#00B4D8', soil:'沙壤土', ph:'6.9', organic:'1.8%', prevCrop:'油菜', yieldTarget:'660kg/亩', yield2025:'630kg/亩', irrigation:'滴灌', planted:'3月18日', estimated:'6月18日', devices:['墒情仪','2号球机','长势感知'], notes:'叶层氮含量2.1%，建议追施穗肥' },
+  { name:'3号田', area:300, crop:'南粳9108', type:'水稻', stage:'抽穗期', status:'干旱预警', color:'#FF8C00', soil:'黏土', ph:'7.0', organic:'2.3%', prevCrop:'小麦', yieldTarget:'680kg/亩', yield2025:'650kg/亩', irrigation:'喷灌', planted:'3月14日', estimated:'6月12日', devices:['墒情仪','虫情灯','赶蛾杆','亩穗数仪'], notes:'⚠️ 土壤湿度18%低于阈值25%，AI已启动灌溉' },
+  { name:'4号田', area:260, crop:'扬麦25', type:'小麦', stage:'灌浆期', status:'正常', color:'#1DB954', soil:'壤土', ph:'6.7', organic:'1.9%', prevCrop:'水稻', yieldTarget:'520kg/亩', yield2025:'498kg/亩', irrigation:'喷灌', planted:'11月5日', estimated:'5月25日', devices:['气象站','3号球机','长势感知'], notes:'灌浆期，千粒重预估42g，长势良好' },
+  { name:'5号田', area:200, crop:'宁麦13', type:'小麦', stage:'灌浆期', status:'正常', color:'#8B6914', soil:'沙壤土', ph:'6.6', organic:'1.7%', prevCrop:'水稻', yieldTarget:'500kg/亩', yield2025:'475kg/亩', irrigation:'漫灌', planted:'11月8日', estimated:'5月28日', devices:['墒情仪','4号球机'], notes:'稻麦轮作田块，下茬计划种植南粳9108' }
+];
+
+var varieties = [
+  { name:'南粳9108', type:'粳稻', fields:'1号/3号田', period:155, yield:'650-700', resist:'稻瘟病中抗、条纹叶枯病抗、白叶枯病中抗', quality:'国标二级', score:95, reason:'高产优质、食味值高、抗性好、适宜邗江地区' },
+  { name:'南粳46', type:'粳稻', fields:'2号田', period:160, yield:'620-680', resist:'稻瘟病中抗、条纹叶枯病抗、白叶枯病中感', quality:'国标一级', score:90, reason:'米质极佳、食味值突出、适合高端市场' },
+  { name:'扬麦25', type:'冬小麦', fields:'4号田', period:200, yield:'480-550', resist:'赤霉病中抗、白粉病抗、纹枯病中抗', quality:'中强筋', score:88, reason:'高产稳产、抗倒伏、适合稻麦轮作' },
+  { name:'宁麦13', type:'冬小麦', fields:'5号田', period:195, yield:'460-520', resist:'赤霉病中抗、白粉病中抗', quality:'中筋', score:82, reason:'早熟、适合稻麦轮作接茬、稳产性好' },
+  { name:'南粳5718', type:'粳稻', fields:'-', period:148, yield:'630-690', resist:'稻瘟病抗、条纹叶枯病抗', quality:'国标二级', score:85, reason:'早熟品种、生育期短、适合灾后补种' },
+  { name:'镇麦12号', type:'冬小麦', fields:'-', period:190, yield:'500-560', resist:'赤霉病抗、穗发芽抗', quality:'强筋', score:83, reason:'强筋麦、市场溢价高、抗穗发芽' }
+];
+
+var planSteps = {
+  prep: [
+    { title:'土壤检测与改良', period:'1月-2月', items:['采集5个田块土壤样本，检测PH/有机质/氮磷钾/重金属','3号田PH偏高，施用硫磺50kg/亩调酸','4号田有机质偏低，施用腐熟有机肥2吨/亩','5号田补施钾肥15kg/亩'], status:'已完成' },
+    { title:'种子准备与处理', period:'2月中旬', items:['南粳9108种子580kg（1号/3号田），发芽率95%','南粳46种子240kg（2号田），发芽率93%','扬麦25种子已秋播，无需备种','宁麦13种子已秋播，无需备种','种子包衣处理：咪鲜胺+吡虫啉，防治苗期病害虫害'], status:'已完成' },
+    { title:'农机检修与调试', period:'2月下旬-3月上旬', items:['无人拖拉机2台：发动机/液压/导航系统检修','无人插秧机2台：插秧臂/取苗器/北斗定位校准','植保无人机3台：电池/喷头/飞控系统检测','无人收割机2台：割台/脱粒/清选系统保养','灌溉泵站6座：水泵/阀门/管道检查试运行'], status:'已完成' },
+    { title:'灌溉系统准备', period:'3月上旬', items:['蓄水池清淤消毒，蓄水2,000m³','灌溉管道冲洗试压，修复漏水点3处','电磁阀门逐一测试，更换故障阀门2个','水质检测：PH 6.8，符合灌溉标准'], status:'已完成' }
+  ],
+  sow: [
+    { title:'水稻育秧', period:'3月5日-3月15日', items:['采用硬盘育秧技术，秧盘4.2万盘','育秧基质：草炭+蛭石+珍珠岩（6:3:1）','播种量：干种子120g/盘','温室控温：白天28°C/夜间20°C','水肥管理：1叶1心期施断奶肥'], status:'已完成' },
+    { title:'大田整地', period:'3月10日-3月18日', items:['1号田：旋耕2遍，深度15-20cm','2号田：旋耕+激光平地，高差≤3cm','3号田：旋耕+施基肥（复合肥40kg/亩）','泡田打浆：灌水5cm，沉淀24h后插秧'], status:'已完成' },
+    { title:'机械插秧', period:'3月15日-3月22日', items:['1号田(280亩)：3月15-17日，2台插秧机并行','2号田(240亩)：3月18-20日','3号田(300亩)：3月20-22日','行距30cm×株距12cm，每穴4-5苗','插秧深度2-3cm，漏插率≤3%'], status:'已完成' },
+    { title:'小麦田间管理(秋播延续)', period:'11月-次年5月', items:['4号田扬麦25：11月5日播种，当前灌浆期','5号田宁麦13：11月8日播种，当前灌浆期','拔节期追施尿素10kg/亩（3月上旬已完成）','扬花期防治赤霉病（4月中旬已完成）','灌浆期叶面喷施磷酸二氢钾（5月初已完成）'], status:'进行中' }
+  ],
+  grow: [
+    { title:'水分管理', period:'3月-6月', items:['返青期：浅水3cm促分蘖','分蘖末期：晒田7-10天控无效分蘖','拔节孕穗期：复水5-7cm','抽穗扬花期：保持3-5cm水层','灌浆成熟期：干湿交替，收割前7天断水','AI自动灌溉系统根据墒情数据实时调控'], status:'进行中' },
+    { title:'肥料管理', period:'3月-6月', items:['基肥：复合肥40kg/亩（插秧前）','分蘖肥：尿素10kg/亩（插秧后7天）','穗肥：尿素5kg/亩+钾肥5kg/亩（倒4叶期）','粒肥：磷酸二氢钾0.2%叶面喷施（齐穗期）','AI根据叶层氮含量和SPAD值精准推荐施肥量'], status:'进行中' },
+    { title:'病虫害防治', period:'4月-6月', items:['4月中旬：防治二化螟（氯虫苯甲酰胺）','5月上旬：防治稻纵卷叶螟（甲维盐）⚠️当前超标','5月中旬：防治纹枯病（井冈霉素）','5月下旬：防治稻瘟病（三环唑）','6月上旬：穗期综合防治','虫情测报灯+AI识别，精准确定防治适期'], status:'进行中' },
+    { title:'杂草防除', period:'3月-5月', items:['插秧后5天：苄嘧磺隆+吡嘧磺隆土壤封闭','插秧后15天：五氟磺草胺+氰氟草酯茎叶处理','中后期人工/机械除草补防','AI识别杂草密度，精准喷施减少药量30%'], status:'进行中' }
+  ],
+  harvest: [
+    { title:'成熟度监测', period:'6月上旬', items:['亩穗数测量仪每日采集数据','籽粒含水率监测：目标≤25%收割','穗部变黄率监测：目标≥95%','AI综合评估成熟度评分（0-100）','台风前优先抢收成熟度≥80%的田块'], status:'待执行' },
+    { title:'收割作业', period:'6月10日-6月25日', items:['2台无人收割机并行作业','日作业能力200亩/台','收割留茬高度≤15cm','籽粒破损率≤2%、落粒损失率≤3%','实时监测含水率，过高则调整收割速度','台风影响需提前至6月8日开始抢收'], status:'待执行' },
+    { title:'烘干仓储', period:'6月-7月', items:['烘干机处理能力50吨/日','烘干目标含水率≤14%','烘干温度38-42°C缓苏降温','仓储温度≤20°C、湿度≤65%','842吨总产量预计17天完成烘干','质量检测：出糙率、整精米率、食味值'], status:'待执行' },
+    { title:'秸秆处理与下茬准备', period:'6月下旬-7月', items:['秸秆全量还田：粉碎长度≤10cm','深翻还田深度20-25cm','3号/5号田稻麦轮作：7月翻耕备播小麦','1号/2号田休耕培肥：种植绿肥紫云英','土壤消毒：石灰氮30kg/亩防治土传病害'], status:'待执行' }
+  ]
+};
+
+function showFieldDetail(idx) {
+  var f = fieldData[idx];
+  var html = '<div class="space-y-3 animate-fadeIn">';
+  html += '<div class="flex items-center justify-between"><span class="text-sm font-bold" style="color:'+f.color+'">'+f.name+'</span><span class="text-xs px-2 py-0.5 rounded-full" style="background:'+f.color+'20;color:'+f.color+';border:1px solid '+f.color+'40">'+f.status+'</span></div>';
+  html += '<div class="grid grid-cols-2 gap-2 text-xs">';
+  html += '<div class="bg-farm-surface rounded-lg p-2"><span class="text-farm-muted">面积</span><div class="font-bold text-farm-text">'+f.area+'亩</div></div>';
+  html += '<div class="bg-farm-surface rounded-lg p-2"><span class="text-farm-muted">作物</span><div class="font-bold text-farm-text">'+f.crop+'</div></div>';
+  html += '<div class="bg-farm-surface rounded-lg p-2"><span class="text-farm-muted">生育期</span><div class="font-bold text-farm-text">'+f.stage+'</div></div>';
+  html += '<div class="bg-farm-surface rounded-lg p-2"><span class="text-farm-muted">土质</span><div class="font-bold text-farm-text">'+f.soil+'</div></div>';
+  html += '<div class="bg-farm-surface rounded-lg p-2"><span class="text-farm-muted">PH值</span><div class="font-bold text-farm-text">'+f.ph+'</div></div>';
+  html += '<div class="bg-farm-surface rounded-lg p-2"><span class="text-farm-muted">有机质</span><div class="font-bold text-farm-text">'+f.organic+'</div></div>';
+  html += '</div>';
+  html += '<div class="text-xs space-y-1.5 mt-2">';
+  html += '<div class="flex justify-between"><span class="text-farm-muted">前茬作物</span><span class="text-farm-text">'+f.prevCrop+'</span></div>';
+  html += '<div class="flex justify-between"><span class="text-farm-muted">播种日期</span><span class="text-farm-text">'+f.planted+'</span></div>';
+  html += '<div class="flex justify-between"><span class="text-farm-muted">预计收获</span><span class="text-farm-text">'+f.estimated+'</span></div>';
+  html += '<div class="flex justify-between"><span class="text-farm-muted">灌溉方式</span><span class="text-farm-text">'+f.irrigation+'</span></div>';
+  html += '<div class="flex justify-between"><span class="text-farm-muted">目标亩产</span><span class="text-farm-green font-bold">'+f.yieldTarget+'</span></div>';
+  html += '<div class="flex justify-between"><span class="text-farm-muted">2025实产</span><span class="text-farm-text">'+f.yield2025+'</span></div>';
+  html += '</div>';
+  html += '<div class="mt-2"><div class="text-xs text-farm-muted mb-1">关联设备</div><div class="flex flex-wrap gap-1">';
+  f.devices.forEach(function(d){ html += '<span class="text-[10px] px-2 py-0.5 rounded-full bg-farm-surface text-farm-muted border border-farm-border">'+d+'</span>'; });
+  html += '</div></div>';
+  html += '<div class="mt-2 p-2 bg-farm-surface rounded-lg text-xs text-farm-muted">'+f.notes+'</div>';
+  html += '<div class="mt-3 flex gap-2"><button onclick="showToast(\'已切换至'+f.name+'监控视图\',\'success\')" class="text-xs px-3 py-1.5 rounded bg-farm-green/15 text-farm-green hover:bg-farm-green/25 transition-colors">实时监控</button><button onclick="showToast(\'已导出'+f.name+'生产档案\',\'success\')" class="text-xs px-3 py-1.5 rounded bg-farm-surface text-farm-muted hover:bg-farm-border transition-colors">导出档案</button></div>';
+  html += '</div>';
+  document.getElementById('fieldDetailContent').innerHTML = html;
+}
+
+function renderVarietyTable() {
+  var tbody = document.getElementById('varietyTable');
+  if (!tbody) return;
+  var html = '';
+  varieties.forEach(function(v) {
+    var scoreColor = v.score >= 90 ? '#1DB954' : v.score >= 85 ? '#00B4D8' : '#FF8C00';
+    var scoreBar = v.score + '%';
+    html += '<tr class="border-b border-farm-border/50 hover:bg-farm-surface/30 transition-colors">';
+    html += '<td class="py-2.5 px-3 font-bold text-farm-text">'+v.name+'</td>';
+    html += '<td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px]" style="background:rgba(0,180,216,0.15);color:#00B4D8">'+v.type+'</span></td>';
+    html += '<td class="py-2.5 px-3 text-farm-text">'+v.fields+'</td>';
+    html += '<td class="py-2.5 px-3 text-farm-text">'+v.period+'</td>';
+    html += '<td class="py-2.5 px-3 text-farm-text">'+v.yield+'</td>';
+    html += '<td class="py-2.5 px-3 text-farm-muted" style="max-width:160px">'+v.resist+'</td>';
+    html += '<td class="py-2.5 px-3 text-farm-text">'+v.quality+'</td>';
+    html += '<td class="py-2.5 px-3"><div class="flex items-center gap-2"><div class="w-16 h-2 bg-farm-surface rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:'+scoreBar+';background:'+scoreColor+'"></div></div><span class="font-bold" style="color:'+scoreColor+'">'+v.score+'</span></div></td>';
+    html += '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function renderPlanTab(tab) {
+  var el = document.getElementById('plan-' + tab);
+  if (!el) return;
+  var steps = planSteps[tab];
+  if (!steps) return;
+  var html = '<div class="space-y-4">';
+  steps.forEach(function(step, i) {
+    var statusColor = step.status === '已完成' ? '#1DB954' : step.status === '进行中' ? '#00B4D8' : '#7B93B0';
+    var statusBg = step.status === '已完成' ? 'rgba(29,185,84,0.1)' : step.status === '进行中' ? 'rgba(0,180,216,0.1)' : 'rgba(123,147,176,0.1)';
+    html += '<div class="bg-farm-surface rounded-lg p-4">';
+    html += '<div class="flex items-center justify-between mb-2">';
+    html += '<div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style="background:'+statusBg+';color:'+statusColor+'">'+(i+1)+'</span><span class="text-sm font-bold text-farm-text">'+step.title+'</span></div>';
+    html += '<div class="flex items-center gap-2"><span class="text-[10px] text-farm-muted">'+step.period+'</span><span class="text-[10px] px-2 py-0.5 rounded-full" style="background:'+statusBg+';color:'+statusColor+'">'+step.status+'</span></div>';
+    html += '</div>';
+    html += '<ul class="space-y-1.5 ml-8">';
+    step.items.forEach(function(item) {
+      var icon = step.status === '已完成' ? '✅' : step.status === '进行中' ? '🔄' : '⏳';
+      html += '<li class="text-xs text-farm-muted flex items-start gap-2"><span>'+icon+'</span><span>'+item+'</span></li>';
+    });
+    html += '</ul></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function switchPlanTab(tab) {
+  document.querySelectorAll('.plan-tab').forEach(function(el) { el.style.display = 'none'; });
+  document.getElementById('plan-' + tab).style.display = 'block';
+  document.querySelectorAll('#section-plan .tab-btn').forEach(function(btn, i) {
+    var tabs = ['prep', 'sow', 'grow', 'harvest'];
+    if (tabs[i] === tab) {
+      btn.classList.add('active');
+      btn.classList.remove('text-farm-muted');
+      btn.style.color = '#1DB954';
+      btn.style.borderColor = '#1DB954';
+      btn.style.background = 'rgba(29, 185, 84, 0.15)';
+    } else {
+      btn.classList.remove('active');
+      btn.classList.add('text-farm-muted');
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.style.background = '';
+    }
+  });
+  renderPlanTab(tab);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   updateTime();
   setInterval(updateTime, 1000);
   initWeatherChart();
   handleHashChange();
+  renderVarietyTable();
+  renderPlanTab('prep');
 });
 </script>
 
