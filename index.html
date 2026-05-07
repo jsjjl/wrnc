@@ -1639,8 +1639,8 @@ function renderHomeFarmMap() {
         var y1 = d.y + fovLen * Math.sin(rad - fovSpread * Math.PI / 180);
         var x2 = d.x + fovLen * Math.cos(rad + fovSpread * Math.PI / 180);
         var y2 = d.y + fovLen * Math.sin(rad + fovSpread * Math.PI / 180);
-        html += '<polygon class="camera-fov" points="' + d.x + ',' + d.y + ' ' + x1 + ',' + y1 + ' ' + x2 + ',' + y2 + '" id="fov-' + d.id + '" fill="rgba(255,60,60,0.06)" stroke="#ff4444" stroke-width="0.8" stroke-opacity="0.5" filter="url(#glow3d)"/>';
-        html += '<line x1="' + d.x + '" y1="' + d.y + '" x2="' + ((x1+x2)/2) + '" y2="' + ((y1+y2)/2) + '" stroke="' + color + '" stroke-width="0.8" opacity="0.4" stroke-dasharray="3,2"/>';
+        html += '<polygon class="camera-fov" points="' + d.x + ',' + d.y + ' ' + x1 + ',' + y1 + ' ' + x2 + ',' + y2 + '" id="fov-' + d.id + '" fill="rgba(255,255,255,0.06)" stroke="#ffffff" stroke-width="0.8" stroke-opacity="0.5" filter="url(#glow3d)"/>';
+        html += '<line x1="' + d.x + '" y1="' + d.y + '" x2="' + ((x1+x2)/2) + '" y2="' + ((y1+y2)/2) + '" stroke="#ffffff" stroke-width="0.8" opacity="0.35" stroke-dasharray="3,2"/>';
       }
 
       html += '<g class="cursor-pointer" id="dev-' + d.id + '" filter="' + gf + '">';
