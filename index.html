@@ -417,291 +417,279 @@ main { flex: 1; display: flex; flex-direction: column; }
 
   <!-- ============ HOME ============ -->
   <section id="section-home" class="section-page active p-4 md:p-6 space-y-5">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-      <div class="glass-card rounded-xl p-4 card-hover animate-fadeInUp" style="animation-delay:0.1s">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-farm-muted">种植面积</span>
-          <div class="w-8 h-8 rounded-lg bg-farm-green/15 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-          </div>
+    <div class="glass-card rounded-xl p-5">
+      <div class="flex items-start justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-bold text-farm-text">📋 邗江区无人农场农情综合简报</h2>
+          <p class="text-xs text-farm-muted mt-1">生成时间：2026-05-10 07:00 | 覆盖面积：1,280亩</p>
         </div>
-        <div class="stat-number text-2xl md:text-3xl font-black text-farm-green">1,280</div>
-        <span class="text-xs text-farm-muted">亩</span>
-      </div>
-      <div class="glass-card rounded-xl p-4 card-hover animate-fadeInUp" style="animation-delay:0.2s">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-farm-muted">设备在线率</span>
-          <div class="w-8 h-8 rounded-lg bg-farm-blue/15 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00B4D8" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          </div>
-        </div>
-        <div class="stat-number text-2xl md:text-3xl font-black text-farm-blue">96.5%</div>
-        <span class="text-xs text-farm-green">↑ 2.3%</span>
-      </div>
-      <div class="glass-card rounded-xl p-4 card-hover animate-fadeInUp" style="animation-delay:0.3s">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-farm-muted">今日预警</span>
-          <div class="w-8 h-8 rounded-lg bg-farm-orange/15 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF8C00" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          </div>
-        </div>
-        <div class="stat-number text-2xl md:text-3xl font-black text-farm-orange">5</div>
-        <span class="text-xs text-farm-orange">待处理</span>
-      </div>
-      <div class="glass-card rounded-xl p-4 card-hover animate-fadeInUp" style="animation-delay:0.4s">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-farm-muted">作业进度</span>
-          <div class="w-8 h-8 rounded-lg bg-farm-green/15 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-        </div>
-        <div class="stat-number text-2xl md:text-3xl font-black text-farm-text">78%</div>
-        <span class="text-xs text-farm-muted">本周完成</span>
-      </div>
-    </div>
-
-    <div>
-      <h3 class="text-sm font-bold mb-3 flex items-center gap-2">
-        <span class="w-1 h-4 bg-farm-green rounded-full"></span>四情概览
-      </h3>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-        <div class="glass-card rounded-xl p-4 card-hover cursor-pointer" onclick="switchSection('monitor')">
-          <div class="flex items-center gap-2 mb-3">
-            <div class="w-9 h-9 rounded-lg bg-blue-500/15 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
-            </div>
-            <span class="text-sm font-medium">墒情</span>
-          </div>
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">土壤湿度</span><span class="text-farm-text font-medium">32%</span></div>
-            <div class="w-full h-1.5 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-blue-500 rounded-full" style="width:32%"></div></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">土壤温度</span><span class="text-farm-text font-medium">22.5°C</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">PH值</span><span class="text-farm-text font-medium">6.8</span></div>
-          </div>
-        </div>
-        <div class="glass-card rounded-xl p-4 card-hover cursor-pointer" onclick="switchSection('monitor')">
-          <div class="flex items-center gap-2 mb-3">
-            <div class="w-9 h-9 rounded-lg bg-farm-orange/15 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF8C00" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-            </div>
-            <span class="text-sm font-medium">虫情</span>
-          </div>
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">稻纵卷叶螟</span><span class="text-farm-orange font-medium">超标</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">二化螟</span><span class="text-farm-green font-medium">正常</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">今日诱虫</span><span class="text-farm-text font-medium">127头</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">防治建议</span><span class="text-farm-orange font-medium">3日内</span></div>
-          </div>
-        </div>
-        <div class="glass-card rounded-xl p-4 card-hover cursor-pointer" onclick="switchSection('monitor')">
-          <div class="flex items-center gap-2 mb-3">
-            <div class="w-9 h-9 rounded-lg bg-farm-green/15 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
-            </div>
-            <span class="text-sm font-medium">苗情</span>
-          </div>
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">LAI指数</span><span class="text-farm-text font-medium">3.8</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">叶层氮含量</span><span class="text-farm-text font-medium">2.1%</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">叶龄</span><span class="text-farm-text font-medium">9.2叶</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">长势评价</span><span class="text-farm-green font-medium">良好</span></div>
-          </div>
-        </div>
-        <div class="glass-card rounded-xl p-4 card-hover cursor-pointer" onclick="switchSection('monitor')">
-          <div class="flex items-center gap-2 mb-3">
-            <div class="w-9 h-9 rounded-lg bg-red-500/15 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M19 16.9A5 5 0 0018 7h-1.26A8 8 0 104 15.25"/><path d="M13 8l-4 4h6l-4 4"/></svg>
-            </div>
-            <span class="text-sm font-medium">灾情</span>
-          </div>
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">暴雨风险</span><span class="text-farm-orange font-medium">关注</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">高温预警</span><span class="text-farm-orange font-medium">关注</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">倒伏风险</span><span class="text-farm-green font-medium">低</span></div>
-            <div class="flex justify-between text-xs"><span class="text-farm-muted">积水情况</span><span class="text-farm-green font-medium">无</span></div>
-          </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-farm-orange/15 text-farm-orange text-xs font-medium rounded-full flex items-center gap-1">
+            <span class="w-2 h-2 bg-farm-orange rounded-full animate-pulse"></span>
+            有异常预警
+          </span>
         </div>
       </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <div class="glass-card rounded-xl p-4 lg:col-span-1">
-        <h3 class="text-sm font-bold mb-3 flex items-center gap-2">
-          <span class="w-1 h-4 bg-farm-blue rounded-full"></span>气象实况
-        </h3>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-farm-surface rounded-lg p-3 text-center">
-            <div class="text-2xl font-black text-farm-text">26°C</div>
-            <div class="text-xs text-farm-muted mt-1">温度</div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-3 text-center">
-            <div class="text-2xl font-black text-farm-text">68%</div>
-            <div class="text-xs text-farm-muted mt-1">湿度</div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-3 text-center">
-            <div class="text-2xl font-black text-farm-text">3.2</div>
-            <div class="text-xs text-farm-muted mt-1">风速 m/s</div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-3 text-center">
-            <div class="text-2xl font-black text-farm-text">0</div>
-            <div class="text-xs text-farm-muted mt-1">降雨 mm</div>
-          </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+        <div class="text-center p-3 bg-farm-surface rounded-lg">
+          <div class="text-2xl font-black text-farm-green">300</div>
+          <div class="text-xs text-farm-muted mt-1">核心区面积(亩)</div>
         </div>
-        <div class="mt-3"><div style="height:120px"><canvas id="weatherChart"></canvas></div></div>
+        <div class="text-center p-3 bg-farm-surface rounded-lg">
+          <div class="text-2xl font-black text-farm-blue">5</div>
+          <div class="text-xs text-farm-muted mt-1">异常地块(个)</div>
+        </div>
+        <div class="text-center p-3 bg-farm-surface rounded-lg">
+          <div class="text-2xl font-black text-farm-text">96.5%</div>
+          <div class="text-xs text-farm-muted mt-1">设备在线率</div>
+        </div>
+        <div class="text-center p-3 bg-farm-surface rounded-lg">
+          <div class="text-2xl font-black text-farm-orange">35</div>
+          <div class="text-xs text-farm-muted mt-1">涉及面积(亩)</div>
+        </div>
       </div>
-      <div class="glass-card rounded-xl p-4 lg:col-span-2">
-        <h3 class="text-sm font-bold mb-3 flex items-center gap-2">
-          <span class="w-1 h-4 bg-farm-green rounded-full"></span>作业进度
-        </h3>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
-          <div class="bg-farm-surface rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm font-medium">灌溉作业</span>
-              <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#00B4D8" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="49"/>
-              </svg>
-              <div>
-                <div class="text-lg font-black text-farm-blue">70%</div>
-                <div class="text-xs text-farm-muted">3/5田块</div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm font-medium">农机作业</span>
-              <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1DB954" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="32.67"/>
-              </svg>
-              <div>
-                <div class="text-lg font-black text-farm-green">80%</div>
-                <div class="text-xs text-farm-muted">4/5田块</div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm font-medium">植保飞防</span>
-              <span class="text-xs text-farm-muted bg-farm-surface px-2 py-0.5 rounded-full border border-farm-border">待执行</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#7B93B0" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36"/>
-              </svg>
-              <div>
-                <div class="text-lg font-black text-farm-muted">0%</div>
-                <div class="text-xs text-farm-muted">计划明日</div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm font-medium">施肥作业</span>
-              <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#8B6914" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="81.68"/>
-              </svg>
-              <div>
-                <div class="text-lg font-black text-farm-brown">50%</div>
-                <div class="text-xs text-farm-muted">2/4田块</div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm font-medium">巡检任务</span>
-              <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1DB954" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="16.34"/>
-              </svg>
-              <div>
-                <div class="text-lg font-black text-farm-green">90%</div>
-                <div class="text-xs text-farm-muted">9/10路线</div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-farm-surface rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm font-medium">收割准备</span>
-              <span class="text-xs text-farm-orange bg-farm-orange/10 px-2 py-0.5 rounded-full">准备中</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
-                <circle cx="32" cy="32" r="26" fill="none" stroke="#FF8C00" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="114.35"/>
-              </svg>
-              <div>
-                <div class="text-lg font-black text-farm-orange">30%</div>
-                <div class="text-xs text-farm-muted">设备调试</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="px-2 py-1 text-xs bg-blue-500/10 text-blue-400 rounded">扬麦25 (120亩)</span>
+        <span class="px-2 py-1 text-xs bg-green-500/10 text-green-400 rounded">宁麦13 (100亩)</span>
+        <span class="px-2 py-1 text-xs bg-yellow-500/10 text-yellow-600 rounded">镇麦12 (80亩)</span>
+        <span class="text-xs text-farm-muted ml-auto">当前生育期：扬花-灌浆期</span>
       </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div class="glass-card rounded-xl p-4">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-sm font-bold flex items-center gap-2"><span class="w-1 h-4 bg-farm-blue rounded-full"></span>实时视频</h3>
-          <a href="#video" class="text-xs text-farm-green hover:underline" onclick="switchSection('video')">查看全部 →</a>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div class="video-placeholder rounded-lg aspect-video flex items-center justify-center cursor-pointer" onclick="switchSection('video')">
-            <div class="text-center z-10"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2" class="mx-auto mb-1"><polygon points="5 3 19 12 5 21 5 3"/></svg><span class="text-xs text-farm-muted">鹰眼全景</span></div>
+      <div class="glass-card rounded-xl p-5">
+        <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+          🔥 异常田块紧急处方（按危急程度排序）
+        </h3>
+        
+        <div class="space-y-3">
+          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+            <div class="flex items-start justify-between mb-2">
+              <span class="font-bold text-farm-text">东区-03号田 <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded ml-2">重度</span></span>
+              <span class="text-xs text-farm-muted">扬麦25</span>
+            </div>
+            <p class="text-xs text-farm-muted mb-2">
+              <b class="text-farm-text">异常：</b>鹰眼识别到东北角有约2亩面积异常发黄。
+              <b class="text-farm-text">交叉验证：</b>履带车近地确认，长势仪显示LNC（氮含量）极低。
+            </p>
+            <p class="text-xs text-farm-orange mb-2">
+              <b>预估影响：</b>若不处理，该2亩区域千粒重将下降15%，预估损失约300斤产量。
+            </p>
+            <div class="flex items-center justify-between">
+              <p class="text-xs text-farm-green">
+                <b>智能处方：</b>调度植保无人机，仅对03号田东北角进行高浓度叶面肥喷洒。
+              </p>
+              <button class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors">
+                一键派单
+              </button>
+            </div>
           </div>
-          <div class="video-placeholder rounded-lg aspect-video flex items-center justify-center cursor-pointer" onclick="switchSection('video')">
-            <div class="text-center z-10"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00B4D8" stroke-width="2" class="mx-auto mb-1"><polygon points="5 3 19 12 5 21 5 3"/></svg><span class="text-xs text-farm-muted">1号球机</span></div>
+          
+          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+            <div class="flex items-start justify-between mb-2">
+              <span class="font-bold text-farm-text">王庄-01号田 <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded ml-2">重度</span></span>
+              <span class="text-xs text-farm-muted">宁麦13</span>
+            </div>
+            <p class="text-xs text-farm-muted mb-2">
+              <b class="text-farm-text">异常：</b>自动赶蛾杆+球机联动报警，发现麦蚜密度超标（50头/百株）。
+            </p>
+            <p class="text-xs text-farm-orange mb-2">
+              <b>预估影响：</b>蚜虫正处于暴发初期，2天内可能蔓延至相邻的02号田，导致大面积减产和煤污病。
+            </p>
+            <div class="flex items-center justify-between">
+              <p class="text-xs text-farm-green">
+                <b>智能处方：</b>立即下发飞防任务，使用吡虫啉进行封锁式打药。
+              </p>
+              <button class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors">
+                一键派单
+              </button>
+            </div>
           </div>
-          <div class="video-placeholder rounded-lg aspect-video flex items-center justify-center cursor-pointer" onclick="switchSection('video')">
-            <div class="text-center z-10"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF8C00" stroke-width="2" class="mx-auto mb-1"><polygon points="5 3 19 12 5 21 5 3"/></svg><span class="text-xs text-farm-muted">巡检无人车</span></div>
-          </div>
-          <div class="video-placeholder rounded-lg aspect-video flex items-center justify-center cursor-pointer" onclick="switchSection('video')">
-            <div class="text-center z-10"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2" class="mx-auto mb-1"><polygon points="5 3 19 12 5 21 5 3"/></svg><span class="text-xs text-farm-muted">巡检机器狗</span></div>
+          
+          <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+            <div class="flex items-start justify-between mb-2">
+              <span class="font-bold text-farm-text">河东-05号田 <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded ml-2">轻度</span></span>
+              <span class="text-xs text-farm-muted">镇麦12</span>
+            </div>
+            <p class="text-xs text-farm-muted mb-2">
+              <b class="text-farm-text">异常：</b>土壤墒情仪显示20cm深度相对湿度仅55%（偏旱）。
+            </p>
+            <p class="text-xs text-farm-orange mb-2">
+              <b>预估影响：</b>处于灌浆初期，轻度缺水会影响灌浆速率，出粉率降低。
+            </p>
+            <div class="flex items-center justify-between">
+              <p class="text-xs text-farm-green">
+                <b>智能处方：</b>开启河东区智能灌溉电磁阀，补水2小时后自动关闭。
+              </p>
+              <button class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors">
+                一键派单
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="glass-card rounded-xl p-4">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-sm font-bold flex items-center gap-2"><span class="w-1 h-4 bg-farm-orange rounded-full"></span>最新预警</h3>
-          <a href="#alert" class="text-xs text-farm-green hover:underline" onclick="switchSection('alert')">查看全部 →</a>
+      
+      <div class="space-y-4">
+        <div class="glass-card rounded-xl p-5">
+          <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+            <span class="w-1 h-4 bg-farm-blue rounded-full"></span>
+            🛡️ 农场安全卫士播报
+          </h3>
+          
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-farm-green/15 flex items-center justify-center flex-shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <div>
+                <p class="text-xs text-farm-text">过去24小时内，鹰眼已完成 <span class="font-bold text-farm-green">12次</span> 全景巡航，球机完成 <span class="font-bold text-farm-green">85个</span> 预置点微距抓拍</p>
+                <p class="text-xs text-farm-green mt-1">✅ 全场300亩未发现任何病虫害与长势异常</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center flex-shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+              </div>
+              <div>
+                <p class="text-xs text-farm-text">6个土壤墒情站数据均处于最佳吸收区间</p>
+                <p class="text-xs text-farm-green mt-1">湿度范围：70%-80%</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="space-y-2">
-          <div class="bg-farm-orange/10 border border-farm-orange/20 rounded-lg p-3 flex items-start gap-3">
-            <div class="w-8 h-8 rounded-full bg-farm-orange/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF8C00" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2"><span class="text-xs font-bold text-farm-orange">虫情预警</span><span class="text-[10px] text-farm-muted">10分钟前</span></div>
-              <p class="text-xs text-farm-text mt-1">稻纵卷叶螟蛾量超标，亩蛾量达580头，建议3日内进行防治</p>
+        
+        <div class="glass-card rounded-xl p-5">
+          <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+            <span class="w-1 h-4 bg-farm-green rounded-full"></span>
+            📈 核心品种长势对标
+          </h3>
+          
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-farm-text font-medium">扬麦25 (东区/河东区)</span>
+                <span class="text-farm-green">达标率 98%</span>
+              </div>
+              <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 rounded-full" style="width:98%"></div>
+              </div>
+              <p class="text-xs text-farm-muted mt-1">当前LAI均值5.2，完全贴合该品种高产标准曲线</p>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-farm-text font-medium">宁麦13 (王庄/季庄区)</span>
+                <span class="text-farm-green">达标率 92%</span>
+              </div>
+              <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width:92%"></div>
+              </div>
+              <p class="text-xs text-farm-muted mt-1">长势强健，叶层氮含量充足，无需额外补肥</p>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-farm-text font-medium">镇麦12 (河东/季庄区)</span>
+                <span class="text-farm-green">达标率 90%</span>
+              </div>
+              <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
+                <div class="h-full bg-yellow-500 rounded-full" style="width:90%"></div>
+              </div>
+              <p class="text-xs text-farm-muted mt-1">整体长势良好，注意灌溉管理</p>
             </div>
           </div>
-          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-3 flex items-start gap-3">
-            <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2"><span class="text-xs font-bold text-red-400">墒情异常</span><span class="text-[10px] text-farm-muted">25分钟前</span></div>
-              <p class="text-xs text-farm-text mt-1">3号田块土壤湿度低于阈值（当前18%，阈值25%），建议启动灌溉</p>
+        </div>
+        
+        <div class="glass-card rounded-xl p-5">
+          <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+            <span class="w-1 h-4 bg-farm-orange rounded-full"></span>
+            📅 下一阶段农事预告
+          </h3>
+          
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-3 bg-farm-orange/10 rounded-lg">
+              <div class="text-farm-orange font-bold">⚠</div>
+              <div>
+                <p class="text-xs text-farm-text font-medium">气象预警：预计5月14日有7级阵风伴随短时强降水</p>
+                <p class="text-xs text-farm-muted mt-1">宁麦13品种抗倒伏能力稍弱，建议明后两天检查沟渠通畅度</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-3 p-3 bg-farm-green/10 rounded-lg">
+              <div class="text-farm-green font-bold">📌</div>
+              <div>
+                <p class="text-xs text-farm-text font-medium">预防处方：确保雨后能迅速排水，降低倒伏风险</p>
+              </div>
             </div>
           </div>
-          <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 flex items-start gap-3">
-            <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EAB308" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2"><span class="text-xs font-bold text-yellow-400">设备告警</span><span class="text-[10px] text-farm-muted">1小时前</span></div>
-              <p class="text-xs text-farm-text mt-1">5号监控球机离线，请检查网络连接与供电状态</p>
-            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-5">
+      <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+        <span class="w-1 h-4 bg-farm-blue rounded-full"></span>
+        📊 产量预测分析
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="bg-farm-surface rounded-lg p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+            <span class="text-xs font-medium">扬麦25 (120亩)</span>
           </div>
+          <div class="text-2xl font-black text-farm-text">512<span class="text-sm">kg/亩</span></div>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-xs text-farm-green">达标率 98%</span>
+            <span class="text-xs text-farm-muted">|</span>
+            <span class="text-xs text-farm-green">+3.2%</span>
+          </div>
+        </div>
+        
+        <div class="bg-farm-surface rounded-lg p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+            <span class="text-xs font-medium">宁麦13 (100亩)</span>
+          </div>
+          <div class="text-2xl font-black text-farm-text">486<span class="text-sm">kg/亩</span></div>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-xs text-farm-green">达标率 92%</span>
+            <span class="text-xs text-farm-muted">|</span>
+            <span class="text-xs text-farm-green">+1.8%</span>
+          </div>
+        </div>
+        
+        <div class="bg-farm-surface rounded-lg p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+            <span class="text-xs font-medium">镇麦12 (80亩)</span>
+          </div>
+          <div class="text-2xl font-black text-farm-text">478<span class="text-sm">kg/亩</span></div>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-xs text-farm-green">达标率 90%</span>
+            <span class="text-xs text-farm-muted">|</span>
+            <span class="text-xs text-farm-green">+2.1%</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-farm-surface rounded-lg p-4">
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-xs text-farm-muted">全域总产预估</p>
+            <p class="text-3xl font-black text-farm-text">14.56<span class="text-lg">万kg</span></p>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-farm-green">较去年 <span class="font-bold">+3.2%</span></p>
+            <p class="text-xs text-farm-orange">较目标 <span class="font-bold">-1.8%</span></p>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div style="height:120px"><canvas id="yieldChart"></canvas></div>
         </div>
       </div>
     </div>
