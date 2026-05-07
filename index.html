@@ -2713,51 +2713,66 @@ function openMapInfoModal(type, id) {
     if (!field) return;
     var statusText = field.status === 'green' ? '正常' : field.status === 'yellow' ? '预警' : '异常';
     var statusColor = field.status === 'green' ? '#22c953' : field.status === 'yellow' ? '#f0c830' : '#ff4444';
-    var statusBg = field.status === 'green' ? 'rgba(34,201,83,0.15)' : field.status === 'yellow' ? 'rgba(240,200,48,0.15)' : 'rgba(255,68,68,0.15)';
+    var statusBg = field.status === 'green' ? 'rgba(34,201,83,0.12)' : field.status === 'yellow' ? 'rgba(240,200,48,0.12)' : 'rgba(255,68,68,0.12)';
     var zone = id.charAt(0).toUpperCase();
     var deviceList = homeMapDevices.filter(function(d) { return Math.abs(d.x - field.cx) < 40 && Math.abs(d.y - field.cy) < 40; });
 
-    html += '<div class="flex items-center justify-between mb-4">';
+    html += '<div style="position:relative;padding:2px;border-radius:16px;background:linear-gradient(135deg,' + statusColor + '40,' + statusColor + '10,' + statusColor + '05)">';
+    html += '<div style="background:linear-gradient(160deg,#0d1f1a 0%,#091714 50%,#0a1915 100%);border-radius:14px;padding:20px">';
+
+    html += '<div class="flex items-center justify-between mb-5">';
     html += '<div class="flex items-center gap-3">';
-    html += '<div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold" style="background:' + statusBg + ';color:' + statusColor + ';border:1.5px solid ' + statusColor + '">' + field.name + '</div>';
+    html += '<div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:' + statusBg + ';border:1.8px solid ' + statusColor + ';box-shadow:0 0 16px ' + statusColor + '30"><span style="font-size:17px;font-weight:900;color:' + statusColor + '">' + field.name + '</span></div>';
     html += '<div>';
-    html += '<h3 class="text-base font-bold text-white">' + field.name + '号田</h3>';
-    html += '<p class="text-xs text-gray-400 mt-0.5">' + field.variety + ' · ' + zone + '区 · ' + (field.area || '--') + '亩</p>';
+    html += '<h3 style="font-size:18px;font-weight:800;color:#ffffff;letter-spacing:0.5px">' + field.name + '号田</h3>';
+    html += '<p style="font-size:12px;color:#6b8599;margin-top:3px;font-weight:500">' + field.variety + ' · ' + zone + '区 · ' + (field.area || '--') + '亩</p>';
     html += '</div></div>';
-    html += '<span class="px-2.5 py-1 rounded-full text-xs font-semibold" style="background:' + statusBg + ';color:' + statusColor + '">' + statusText + '</span>';
+    html += '<span style="padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;background:' + statusBg + ';color:' + statusColor + ';border:1px solid ' + statusColor + '40;letter-spacing:1px">' + statusText + '</span>';
     html += '</div>';
 
-    html += '<div class="grid grid-cols-2 gap-2 mb-4">';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">种植品种</p><p class="text-sm font-bold text-white">' + field.variety + '</p></div>';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">地块面积</p><p class="text-sm font-bold text-white">' + (field.area || '--') + ' 亩</p></div>';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">所属区域</p><p class="text-sm font-bold text-white">' + zone + ' 区</p></div>';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">当前状态</p><p class="text-sm font-bold" style="color:' + statusColor + '">' + statusText + '</p></div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">';
+    var fItems = [
+      {l:'种植品种',v:field.variety,c:'#fff',icon:'🌾'},
+      {l:'地块面积',v:(field.area || '--') + ' 亩',c:'#fff',icon:'📐'},
+      {l:'所属区域',v:zone + ' 区',c:'#fff',icon:'🗺️'},
+      {l:'当前状态',v:statusText,c:statusColor,icon:''}
+    ];
+    fItems.forEach(function(item) {
+      html += '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px">';
+      html += '<p style="font-size:10px;color:#5a7089;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">' + item.icon + ' ' + item.l + '</p>';
+      html += '<p style="font-size:15px;font-weight:800;color:' + item.c + ';letter-spacing:0.3px">' + item.v + '</p></div>';
+    });
     html += '</div>';
 
     if (deviceList.length > 0) {
-      html += '<p class="text-xs font-semibold text-gray-300 mb-2">📍 关联设备 (' + deviceList.length + ')</p>';
-      html += '<div class="space-y-1.5">';
+      html += '<div style="margin-bottom:18px">';
+      html += '<p style="font-size:11px;font-weight:700;color:#889db5;margin-bottom:10px;letter-spacing:0.5px">📍 关联设备 (' + deviceList.length + ')</p>';
       deviceList.forEach(function(dev) {
         var devClr = dev.status === 'online' ? '#22c953' : '#ff4444';
         var devSt = dev.status === 'online' ? '在线' : '告警';
-        html += '<div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2">';
-        html += '<div class="flex items-center gap-2">';
-        html += '<span class="w-2 h-2 rounded-full" style="background:' + devClr + '"></span>';
-        html += '<span class="text-xs font-medium text-white">' + dev.name + '</span>';
-        html += '<span class="text-xs text-gray-500">' + dev.type + '</span>';
+        html += '<div style="display:flex;align-items:center;justify-content:between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:10px 14px;margin-bottom:6px">';
+        html += '<div style="display:flex;align-items:center;gap:10px">';
+        html += '<span style="width:8px;height:8px;border-radius:50%;background:' + devClr + ';box-shadow:0 0 6px ' + devClr + '60"></span>';
+        html += '<span style="font-size:13px;font-weight:700;color:#ffffff">' + dev.name + '</span>';
+        html += '<span style="font-size:11px;color:#556b82;background:rgba(255,255,255,0.04);padding:2px 8px;border-radius:6px">' + dev.type + '</span>';
         html += '</div>';
-        html += '<span class="text-xs px-1.5 py-0.5 rounded" style="background:' + (dev.status === 'online' ? 'rgba(34,201,83,0.15)' : 'rgba(255,68,68,0.15)') + ';color:' + devClr + '">' + devSt + '</span>';
+        html += '<span style="font-size:10px;padding:3px 10px;border-radius:10px;font-weight:700;background:' + (dev.status === 'online' ? 'rgba(34,201,83,0.12)' : 'rgba(255,68,68,0.12)') + ';color:' + devClr + ';border:1px solid ' + devClr + '25">' + devSt + '</span>';
         html += '</div>';
       });
       html += '</div>';
     }
 
-    html += '<div class="mt-4 pt-3 border-t border-white/10">';
-    html += '<p class="text-xs text-gray-500 mb-2">📊 实时监测数据</p>';
-    html += '<div class="grid grid-cols-3 gap-2">';
-    html += '<div class="text-center"><p class="text-lg font-bold text-farm-green">26.3°C</p><p class="text-xs text-gray-500 mt-0.5">土壤温度</p></div>';
-    html += '<div class="text-center"><p class="text-lg font-bold text-farm-blue">68%</p><p class="text-xs text-gray-500 mt-0.5">土壤湿度</p></div>';
-    html += '<div class="text-center"><p class="text-lg font-bold text-yellow-400">良好</p><p class="text-xs text-gray-500 mt-0.5">长势评估</p></div>';
+    html += '<div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px">';
+    html += '<p style="font-size:11px;font-weight:700;color:#556b82;margin-bottom:12px;letter-spacing:0.5px">📊 实时监测数据</p>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">';
+    html += '<div style="text-align:center;background:rgba(34,201,83,0.05);border:1px solid rgba(34,201,83,0.12);border-radius:10px;padding:14px 8px">';
+    html += '<p style="font-size:22px;font-weight:900;color:#22c953;text-shadow:0 0 12px rgba(34,201,83,0.3)">26.3°C</p><p style="font-size:10px;color:#4a6680;margin-top:4px;font-weight:500">土壤温度</p></div>';
+    html += '<div style="text-align:center;background:rgba(0,180,216,0.05);border:1px solid rgba(0,180,216,0.12);border-radius:10px;padding:14px 8px">';
+    html += '<p style="font-size:22px;font-weight:900;color:#00B4D8;text-shadow:0 0 12px rgba(0,180,216,0.3)">68%</p><p style="font-size:10px;color:#4a6680;margin-top:4px;font-weight:500">土壤湿度</p></div>';
+    html += '<div style="text-align:center;background:rgba(250,200,38,0.05);border:1px solid rgba(250,200,38,0.12);border-radius:10px;padding:14px 8px">';
+    html += '<p style="font-size:22px;font-weight:900;color:#fac826;text-shadow:0 0 12px rgba(250,200,38,0.3)">良好</p><p style="font-size:10px;color:#4a6680;margin-top:4px;font-weight:500">长势评估</p></div>';
+    html += '</div></div>';
+
     html += '</div></div>';
 
   } else if (type === 'device') {
@@ -2765,60 +2780,64 @@ function openMapInfoModal(type, id) {
     if (!dev) return;
     var clr = dev.status === 'online' ? '#22c953' : '#ff4444';
     var stText = dev.status === 'online' ? '在线运行' : '异常告警';
-    var stBg = dev.status === 'online' ? 'rgba(34,201,83,0.15)' : 'rgba(255,68,68,0.15)';
+    var stBg = dev.status === 'online' ? 'rgba(34,201,83,0.12)' : 'rgba(255,68,68,0.12)';
+    var typeIcon = { '鹰眼':'🦅','球机':'📹','墒情仪':'💧','虫情灯':'🐛','长势仪':'🌱','气象站':'🌤️' }[dev.type] || '📡';
 
-    html += '<div class="flex items-center justify-between mb-4">';
+    html += '<div style="position:relative;padding:2px;border-radius:16px;background:linear-gradient(135deg,' + clr + '40,' + clr + '08,' + clr + '03)">';
+    html += '<div style="background:linear-gradient(160deg,#0d1f1a 0%,#091714 50%,#0a1915 100%);border-radius:14px;padding:20px">';
+
+    html += '<div class="flex items-center justify-between mb-5">';
     html += '<div class="flex items-center gap-3">';
-    html += '<div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:rgba(20,30,26,0.9);border:2px solid ' + clr + '">';
-    html += '<span class="w-3.5 h-3.5 rounded-full" style="background:' + clr + '"></span>';
+    html += '<div style="width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(15,28,22,0.95);border:2.2px solid ' + clr + ';box-shadow:0 0 18px ' + clr + '25,inset 0 0 8px ' + clr + '15">';
+    html += '<span style="width:14px;height:14px;border-radius:50%;background:' + clr + ';box-shadow:0 0 8px ' + clr + '80"></span>';
     html += '</div>';
     html += '<div>';
-    html += '<h3 class="text-base font-bold text-white">' + dev.name + '</h3>';
-    html += '<p class="text-xs text-gray-400 mt-0.5">' + dev.type + ' · ID: ' + dev.id + '</p>';
+    html += '<h3 style="font-size:18px;font-weight:800;color:#ffffff;letter-spacing:0.5px">' + dev.name + '</h3>';
+    html += '<p style="font-size:12px;color:#6b8599;margin-top:3px;font-weight:500">' + typeIcon + ' ' + dev.type + ' · ID: ' + dev.id + '</p>';
     html += '</div></div>';
-    html += '<span class="px-2.5 py-1 rounded-full text-xs font-semibold animate-pulse" style="background:' + stBg + ';color:' + clr + '">' + stText + '</span>';
+    html += '<span style="padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;background:' + stBg + ';color:' + clr + ';border:1px solid ' + clr + '35;letter-spacing:1px;animation:pulse-glow 2s ease-in-out infinite">@' + stText + '</span>';
     html += '</div>';
 
-    html += '<div class="grid grid-cols-2 gap-2 mb-4">';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">设备类型</p><p class="text-sm font-bold text-white">' + dev.type + '</p></div>';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">设备状态</p><p class="text-sm font-bold" style="color:' + clr + '">' + stText + '</p></div>';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">安装位置</p><p class="text-sm font-bold text-white">(' + dev.x + ', ' + dev.y + ')</p></div>';
-    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">最后通信</p><p class="text-sm font-bold text-white">刚刚</p></div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">';
+    var dItems = [
+      {l:'设备类型',v:dev.type},
+      {l:'设备状态',v:stText,c:clr},
+      {l:'安装位置',v:'(' + dev.x + ', ' + dev.y + ')'},
+      {l:'最后通信',v:'刚刚'}
+    ];
+    dItems.forEach(function(item) {
+      html += '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px">';
+      html += '<p style="font-size:10px;color:#5a7089;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">' + item.l + '</p>';
+      html += '<p style="font-size:15px;font-weight:800;color:' + (item.c || '#fff') + ';letter-spacing:0.3px">' + item.v + '</p></div>';
+    });
     html += '</div>';
 
-    html += '<div class="bg-white/5 rounded-lg p-3 mb-4">';
-    html += '<p class="text-xs font-semibold text-gray-300 mb-2">📡 实时数据</p>';
+    html += '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:14px 16px;margin-bottom:18px">';
+    html += '<p style="font-size:11px;font-weight:700;color:#889db5;margin-bottom:12px;letter-spacing:0.5px">📡 实时数据</p>';
     if (dev.type === '鹰眼' || dev.type === '球机') {
-      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">拍摄模式</span><span class="text-white">广角巡田</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">云台角度</span><span class="text-white">' + (dev.angle || 0) + '°</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">分辨率</span><span class="text-white">4K UltraHD</span></div>';
-      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">帧率</span><span class="text-white">25 fps</span></div></div>';
+      var camData = [['拍摄模式','广角巡田'],['云台角度',(dev.angle||0)+'°'],['分辨率','4K UltraHD'],['帧率','25 fps']];
+      camData.forEach(function(row,i){var isLast=i===camData.length-1;html+='<div style="display:flex;justify-content:space-between;padding:'+(isLast?'':'')+' 8px 0;font-size:12px'+(isLast?'':';border-bottom:1px solid rgba(255,255,255,0.04)')+'"><span style="color:#5a7089">'+row[0]+'</span><span style="color:#ffffff;font-weight:600">'+row[1]+'</span></div>'});
     } else if (dev.type === '墒情仪') {
-      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">土壤湿度</span><span class="text-white">' + (dev.status === 'alert' ? '42% ⚠️' : '72%') + '</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">土壤温度</span><span class="text-white">18.5°C</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">电导率</span><span class="text-white">0.42 mS/cm</span></div>';
-      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">PH值</span><span class="text-white">6.8</span></div></div>';
+      var soilData = [['土壤湿度',dev.status==='alert'?'42% ⚠️':'72%'],['土壤温度','18.5°C'],['电导率','0.42 mS/cm'],['PH值','6.8']];
+      soilData.forEach(function(row,i){var isLast=i===soilData.length-1;html+='<div style="display:flex;justify-content:space-between;padding:'+(isLast?'':'')+' 8px 0;font-size:12px'+(isLast?'':';border-bottom:1px solid rgba(255,255,255,0.04)')+'"><span style="color:#5a7089">'+row[0]+'</span><span style="color:#ffffff;font-weight:600">'+row[1]+'</span></div>'});
     } else if (dev.type === '虫情灯') {
-      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">今日虫量</span><span class="text-white">' + (dev.status === 'alert' ? '5 ⚠️' : '2') + ' 头</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">昨日虫量</span><span class="text-white">3 头</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">主要虫种</span><span class="text-white">蚜虫</span></div>';
-      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">诱捕周期</span><span class="text-white">24h</span></div></div>';
+      var pestData = [['今日虫量',(dev.status==='alert'?'5 ⚠️':'2')+' 头'],['昨日虫量','3 头'],['主要虫种','蚜虫'],['诱捕周期','24h']];
+      pestData.forEach(function(row,i){var isLast=i===pestData.length-1;html+='<div style="display:flex;justify-content:space-between;padding:'+(isLast?'':'')+' 8px 0;font-size:12px'+(isLast?'':';border-bottom:1px solid rgba(255,255,255,0.04)')+'"><span style="color:#5a7089">'+row[0]+'</span><span style="color:#ffffff;font-weight:600">'+row[1]+'</span></div>'});
     } else if (dev.type === '长势仪') {
-      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">NDVI指数</span><span class="text-white">' + (dev.status === 'alert' ? '0.58 ⚠️' : '0.76') + '</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">LAI指数</span><span class="text-white">4.2</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">株高</span><span class="text-white">68 cm</span></div>';
-      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">覆盖度</span><span class="text-white">85%</span></div></div>';
+      var growData = [['NDVI指数',dev.status==='alert'?'0.58 ⚠️':'0.76'],['LAI指数','4.2'],['株高','68 cm'],['覆盖度','85%']];
+      growData.forEach(function(row,i){var isLast=i===growData.length-1;html+='<div style="display:flex;justify-content:space-between;padding:'+(isLast?'':'')+' 8px 0;font-size:12px'+(isLast?'':';border-bottom:1px solid rgba(255,255,255,0.04)')+'"><span style="color:#5a7089">'+row[0]+'</span><span style="color:#ffffff;font-weight:600">'+row[1]+'</span></div>'});
     } else if (dev.type === '气象站') {
-      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">空气温度</span><span class="text-white">26.3°C</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">空气湿度</span><span class="text-white">68%</span></div>';
-      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">风速</span><span class="text-white">3.2 m/s</span></div>';
-      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">光照强度</span><span class="text-white">42000 Lux</span></div></div>';
+      var weatherData = [['空气温度','26.3°C'],['空气湿度','68%'],['风速','3.2 m/s'],['光照强度','42000 Lux']];
+      weatherData.forEach(function(row,i){var isLast=i===weatherData.length-1;html+='<div style="display:flex;justify-content:space-between;padding:'+(isLast?'':'')+' 8px 0;font-size:12px'+(isLast?'':';border-bottom:1px solid rgba(255,255,255,0.04)')+'"><span style="color:#5a7089">'+row[0]+'</span><span style="color:#ffffff;font-weight:600">'+row[1]+'</span></div>'});
     }
     html += '</div>';
+
+    html += '</div></div>';
   }
 
-  html += '<div class="flex justify-end gap-2 mt-5 pt-3 border-t border-white/10">';
-  html += '<button onclick="closeMapInfoModal()" class="px-4 py-2 rounded-lg text-xs font-medium bg-white/10 text-gray-300 hover:bg-white/15 transition-colors">关闭</button>';
+  html += '<style>@keyframes pulse-glow{0%,100%{box-shadow:0 0 4px ' + clr + '30}50%{box-shadow:0 0 12px ' + clr + '60}}</style>';
+  html += '<div style="display:flex;justify-content:end;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07)">';
+  html += '<button onclick="closeMapInfoModal()" style="padding:9px 24px;border-radius:10px;font-size:12px;font-weight:700;background:rgba(255,255,255,0.06);color:#889db5;border:1px solid rgba(255,255,255,0.1);cursor:pointer;transition:all 0.2s" onmouseover="this.style.background=\'rgba(255,255,255,0.12)\';this.style.color=\'#ffffff\'" onmouseout="this.style.background=\'rgba(255,255,255,0.06)\';this.style.color=\'#889db5\'">✕ 关闭</button>';
   html += '</div>';
 
   modal.innerHTML = html;
