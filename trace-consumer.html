@@ -198,6 +198,38 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333
 .logistics-done { border-left: 3px solid #2D8B4E; }
 .logistics-current { border-left: 3px solid #D4A843; background: rgba(212, 168, 67, 0.05); }
 
+@keyframes scanLine {
+  0% { top: 0; }
+  50% { top: calc(100% - 3px); }
+  100% { top: 0; }
+}
+
+@keyframes scanPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #2D8B4E, #D4A843, #2D8B4E, transparent);
+  animation: scanLine 2s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(45, 139, 78, 0.6);
+}
+
+.scan-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #2D8B4E;
+}
+.scan-corner-tl { top: 0; left: 0; border-top: 3px solid; border-left: 3px solid; border-radius: 4px 0 0 0; }
+.scan-corner-tr { top: 0; right: 0; border-top: 3px solid; border-right: 3px solid; border-radius: 0 4px 0 0; }
+.scan-corner-bl { bottom: 0; left: 0; border-bottom: 3px solid; border-left: 3px solid; border-radius: 0 0 0 4px; }
+.scan-corner-br { bottom: 0; right: 0; border-bottom: 3px solid; border-right: 3px solid; border-radius: 0 0 4px 0; }
+
 .ai-fab {
   animation: float 3s ease-in-out infinite;
 }
@@ -273,6 +305,10 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333
           <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
           <input id="traceInput" type="text" placeholder="请输入溯源码，如 HJ20250507001" class="w-full pl-12 pr-4 py-3.5 bg-warm-gray/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all" onkeydown="if(event.key==='Enter')doTrace()">
         </div>
+        <button onclick="openScanModal()" class="capsule-btn px-6 py-3.5 bg-gradient-to-r from-gold to-gold/80 text-white font-medium text-sm whitespace-nowrap flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><path d="M7 12h10"/></svg>
+          扫码
+        </button>
         <button onclick="doTrace()" class="capsule-btn px-8 py-3.5 bg-gradient-to-r from-primary to-primary-dark text-white font-medium text-sm whitespace-nowrap">
           立即查询
         </button>
@@ -327,8 +363,8 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333
         </div>
       </div>
       <div class="relative">
-        <div class="rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-primary-light to-warm-gray aspect-[4/3] flex items-center justify-center">
-          <svg class="w-32 h-32 text-primary/20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-9-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.5-4c-3.5 0-6.5 2-8 5 1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
+        <div class="rounded-3xl overflow-hidden shadow-xl aspect-[4/3]">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Aerial%20view%20of%20modern%20smart%20farm%20in%20Jiangsu%20China%2C%20green%20rice%20paddies%20with%20automated%20irrigation%20systems%2C%20drone%20flying%20overhead%2C%20solar%20panels%2C%20clean%20technology%2C%20golden%20sunlight%2C%20peaceful%20countryside&image_size=landscape_4_3" alt="邗江无人农场示范基地" class="w-full h-full object-cover">
         </div>
         <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-lg p-4 flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center">
@@ -467,7 +503,7 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333
 
 <!-- AI Assistant -->
 <div id="aiOverlay" class="fixed inset-0 z-[60] ai-overlay hidden" onclick="toggleAI()"></div>
-<div id="aiPanel" class="fixed bottom-0 right-0 z-[70] w-full sm:w-[400px] h-[70vh] sm:h-[600px] bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 ease-out sm:bottom-6 sm:right-6 sm:max-h-[600px]">
+<div id="aiPanel" class="fixed bottom-0 left-0 right-0 z-[70] w-full h-[70vh] bg-white rounded-t-3xl shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 ease-out">
   <div class="flex items-center justify-between p-4 border-b border-gray-100">
     <div class="flex items-center gap-2">
       <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
@@ -510,8 +546,40 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333
   </div>
 </div>
 
+<!-- Scan QR Modal -->
+<div id="scanModal" class="fixed inset-0 z-[80] hidden" onclick="closeScanModal(event)">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+  <div class="absolute inset-0 flex items-center justify-center p-6">
+    <div class="relative bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm animate-scaleIn" onclick="event.stopPropagation()">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gold/20 to-primary-light flex items-center justify-center mx-auto mb-3">
+          <svg class="w-7 h-7 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><path d="M7 12h10"/></svg>
+        </div>
+        <h3 class="font-serif text-lg font-bold text-deep-brown">扫描溯源码</h3>
+        <p class="text-sm text-gray-400 mt-1">请将二维码对准扫描框</p>
+      </div>
+      <div class="relative w-56 h-56 mx-auto mb-6 bg-gray-900/5 rounded-2xl overflow-hidden">
+        <div class="scan-corner scan-corner-tl"></div>
+        <div class="scan-corner scan-corner-tr"></div>
+        <div class="scan-corner scan-corner-bl"></div>
+        <div class="scan-corner scan-corner-br"></div>
+        <div class="scan-line"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="text-center">
+            <svg class="w-12 h-12 text-primary/20 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z"/><path d="M13.5 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5z"/></svg>
+            <p class="text-xs text-gray-400 mt-2" id="scanStatus">扫描中...</p>
+          </div>
+        </div>
+      </div>
+      <button onclick="closeScanModal()" class="w-full py-3 bg-warm-gray text-gray-500 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
+        取消
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- AI FAB -->
-<button id="aiFab" onclick="toggleAI()" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/30 ai-fab sm:hidden">
+<button id="aiFab" onclick="toggleAI()" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/30 ai-fab">
   <div class="ai-fab-ripple"></div>
   <svg class="w-6 h-6 relative z-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
 </button>
@@ -734,6 +802,38 @@ function renderLogistics() {
   }).join('');
 }
 
+var scanTimer = null;
+
+function openScanModal() {
+  var modal = document.getElementById('scanModal');
+  var status = document.getElementById('scanStatus');
+  modal.classList.remove('hidden');
+  status.textContent = '扫描中...';
+
+  scanTimer = setTimeout(function() {
+    status.textContent = '识别成功！';
+    status.style.color = '#2D8B4E';
+    setTimeout(function() {
+      modal.classList.add('hidden');
+      status.style.color = '';
+      document.getElementById('traceInput').value = 'HJ20250507001';
+      doTrace();
+    }, 500);
+  }, 2000);
+}
+
+function closeScanModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  var modal = document.getElementById('scanModal');
+  var status = document.getElementById('scanStatus');
+  modal.classList.add('hidden');
+  status.style.color = '';
+  if (scanTimer) {
+    clearTimeout(scanTimer);
+    scanTimer = null;
+  }
+}
+
 var aiOpen = false;
 var aiFullscreen = false;
 
@@ -751,7 +851,7 @@ function toggleAI() {
   } else {
     overlay.classList.add('hidden');
     panel.style.transform = 'translateY(100%)';
-    if (window.innerWidth < 640) fab.style.display = 'flex';
+    fab.style.display = 'flex';
     if (aiFullscreen) toggleAIFullscreen();
   }
 }
@@ -760,19 +860,11 @@ function toggleAIFullscreen() {
   aiFullscreen = !aiFullscreen;
   var panel = document.getElementById('aiPanel');
   if (aiFullscreen) {
-    panel.style.width = '100%';
     panel.style.height = '100%';
-    panel.style.maxHeight = '100%';
     panel.style.borderRadius = '0';
-    panel.style.bottom = '0';
-    panel.style.right = '0';
   } else {
-    panel.style.width = '';
     panel.style.height = '';
-    panel.style.maxHeight = '';
     panel.style.borderRadius = '';
-    panel.style.bottom = '';
-    panel.style.right = '';
   }
 }
 
@@ -870,9 +962,7 @@ window.addEventListener('scroll', function() {
 
 renderProducts();
 
-if (window.innerWidth < 640) {
-  document.getElementById('aiFab').style.display = 'flex';
-}
+document.getElementById('aiFab').style.display = 'flex';
 </script>
 </body>
 </html>
