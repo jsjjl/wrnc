@@ -353,6 +353,9 @@ main { flex: 1; display: flex; flex-direction: column; }
 <div class="dispatch-overlay" id="anomalyOverlay" onclick="if(event.target===this)closeAnomalyModal()">
   <div class="dispatch-modal" id="anomalyModalContent" style="max-width:560px;max-height:90vh"></div>
 </div>
+<div class="dispatch-overlay" id="mapInfoOverlay" onclick="if(event.target===this)closeMapInfoModal()">
+  <div class="dispatch-modal" id="mapInfoModalContent" style="max-width:480px;max-height:90vh"></div>
+</div>
 
 <aside class="desktop-sidebar fixed left-0 top-0 h-full w-56 bg-farm-card border-r border-farm-border z-40 flex flex-col" style="display:flex">
   <div class="p-4 border-b border-farm-border">
@@ -1610,6 +1613,7 @@ function renderHomeFarmMap() {
       return (parseFloat(parts[0]) + 4) + ',' + (parseFloat(parts[1]) + 6);
     }).join(' ');
 
+    html += '<g class="cursor-pointer" style="cursor:pointer" onclick="openMapInfoModal(\'field\',\'' + f.id + '\')">';
     html += '<polygon points="' + shiftedPts + '" fill="' + sideGrad + '" opacity="0.6"/>';
     html += '<polygon points="' + f.points + '" fill="' + faceGrad + '" stroke="' + edgeClr + '" stroke-width="1.4" stroke-opacity="' + edgeOp + '" filter="url(#glow3d)"/>';
     html += '<polygon points="' + f.points + '" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>';
@@ -1623,6 +1627,7 @@ function renderHomeFarmMap() {
       html += '<text x="' + f.cx + '" y="' + (f.cy + 14) + '" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9.5" font-family="Noto Sans SC,sans-serif" stroke="#000" stroke-width="2" paint-order="stroke fill">' + f.variety + '</text>';
       html += '</g>';
     }
+    html += '</g>';
   });
 
   if (homeMapMode === 'device' || homeMapMode === 'status') {
@@ -1643,7 +1648,7 @@ function renderHomeFarmMap() {
         html += '<line x1="' + d.x + '" y1="' + d.y + '" x2="' + ((x1+x2)/2) + '" y2="' + ((y1+y2)/2) + '" stroke="#ffffff" stroke-width="1.2" opacity="0.6" stroke-dasharray="4,3"/>';
       }
 
-      html += '<g class="cursor-pointer" id="dev-' + d.id + '" filter="' + gf + '">';
+      html += '<g class="cursor-pointer" id="dev-' + d.id + '" filter="' + gf + '" style="cursor:pointer" onclick="openMapInfoModal(\'device\',\'' + d.id + '\')">';
       html += '<ellipse cx="' + (d.x+1.5) + '" cy="' + (d.y+3) + '" rx="10" ry="5" fill="rgba(0,0,0,0.35)"/>';
       html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="11" fill="url(#devSphere)" stroke="' + color + '" stroke-width="1.6"/>';
       html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="11" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" transform="translate(-1,-2)"/>';
@@ -2698,6 +2703,130 @@ function openAnomalyModal(idx) {
 
 function closeAnomalyModal() {
   document.getElementById('anomalyOverlay').classList.remove('active');
+}
+
+function openMapInfoModal(type, id) {
+  var modal = document.getElementById('mapInfoModalContent');
+  var html = '';
+  if (type === 'field') {
+    var field = homeMapFields.find(function(f) { return f.id === id; });
+    if (!field) return;
+    var statusText = field.status === 'green' ? '正常' : field.status === 'yellow' ? '预警' : '异常';
+    var statusColor = field.status === 'green' ? '#22c953' : field.status === 'yellow' ? '#f0c830' : '#ff4444';
+    var statusBg = field.status === 'green' ? 'rgba(34,201,83,0.15)' : field.status === 'yellow' ? 'rgba(240,200,48,0.15)' : 'rgba(255,68,68,0.15)';
+    var zone = id.charAt(0).toUpperCase();
+    var deviceList = homeMapDevices.filter(function(d) { return Math.abs(d.x - field.cx) < 40 && Math.abs(d.y - field.cy) < 40; });
+
+    html += '<div class="flex items-center justify-between mb-4">';
+    html += '<div class="flex items-center gap-3">';
+    html += '<div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold" style="background:' + statusBg + ';color:' + statusColor + ';border:1.5px solid ' + statusColor + '">' + field.name + '</div>';
+    html += '<div>';
+    html += '<h3 class="text-base font-bold text-white">' + field.name + '号田</h3>';
+    html += '<p class="text-xs text-gray-400 mt-0.5">' + field.variety + ' · ' + zone + '区 · ' + (field.area || '--') + '亩</p>';
+    html += '</div></div>';
+    html += '<span class="px-2.5 py-1 rounded-full text-xs font-semibold" style="background:' + statusBg + ';color:' + statusColor + '">' + statusText + '</span>';
+    html += '</div>';
+
+    html += '<div class="grid grid-cols-2 gap-2 mb-4">';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">种植品种</p><p class="text-sm font-bold text-white">' + field.variety + '</p></div>';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">地块面积</p><p class="text-sm font-bold text-white">' + (field.area || '--') + ' 亩</p></div>';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">所属区域</p><p class="text-sm font-bold text-white">' + zone + ' 区</p></div>';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">当前状态</p><p class="text-sm font-bold" style="color:' + statusColor + '">' + statusText + '</p></div>';
+    html += '</div>';
+
+    if (deviceList.length > 0) {
+      html += '<p class="text-xs font-semibold text-gray-300 mb-2">📍 关联设备 (' + deviceList.length + ')</p>';
+      html += '<div class="space-y-1.5">';
+      deviceList.forEach(function(dev) {
+        var devClr = dev.status === 'online' ? '#22c953' : '#ff4444';
+        var devSt = dev.status === 'online' ? '在线' : '告警';
+        html += '<div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2">';
+        html += '<div class="flex items-center gap-2">';
+        html += '<span class="w-2 h-2 rounded-full" style="background:' + devClr + '"></span>';
+        html += '<span class="text-xs font-medium text-white">' + dev.name + '</span>';
+        html += '<span class="text-xs text-gray-500">' + dev.type + '</span>';
+        html += '</div>';
+        html += '<span class="text-xs px-1.5 py-0.5 rounded" style="background:' + (dev.status === 'online' ? 'rgba(34,201,83,0.15)' : 'rgba(255,68,68,0.15)') + ';color:' + devClr + '">' + devSt + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    html += '<div class="mt-4 pt-3 border-t border-white/10">';
+    html += '<p class="text-xs text-gray-500 mb-2">📊 实时监测数据</p>';
+    html += '<div class="grid grid-cols-3 gap-2">';
+    html += '<div class="text-center"><p class="text-lg font-bold text-farm-green">26.3°C</p><p class="text-xs text-gray-500 mt-0.5">土壤温度</p></div>';
+    html += '<div class="text-center"><p class="text-lg font-bold text-farm-blue">68%</p><p class="text-xs text-gray-500 mt-0.5">土壤湿度</p></div>';
+    html += '<div class="text-center"><p class="text-lg font-bold text-yellow-400">良好</p><p class="text-xs text-gray-500 mt-0.5">长势评估</p></div>';
+    html += '</div></div>';
+
+  } else if (type === 'device') {
+    var dev = homeMapDevices.find(function(d) { return d.id === id; });
+    if (!dev) return;
+    var clr = dev.status === 'online' ? '#22c953' : '#ff4444';
+    var stText = dev.status === 'online' ? '在线运行' : '异常告警';
+    var stBg = dev.status === 'online' ? 'rgba(34,201,83,0.15)' : 'rgba(255,68,68,0.15)';
+
+    html += '<div class="flex items-center justify-between mb-4">';
+    html += '<div class="flex items-center gap-3">';
+    html += '<div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:rgba(20,30,26,0.9);border:2px solid ' + clr + '">';
+    html += '<span class="w-3.5 h-3.5 rounded-full" style="background:' + clr + '"></span>';
+    html += '</div>';
+    html += '<div>';
+    html += '<h3 class="text-base font-bold text-white">' + dev.name + '</h3>';
+    html += '<p class="text-xs text-gray-400 mt-0.5">' + dev.type + ' · ID: ' + dev.id + '</p>';
+    html += '</div></div>';
+    html += '<span class="px-2.5 py-1 rounded-full text-xs font-semibold animate-pulse" style="background:' + stBg + ';color:' + clr + '">' + stText + '</span>';
+    html += '</div>';
+
+    html += '<div class="grid grid-cols-2 gap-2 mb-4">';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">设备类型</p><p class="text-sm font-bold text-white">' + dev.type + '</p></div>';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">设备状态</p><p class="text-sm font-bold" style="color:' + clr + '">' + stText + '</p></div>';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">安装位置</p><p class="text-sm font-bold text-white">(' + dev.x + ', ' + dev.y + ')</p></div>';
+    html += '<div class="bg-white/5 rounded-lg p-3"><p class="text-xs text-gray-400 mb-1">最后通信</p><p class="text-sm font-bold text-white">刚刚</p></div>';
+    html += '</div>';
+
+    html += '<div class="bg-white/5 rounded-lg p-3 mb-4">';
+    html += '<p class="text-xs font-semibold text-gray-300 mb-2">📡 实时数据</p>';
+    if (dev.type === '鹰眼' || dev.type === '球机') {
+      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">拍摄模式</span><span class="text-white">广角巡田</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">云台角度</span><span class="text-white">' + (dev.angle || 0) + '°</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">分辨率</span><span class="text-white">4K UltraHD</span></div>';
+      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">帧率</span><span class="text-white">25 fps</span></div></div>';
+    } else if (dev.type === '墒情仪') {
+      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">土壤湿度</span><span class="text-white">' + (dev.status === 'alert' ? '42% ⚠️' : '72%') + '</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">土壤温度</span><span class="text-white">18.5°C</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">电导率</span><span class="text-white">0.42 mS/cm</span></div>';
+      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">PH值</span><span class="text-white">6.8</span></div></div>';
+    } else if (dev.type === '虫情灯') {
+      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">今日虫量</span><span class="text-white">' + (dev.status === 'alert' ? '5 ⚠️' : '2') + ' 头</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">昨日虫量</span><span class="text-white">3 头</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">主要虫种</span><span class="text-white">蚜虫</span></div>';
+      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">诱捕周期</span><span class="text-white">24h</span></div></div>';
+    } else if (dev.type === '长势仪') {
+      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">NDVI指数</span><span class="text-white">' + (dev.status === 'alert' ? '0.58 ⚠️' : '0.76') + '</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">LAI指数</span><span class="text-white">4.2</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">株高</span><span class="text-white">68 cm</span></div>';
+      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">覆盖度</span><span class="text-white">85%</span></div></div>';
+    } else if (dev.type === '气象站') {
+      html += '<div class="grid grid-cols-2 gap-2"><div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">空气温度</span><span class="text-white">26.3°C</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">空气湿度</span><span class="text-white">68%</span></div>';
+      html += '<div class="flex justify-between text-xs py-1 border-b border-white/5"><span class="text-gray-400">风速</span><span class="text-white">3.2 m/s</span></div>';
+      html += '<div class="flex justify-between text-xs py-1"><span class="text-gray-400">光照强度</span><span class="text-white">42000 Lux</span></div></div>';
+    }
+    html += '</div>';
+  }
+
+  html += '<div class="flex justify-end gap-2 mt-5 pt-3 border-t border-white/10">';
+  html += '<button onclick="closeMapInfoModal()" class="px-4 py-2 rounded-lg text-xs font-medium bg-white/10 text-gray-300 hover:bg-white/15 transition-colors">关闭</button>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  document.getElementById('mapInfoOverlay').classList.add('active');
+}
+
+function closeMapInfoModal() {
+  document.getElementById('mapInfoOverlay').classList.remove('active');
 }
 
 var sectionTitles = {
