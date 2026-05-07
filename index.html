@@ -666,7 +666,7 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
       <div class="glass-card rounded-xl p-4">
         <h4 class="text-sm font-bold mb-3">24小时温湿度趋势</h4>
-        <div style="height:120px"><canvas id="tempHumidityChart"></canvas></div>
+        <div style="height:220px"><canvas id="tempHumidityChart"></canvas></div>
       </div>
     </div>
     <div id="monitor-soil" class="monitor-tab space-y-4" style="display:none">
@@ -707,14 +707,14 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
       <div class="glass-card rounded-xl p-4">
         <h4 class="text-sm font-bold mb-3">氮磷钾含量</h4>
-        <div style="height:120px"><canvas id="npkChart"></canvas></div>
+        <div style="height:220px"><canvas id="npkChart"></canvas></div>
       </div>
     </div>
     <div id="monitor-pest" class="monitor-tab space-y-4" style="display:none">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="glass-card rounded-xl p-4">
           <h4 class="text-sm font-bold mb-3">虫情统计（近7日）</h4>
-          <div style="height:120px"><canvas id="pestChart"></canvas></div>
+          <div style="height:220px"><canvas id="pestChart"></canvas></div>
         </div>
         <div class="glass-card rounded-xl p-4">
           <h4 class="text-sm font-bold mb-3">害虫类型分布</h4>
@@ -741,7 +741,7 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
       <div class="glass-card rounded-xl p-4">
         <h4 class="text-sm font-bold mb-3">作物长势趋势</h4>
-        <div style="height:120px"><canvas id="seedlingChart"></canvas></div>
+        <div style="height:220px"><canvas id="seedlingChart"></canvas></div>
       </div>
     </div>
   </section>
@@ -882,7 +882,7 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
       <div class="glass-card rounded-xl p-4">
         <h4 class="text-sm font-bold mb-3">产量预测趋势</h4>
-        <div style="height:120px"><canvas id="yieldChart"></canvas></div>
+        <div style="height:220px"><canvas id="yieldChart"></canvas></div>
       </div>
       <div class="glass-card rounded-xl p-4">
         <h4 class="text-sm font-bold mb-3">产量构成因素分析</h4>
@@ -1127,7 +1127,7 @@ function renderIrrigation() {
       '<div><span class="text-farm-muted">流量</span><div class="font-medium text-farm-text">' + item.flow + '</div></div></div>' +
       '<button class="mt-3 w-full text-xs px-3 py-1.5 rounded bg-farm-green/15 text-farm-green hover:bg-farm-green/25 transition-colors" onclick="showToast(\'' + item.btnAction + '\',\'success\')">' + item.btn + '</button></div>';
   });
-  cards += '</div><div class="glass-card rounded-xl p-4"><h4 class="text-sm font-bold mb-3">片区灌溉规划</h4><div style="height:120px"><canvas id="irrigationChart"></canvas></div></div>';
+  cards += '</div><div class="glass-card rounded-xl p-4"><h4 class="text-sm font-bold mb-3">片区灌溉规划</h4><div style="height:220px"><canvas id="irrigationChart"></canvas></div></div>';
   container.innerHTML = cards;
 }
 
@@ -1153,7 +1153,7 @@ function renderMachinery() {
       '<div class="flex justify-between"><span class="text-farm-muted">作业面积</span><span class="text-farm-text">' + item.area + '</span></div></div>' +
       '<button class="mt-3 w-full text-xs px-3 py-1.5 rounded bg-farm-green/15 text-farm-green hover:bg-farm-green/25 transition-colors" onclick="showToast(\'' + item.btnAction + '\',\'success\')">' + item.btn + '</button></div>';
   });
-  cards += '</div><div class="glass-card rounded-xl p-4"><h4 class="text-sm font-bold mb-3">作业完成情况</h4><div style="height:120px"><canvas id="machineryChart"></canvas></div></div>';
+  cards += '</div><div class="glass-card rounded-xl p-4"><h4 class="text-sm font-bold mb-3">作业完成情况</h4><div style="height:220px"><canvas id="machineryChart"></canvas></div></div>';
   container.innerHTML = cards;
 }
 
