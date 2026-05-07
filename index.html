@@ -113,17 +113,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 .nav-item { transition: all 0.3s ease; position: relative; }
 .nav-item.active { color: #1DB954; }
-.nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 3px;
-  background: #1DB954;
-  border-radius: 2px;
-}
+.nav-item.active::after { display: none; }
 .nav-item:hover { color: #1DB954; }
 
 .section-page { display: none; flex: 1; overflow-y: auto; }
@@ -976,7 +966,22 @@ const chartInstances = {};
 const chartDefaults = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { legend: { labels: { color: '#7B93B0', font: { size: 11, family: 'Noto Sans SC' } } } },
+  plugins: {
+    legend: { labels: { color: '#7B93B0', font: { size: 11, family: 'Noto Sans SC' } } },
+    tooltip: {
+      backgroundColor: 'rgba(17,29,51,0.95)',
+      titleColor: '#E8F0FE',
+      bodyColor: '#7B93B0',
+      borderColor: '#1E3A5F',
+      borderWidth: 1,
+      padding: 10,
+      cornerRadius: 8,
+      titleFont: { size: 12, family: 'Noto Sans SC' },
+      bodyFont: { size: 11, family: 'Noto Sans SC' },
+      displayColors: true,
+      boxPadding: 4
+    }
+  },
   scales: {
     x: { ticks: { color: '#7B93B0', font: { size: 10 } }, grid: { color: 'rgba(30,58,95,0.4)' } },
     y: { ticks: { color: '#7B93B0', font: { size: 10 } }, grid: { color: 'rgba(30,58,95,0.4)' } }
@@ -1106,29 +1111,52 @@ function initYieldChart() {
 }
 
 var devices = [
-  { name:'综合农情监测站', desc:'温度/湿度/风速/降雨/光照/气压', status:'online', statusText:'在线', update:'2分钟前' },
-  { name:'管式墒情监测仪', desc:'3层土壤温湿度/PH/电导率', status:'online', statusText:'在线', update:'5分钟前' },
-  { name:'土壤监测仪', desc:'氮磷钾/有机质/重金属', status:'online', statusText:'在线', update:'10分钟前' },
-  { name:'智能虫情测报灯', desc:'自动诱虫/AI识别/计数统计', status:'online', statusText:'在线', update:'1分钟前' },
-  { name:'小虫体测报仪', desc:'飞虱/叶蝉等微小害虫监测', status:'online', statusText:'在线', update:'3分钟前' },
-  { name:'昆虫性诱设备', desc:'性诱剂诱捕/靶标害虫监测', status:'online', statusText:'在线', update:'8分钟前' },
-  { name:'高空鹰眼全景摄像机', desc:'8192×2700 | 270°全景 | 智能跟踪', status:'online', statusText:'在线', update:'实时' },
-  { name:'1号监控球机', desc:'800万像素 | 25倍光学 | 预置点巡航', status:'online', statusText:'在线', update:'实时' },
-  { name:'2号监控球机', desc:'800万像素 | 红外夜视 | 区域入侵检测', status:'online', statusText:'在线', update:'实时' },
-  { name:'5号监控球机', desc:'网络连接异常', status:'fault', statusText:'故障', update:'1小时前断线' },
-  { name:'智慧农情巡检无人车', desc:'多光谱相机/LiDAR/自主导航', status:'online', statusText:'巡检中', update:'实时' },
-  { name:'稻纵卷叶螟赶蛾统计杆', desc:'自动赶蛾/视频识别/蛾量统计', status:'online', statusText:'在线', update:'10分钟前' },
-  { name:'水稻亩穗数测量仪', desc:'图像识别/深度学习/亩穗数估算', status:'online', statusText:'在线', update:'30分钟前' },
-  { name:'小麦亩穗数测量仪', desc:'图像识别/深度学习/亩穗数估算', status:'online', statusText:'在线', update:'30分钟前' },
-  { name:'作物长势感知设备', desc:'LAI/叶层氮含量/叶龄/NDVI', status:'online', statusText:'在线', update:'15分钟前' },
-  { name:'田间可移动智能监测调查设备', desc:'移动巡检/多参数采集/远程操控', status:'online', statusText:'在线', update:'20分钟前' },
-  { name:'巡检机器狗', desc:'3D激光雷达/智能伴随/自主避障', status:'online', statusText:'待命', update:'充电中' },
-  { name:'具身人形机器人', desc:'多模态感知/灵巧操作/人机协作', status:'online', statusText:'待命', update:'待命中' },
-  { name:'户外LED显示屏', desc:'P6全彩/农情信息发布/远程管控', status:'online', statusText:'在线', update:'运行中' },
-  { name:'55寸触摸一体机', desc:'现场操控/数据展示/交互查询', status:'online', statusText:'在线', update:'运行中' },
-  { name:'移动管理PAD终端', desc:'移动办公/远程操控/实时告警', status:'online', statusText:'在线', update:'在线' },
-  { name:'前沿智慧农业站', desc:'AI模型训练/边缘计算/数据融合', status:'online', statusText:'在线', update:'运行中' },
-  { name:'指挥中心LED显示屏', desc:'小间距LED/大屏指挥/多画面拼接', status:'online', statusText:'在线', update:'运行中' }
+  { name:'综合农情监测站', desc:'温度/湿度/风速/降雨/光照/气压', status:'online', statusText:'在线', update:'2分钟前',
+    detail:{params:[['温度范围','-40~80°C'],['湿度范围','0-100%RH'],['风速范围','0-60m/s'],['降雨量','0-200mm/h'],['光照强度','0-200000Lux'],['气压范围','300-1100hPa']],lastData:'温度26°C，湿度68%，风速3.2m/s，降雨0mm，光照42000Lux，气压1013hPa',actions:['远程控制','数据导出','重启设备']}},
+  { name:'管式墒情监测仪', desc:'3层土壤温湿度/PH/电导率', status:'online', statusText:'在线', update:'5分钟前',
+    detail:{params:[['监测层数','3层(10/20/30cm)'],['温度范围','-20~60°C'],['湿度范围','0-100%'],['PH范围','0-14'],['电导率','0-10000μS/cm']],lastData:'10cm:22.5°C/32%/6.8PH/450μS，20cm:21.8°C/38%/6.9PH/520μS，30cm:20.3°C/45%/7.0PH/580μS',actions:['远程控制','数据导出','重启设备']}},
+  { name:'土壤监测仪', desc:'氮磷钾/有机质/重金属', status:'online', statusText:'在线', update:'10分钟前',
+    detail:{params:[['氮磷钾范围','0-2000mg/kg'],['有机质范围','0-10%'],['重金属检测','支持'],['检测精度','±2%']],lastData:'氮85mg/kg，磷42mg/kg，钾128mg/kg，有机质3.2%，重金属未检出',actions:['远程控制','数据导出','重启设备']}},
+  { name:'智能虫情测报灯', desc:'自动诱虫/AI识别/计数统计', status:'online', statusText:'在线', update:'1分钟前',
+    detail:{params:[['诱虫光源','395nm'],['识别精度','≥95%'],['拍摄像素','1200万'],['识别种类','≥100种']],lastData:'今日诱虫127头，稻纵卷叶螟占比45%，二化螟占比18%',actions:['远程控制','数据导出','重启设备']}},
+  { name:'小虫体测报仪', desc:'飞虱/叶蝉等微小害虫监测', status:'online', statusText:'在线', update:'3分钟前',
+    detail:{params:[['监测对象','飞虱/叶蝉'],['识别种类','≥50种'],['识别精度','≥90%'],['监测方式','自动拍照+AI识别']],lastData:'白背飞虱210头/百丛，褐飞虱180头/百丛，均在正常范围',actions:['远程控制','数据导出','重启设备']}},
+  { name:'昆虫性诱设备', desc:'性诱剂诱捕/靶标害虫监测', status:'online', statusText:'在线', update:'8分钟前',
+    detail:{params:[['靶标害虫','6种'],['诱芯更换周期','30天'],['诱捕方式','性诱剂+粘虫板'],['数据上传','实时']],lastData:'稻纵卷叶螟诱捕量偏高，二化螟/大螟正常，诱芯剩余12天有效期',actions:['远程控制','数据导出','更换诱芯']}},
+  { name:'高空鹰眼全景摄像机', desc:'8192×2700 | 270°全景 | 智能跟踪', status:'online', statusText:'在线', update:'实时',
+    detail:{params:[['分辨率','8192×2700'],['视角','270°全景'],['立杆高度','12m'],['智能功能','目标跟踪/区域入侵']],lastData:'全景画面正常，智能跟踪运行中，未检测到异常入侵',actions:['云台控制','截图下载','重启设备']}},
+  { name:'1号监控球机', desc:'800万像素 | 25倍光学 | 预置点巡航', status:'online', statusText:'在线', update:'实时',
+    detail:{params:[['像素','800万'],['光学变倍','25倍'],['红外距离','200m'],['预置点','256个']],lastData:'画面正常，预置点巡航中，红外夜视已自动切换',actions:['云台控制','预置点设置','重启设备']}},
+  { name:'2号监控球机', desc:'800万像素 | 红外夜视 | 区域入侵检测', status:'online', statusText:'在线', update:'实时',
+    detail:{params:[['像素','800万'],['红外距离','200m'],['智能功能','区域入侵检测'],['预置点','256个']],lastData:'画面正常，红外夜视运行中，未检测到区域入侵',actions:['云台控制','预置点设置','重启设备']}},
+  { name:'5号监控球机', desc:'网络连接异常', status:'fault', statusText:'故障', update:'1小时前断线',
+    detail:{params:[['像素','800万'],['光学变倍','25倍'],['红外距离','200m'],['预置点','256个']],lastData:'设备离线，最后数据：1小时前画面正常，疑似网线松动',actions:['远程诊断','派单维修','重启设备']}},
+  { name:'智慧农情巡检无人车', desc:'多光谱相机/LiDAR/自主导航', status:'online', statusText:'巡检中', update:'实时',
+    detail:{params:[['多光谱相机','5波段'],['LiDAR测距','200m'],['导航方式','自主导航'],['最高时速','15km/h']],lastData:'正在3号田巡检，电量82%，已巡检路线9/10，多光谱数据采集中',actions:['路径规划','远程控制','数据导出']}},
+  { name:'稻纵卷叶螟赶蛾统计杆', desc:'自动赶蛾/视频识别/蛾量统计', status:'online', statusText:'在线', update:'10分钟前',
+    detail:{params:[['赶蛾方式','自动振动'],['识别方式','视频AI识别'],['统计精度','≥90%'],['数据更新','实时']],lastData:'亩蛾量580头，超过防治指标300头/亩，连续3日上升趋势',actions:['远程控制','数据导出','重启设备']}},
+  { name:'水稻亩穗数测量仪', desc:'图像识别/深度学习/亩穗数估算', status:'online', statusText:'在线', update:'30分钟前',
+    detail:{params:[['识别方式','图像识别'],['算法','深度学习'],['测量误差','≤5%'],['适用作物','水稻']],lastData:'亩穗数18.5万穗，穗粒数132.6粒，测量精度96.8%',actions:['远程控制','数据导出','重启设备']}},
+  { name:'小麦亩穗数测量仪', desc:'图像识别/深度学习/亩穗数估算', status:'online', statusText:'在线', update:'30分钟前',
+    detail:{params:[['识别方式','图像识别'],['算法','深度学习'],['测量误差','≤5%'],['适用作物','小麦']],lastData:'小麦亩穗数测量仪待命，当前季节以水稻监测为主',actions:['远程控制','数据导出','重启设备']}},
+  { name:'作物长势感知设备', desc:'LAI/叶层氮含量/叶龄/NDVI', status:'online', statusText:'在线', update:'15分钟前',
+    detail:{params:[['LAI范围','0-10'],['叶层氮范围','0-5%'],['叶龄范围','0-20叶'],['NDVI范围','0-1']],lastData:'LAI 3.8，叶层氮2.1%，叶龄9.2叶，NDVI 0.82，长势良好',actions:['远程控制','数据导出','重启设备']}},
+  { name:'田间可移动智能监测调查设备', desc:'移动巡检/多参数采集/远程操控', status:'online', statusText:'在线', update:'20分钟前',
+    detail:{params:[['监测方式','移动巡检'],['参数采集','多参数'],['操控方式','远程操控'],['续航','8h']],lastData:'已完成今日巡检任务，采集数据12项，设备状态正常',actions:['远程控制','数据导出','路径规划']}},
+  { name:'巡检机器狗', desc:'3D激光雷达/智能伴随/自主避障', status:'online', statusText:'待命', update:'充电中',
+    detail:{params:[['感知方式','3D LiDAR'],['智能功能','智能伴随'],['避障能力','自主避障'],['续航时间','4h']],lastData:'充电中，电量65%，待命状态，上次巡检完成时间14:30',actions:['路径规划','远程控制','数据导出']}},
+  { name:'具身人形机器人', desc:'多模态感知/灵巧操作/人机协作', status:'online', statusText:'待命', update:'待命中',
+    detail:{params:[['感知方式','多模态感知'],['操作能力','灵巧操作'],['协作方式','人机协作'],['续航时间','3h']],lastData:'待命中，电量88%，各关节运行正常，可随时执行任务',actions:['任务下发','远程控制','数据导出']}},
+  { name:'户外LED显示屏', desc:'P6全彩/农情信息发布/远程管控', status:'online', statusText:'在线', update:'运行中',
+    detail:{params:[['型号','P6全彩'],['亮度','≥6000cd/m²'],['防护等级','IP65'],['功能','农情信息发布']],lastData:'正在播放农情日报与预警信息，屏幕亮度自动调节中，运行正常',actions:['内容管理','亮度调节','重启设备']}},
+  { name:'55寸触摸一体机', desc:'现场操控/数据展示/交互查询', status:'online', statusText:'在线', update:'运行中',
+    detail:{params:[['分辨率','4K'],['触控方式','十点触控'],['防护等级','IP54'],['尺寸','55寸']],lastData:'触摸交互正常，正在展示农情监测数据大屏，在线率96.5%',actions:['内容管理','远程控制','重启设备']}},
+  { name:'移动管理PAD终端', desc:'移动办公/远程操控/实时告警', status:'online', statusText:'在线', update:'在线',
+    detail:{params:[['内存','6GB RAM'],['屏幕','8寸'],['防护等级','IP67'],['功能','移动办公/远程操控']],lastData:'在线运行中，已接收今日5条预警推送，远程操控功能正常',actions:['远程控制','数据导出','重启设备']}},
+  { name:'前沿智慧农业站', desc:'AI模型训练/边缘计算/数据融合', status:'online', statusText:'在线', update:'运行中',
+    detail:{params:[['核心能力','AI模型训练'],['计算方式','边缘计算'],['推理能力','GPU推理'],['数据融合','多源数据']],lastData:'AI模型运行正常，边缘计算节点负载42%，GPU推理响应时间<50ms',actions:['模型管理','数据导出','重启设备']}},
+  { name:'指挥中心LED显示屏', desc:'小间距LED/大屏指挥/多画面拼接', status:'online', statusText:'在线', update:'运行中',
+    detail:{params:[['型号','P1.5小间距'],['尺寸','5.12m×2.88m'],['分辨率','4K拼接'],['功能','多画面指挥']],lastData:'4K拼接显示正常，当前展示农情总览+视频监控+预警信息三画面',actions:['画面切换','内容管理','重启设备']}}
 ];
 
 function renderDevices(filter) {
@@ -1137,7 +1165,8 @@ function renderDevices(filter) {
   var filtered = devices;
   if (filter === 'online') filtered = devices.filter(function(d){return d.status==='online';});
   if (filter === 'fault') filtered = devices.filter(function(d){return d.status==='fault'||d.status==='offline';});
-  filtered.forEach(function(d) {
+  filtered.forEach(function(d, i) {
+    var origIndex = devices.indexOf(d);
     var dotClass = d.status === 'online' ? 'online' : d.status === 'fault' ? 'fault' : 'offline';
     var statusColor = d.status === 'online' ? 'text-farm-green' : d.status === 'fault' ? 'text-farm-orange' : 'text-farm-muted';
     list.innerHTML += '<div class="px-4 py-3 flex items-center gap-3 hover:bg-farm-surface/50 transition-colors">' +
@@ -1145,8 +1174,41 @@ function renderDevices(filter) {
       '<div class="flex-1 min-w-0"><div class="text-sm font-medium">' + d.name + '</div><div class="text-xs text-farm-muted">' + d.desc + '</div></div>' +
       '<span class="text-xs ' + statusColor + '">' + d.statusText + '</span>' +
       '<span class="text-xs text-farm-muted hidden sm:block">' + d.update + '</span>' +
-      '<button class="text-xs px-2 py-1 rounded bg-farm-surface text-farm-green hover:bg-farm-green/15 transition-colors" onclick="showToast(\'' + d.name + ' 详情已打开\',\'info\')">详情</button></div>';
+      '<button class="text-xs px-2 py-1 rounded bg-farm-surface text-farm-green hover:bg-farm-green/15 transition-colors" onclick="showDeviceDetail(' + origIndex + ')">详情</button></div>';
   });
+}
+
+function showDeviceDetail(index) {
+  var d = devices[index];
+  if (!d || !d.detail) { showToast('暂无该设备详细信息','info'); return; }
+  var dotClass = d.status === 'online' ? 'online' : d.status === 'fault' ? 'fault' : 'offline';
+  var statusColor = d.status === 'online' ? '#1DB954' : d.status === 'fault' ? '#FF8C00' : '#7B93B0';
+  var paramsHtml = '<table style="width:100%;border-collapse:separate;border-spacing:0">';
+  paramsHtml += '<thead><tr><th style="text-align:left;padding:8px 12px;background:#162236;color:#7B93B0;font-size:12px;font-weight:500;border-bottom:1px solid #1E3A5F">参数名</th><th style="text-align:left;padding:8px 12px;background:#162236;color:#7B93B0;font-size:12px;font-weight:500;border-bottom:1px solid #1E3A5F">参数值</th></tr></thead><tbody>';
+  d.detail.params.forEach(function(p, i) {
+    var bg = i % 2 === 0 ? 'transparent' : 'rgba(22,34,54,0.5)';
+    paramsHtml += '<tr style="background:' + bg + '"><td style="padding:8px 12px;color:#7B93B0;font-size:12px;border-bottom:1px solid rgba(30,58,95,0.3)">' + p[0] + '</td><td style="padding:8px 12px;color:#E8F0FE;font-size:12px;font-weight:500;border-bottom:1px solid rgba(30,58,95,0.3)">' + p[1] + '</td></tr>';
+  });
+  paramsHtml += '</tbody></table>';
+  var actionsHtml = '';
+  d.detail.actions.forEach(function(a) {
+    actionsHtml += '<button class="text-xs px-3 py-1.5 rounded-lg bg-farm-green/15 text-farm-green hover:bg-farm-green/25 transition-colors" onclick="showToast(\'' + a + '指令已发送\',\'success\');closeAIModal()">' + a + '</button>';
+  });
+  var modal = document.getElementById('aiModal');
+  modal.innerHTML = '<div class="p-5 border-b border-farm-border">' +
+    '<div class="flex items-center gap-3">' +
+    '<div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:' + statusColor + '20"><span class="device-dot ' + dotClass + '" style="width:14px;height:14px"></span></div>' +
+    '<div style="flex:1"><h3 class="text-base font-bold">' + d.name + '</h3><p class="text-xs text-farm-muted">' + d.desc + '</p></div>' +
+    '<span class="text-xs font-medium px-2 py-1 rounded-full" style="color:' + statusColor + ';background:' + statusColor + '15">' + d.statusText + '</span></div></div>' +
+    '<div class="p-5 space-y-4">' +
+    '<div><h4 class="text-xs font-bold text-farm-muted mb-2 uppercase tracking-wider">技术参数</h4>' + paramsHtml + '</div>' +
+    '<div><h4 class="text-xs font-bold text-farm-muted mb-2 uppercase tracking-wider">最近采集数据</h4>' +
+    '<div class="bg-farm-surface rounded-lg p-3 border border-farm-border"><p class="text-xs text-farm-text leading-relaxed">' + d.detail.lastData + '</p><p class="text-[10px] text-farm-muted mt-1">更新时间：' + d.update + '</p></div></div>' +
+    '<div><h4 class="text-xs font-bold text-farm-muted mb-2 uppercase tracking-wider">设备操作</h4>' +
+    '<div class="flex flex-wrap gap-2">' + actionsHtml + '</div></div></div>' +
+    '<div class="p-5 border-t border-farm-border flex justify-end">' +
+    '<button class="text-xs px-4 py-2 rounded-lg bg-farm-surface text-farm-muted hover:bg-farm-border transition-colors" onclick="closeAIModal()">关闭</button></div>';
+  document.getElementById('aiModalOverlay').classList.add('active');
 }
 
 function filterDevices(f) {
@@ -1166,11 +1228,23 @@ function renderIrrigation() {
   var container = document.getElementById('op-irrigation');
   var cards = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
   irrigationData.forEach(function(item) {
+    var barStyle = '';
+    var glowStyle = '';
+    if (item.status === '灌溉中') {
+      barStyle = 'background:linear-gradient(90deg,#00B4D8,#1DB954);';
+      glowStyle = 'box-shadow:0 0 12px rgba(0,180,216,0.5),0 0 4px rgba(29,185,84,0.3);';
+    } else if (item.status === '待灌溉') {
+      barStyle = 'background:#FF8C00;';
+      glowStyle = 'box-shadow:0 0 8px rgba(255,140,0,0.4);';
+    } else {
+      barStyle = 'background:linear-gradient(90deg,#1DB954,#22C55E);';
+      glowStyle = 'box-shadow:0 0 10px rgba(29,185,84,0.5);';
+    }
     cards += '<div class="glass-card rounded-xl p-4">' +
       '<div class="flex items-center justify-between mb-2"><span class="text-sm font-bold">' + item.name + '</span>' +
       '<span class="text-xs text-farm-' + item.statusColor + ' bg-farm-' + item.statusColor + '/10 px-2 py-0.5 rounded-full">' + item.status + '</span></div>' +
-      '<div class="mb-2"><div class="flex justify-between text-xs mb-1"><span class="text-farm-muted">灌溉进度</span><span class="text-farm-text">' + item.progress + '%</span></div>' +
-      '<div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-farm-' + item.statusColor + ' rounded-full transition-all" style="width:' + item.progress + '%"></div></div></div>' +
+      '<div class="mb-2"><div class="flex items-center justify-between mb-1"><span class="text-xs text-farm-muted">灌溉进度</span><span class="text-lg font-black" style="color:' + (item.status==='灌溉中'?'#00B4D8':item.status==='待灌溉'?'#FF8C00':'#1DB954') + '">' + item.progress + '%</span></div>' +
+      '<div class="w-full h-3 bg-farm-surface rounded-full overflow-hidden"><div class="h-full rounded-full transition-all" style="width:' + item.progress + '%;' + barStyle + glowStyle + '"></div></div></div>' +
       '<div class="grid grid-cols-2 gap-2 text-xs"><div><span class="text-farm-muted">水量</span><div class="font-medium text-farm-text">' + item.water + '</div></div>' +
       '<div><span class="text-farm-muted">流量</span><div class="font-medium text-farm-text">' + item.flow + '</div></div></div>' +
       '<button class="mt-3 w-full text-xs px-3 py-1.5 rounded bg-farm-green/15 text-farm-green hover:bg-farm-green/25 transition-colors" onclick="showToast(\'' + item.btnAction + '\',\'success\')">' + item.btn + '</button></div>';
@@ -1361,6 +1435,48 @@ var aiScenarios = [
       { title: '降温方案', desc: '日灌夜排：每日10:00-16:00灌深水5-8cm降温，夜间22:00排干，降低穗层温度2-3°C' },
       { title: '自动执行', desc: '灌溉系统自动执行日灌夜排模式，1-5号田块全部启用，同步叶面喷水降温' },
       { title: '效果验证', desc: '实施后穗层温度降低2.8°C，结实率保持在86.5%（对照预估72%），有效减轻热害' }
+    ]
+  },
+  {
+    id: 'disease',
+    icon: '🦠',
+    title: '水稻病害检测 → 精准施药',
+    desc: 'AI识别稻瘟病早期症状，生成精准施药方案',
+    color: '#A855F7',
+    steps: [
+      { title: '病害识别', desc: '作物长势感知设备+多光谱相机检测到2号田叶片出现稻瘟病早期症状，病叶率8%' },
+      { title: '扩散预测', desc: 'AI预测：当前温湿度条件下，7天内病叶率将扩散至35%，影响面积可达180亩' },
+      { title: '处方生成', desc: '推荐三环唑+稻瘟灵复配方案，亩用量三环唑30g+稻瘟灵100ml，兑水45kg喷雾' },
+      { title: '精准施药', desc: '植保无人机定点喷施，重点区域2号田全覆盖，周边1/3号田预防性喷施' },
+      { title: '效果跟踪', desc: '施药后7天复查：病叶率降至2%，病情指数由12.5降至3.2，防治效果达74.4%' }
+    ]
+  },
+  {
+    id: 'water',
+    icon: '💧',
+    title: '水质异常 → 精准调控',
+    desc: '灌溉水PH异常，AI启动水质调控与水源切换',
+    color: '#06B6D4',
+    steps: [
+      { title: '水质检测', desc: '管式墒情监测仪检测到灌溉水PH异常5.2，低于正常范围6.0-7.5，存在酸化风险' },
+      { title: '影响分析', desc: 'AI分析：长期使用PH5.2水源灌溉将导致土壤酸化，影响作物根系发育与养分吸收' },
+      { title: '调控方案', desc: '石灰调酸：亩施生石灰50kg中和土壤酸性，同时切换至备用水源（PH6.8）' },
+      { title: '自动执行', desc: '灌溉系统自动切换至备用水源，石灰撒施任务下发至无人拖拉机-01' },
+      { title: '效果验证', desc: '切换水源48小时后灌溉水PH恢复至6.5，土壤PH由6.2回升至6.6，风险解除' }
+    ]
+  },
+  {
+    id: 'lodging',
+    icon: '🌾',
+    title: '倒伏预警 → 扶正处理',
+    desc: '监测到倒伏风险，AI启动预防与应急响应',
+    color: '#84CC16',
+    steps: [
+      { title: '倒伏检测', desc: '风速传感器检测到阵风6级+茎秆强度监测仪显示5号田茎秆偏弱，倒伏风险中等' },
+      { title: '风险评估', desc: 'AI评估：5号田茎秆强度低于阈值，若遇7级以上大风倒伏概率达60%，预估减产15-25%' },
+      { title: '预防措施', desc: '增施钾肥增强茎秆韧性（亩施氯化钾8kg）+控水晒田促进根系深扎' },
+      { title: '应急响应', desc: '台风前加固支撑：田间插防倒伏支架，低洼田块预排水降低水位' },
+      { title: '恢复评估', desc: '预防措施实施后茎秆强度提升23%，倒伏率控制在5%以内，远低于预估的60%' }
     ]
   }
 ];
