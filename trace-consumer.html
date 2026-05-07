@@ -242,6 +242,118 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333
   border: 2px solid #2D8B4E;
   animation: ripple 2s ease-out infinite;
 }
+
+/* 手机端优化 */
+@media (max-width: 640px) {
+  .mobile-nav-padding {
+    padding-bottom: 80px;
+  }
+  
+  /* 导航栏优化 */
+  nav#navbar {
+    padding: 12px 16px;
+  }
+  
+  /* Hero区域优化 */
+  #hero h1 {
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  
+  #hero p {
+    font-size: 0.95rem;
+  }
+  
+  /* 搜索框和按钮优化 */
+  #traceInput {
+    font-size: 0.95rem;
+    padding: 14px 16px 14px 44px;
+  }
+  
+  .capsule-btn {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+  
+  /* 产品卡片优化 */
+  #products section, #farm section {
+    padding: 12px 16px;
+  }
+  
+  #productGrid .card-hover {
+    margin-bottom: 16px;
+  }
+  
+  /* 时间线节点优化 */
+  .timeline-item {
+    padding: 16px;
+  }
+  
+  /* 农场图片和统计卡片 */
+  #farm .grid > div {
+    margin-bottom: 12px;
+  }
+  
+  #farm .text-2xl {
+    font-size: 1.5rem;
+  }
+  
+  /* AI助手面板优化 */
+  #aiPanel {
+    height: 75vh;
+    border-radius: 24px 24px 0 0;
+  }
+  
+  #aiFab {
+    bottom: 20px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  /* 热门溯源码 */
+  #hero .flex.flex-wrap {
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  /* 溯源详情页 */
+  #trace-detail .p-5 {
+    padding: 16px;
+  }
+  
+  #trace-detail .text-lg {
+    font-size: 1rem;
+  }
+  
+  #trace-detail .text-sm {
+    font-size: 0.9rem;
+  }
+  
+  /* 质检表格 */
+  #qualityReports table {
+    font-size: 0.85rem;
+  }
+  
+  /* 物流节点 */
+  #logisticsContainer .pl-6 {
+    padding-left: 20px;
+  }
+  
+  #logisticsContainer .py-4 {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* 平板端优化 */
+@media (min-width: 641px) and (max-width: 1024px) {
+  #aiPanel {
+    width: 85%;
+    right: 2.5%;
+    bottom: 4%;
+  }
+}
 </style>
 </head>
 <body class="bg-cream min-h-screen">
@@ -638,9 +750,9 @@ var iconMap = {
 };
 
 var imgPlaceholder = {
-  rice: { bg: 'from-amber-50 to-primary-light', emoji: '🌾', label: '有机大米' },
-  vegetable: { bg: 'from-green-50 to-primary-light', emoji: '🥬', label: '绿色蔬菜' },
-  fruit: { bg: 'from-red-50 to-orange-50', emoji: '🍎', label: '生态水果' }
+  rice: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Fresh%20organic%20rice%20in%20wooden%20bowl%2C%20golden%20grains%2C%20rustic%20wooden%20background%2C%20natural%20light%2C%20high%20quality%20food%20photography&image_size=square',
+  vegetable: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Fresh%20organic%20green%20vegetables%20assortment%2C%20spinach%2C%20lettuce%2C%20bok%20choy%2C%20on%20rustic%20wooden%20table%2C%20natural%20light%2C%20high%20quality%20food%20photography&image_size=square',
+  fruit: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Fresh%20organic%20assorted%20fruits%2C%20apples%2C%20oranges%2C%20pears%2C%20in%20wicker%20basket%2C%20rustic%20wooden%20table%2C%20natural%20light%2C%20high%20quality%20food%20photography&image_size=square'
 };
 
 function renderProducts() {
@@ -648,8 +760,8 @@ function renderProducts() {
   grid.innerHTML = products.map(function(p, i) {
     var ph = imgPlaceholder[p.img];
     return '<div class="card-hover bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 animate-fadeInUp delay-' + (i * 100) + '">' +
-      '<div class="h-48 bg-gradient-to-br ' + ph.bg + ' flex items-center justify-center">' +
-        '<span class="text-6xl">' + ph.emoji + '</span>' +
+      '<div class="h-48 overflow-hidden">' +
+        '<img src="' + ph + '" alt="' + p.name + '" class="w-full h-full object-cover">' +
       '</div>' +
       '<div class="p-5">' +
         '<div class="flex items-start justify-between mb-2">' +
