@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邗江无人农场 · 网格化农情指挥中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060E1A;
+  --bg2: #0A1628;
+  --panel: rgba(10,22,40,0.85);
+  --border: #1E3A5F;
+  --cyan: #00D4FF;
+  --green: #1DB954;
+  --red: #FF4757;
+  --yellow: #FFD93D;
+  --orange: #FF8C00;
+  --text: #E0E6F0;
+  --muted: #6B7FA0;
+  --gold: #D4A843;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:'Noto Sans SC',sans-serif; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+#particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+.dashboard { position:relative; z-index:1; display:grid; grid-template-rows:56px 1fr; height:100vh; }
+.top-bar { display:flex; align-items:center; justify-content:space-between; padding:0 24px; background:rgba(10,22,40,0.95); border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+.top-bar::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); animation:scanline 3s linear infinite; }
+@keyframes scanline { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+.main-grid { display:grid; grid-template-columns:320px 1fr 320px; gap:12px; padding:12px; overflow:hidden; }
+@media(max-width:1200px){ .main-grid{ grid-template-columns:280px 1fr 280px; gap:8px; padding:8px; } }
+@media(max-width:900px){ .main-grid{ grid-template-columns:1fr; grid-template-rows:auto 1fr auto; overflow-y:auto; } }
+
+.panel { background:var(--panel); border:1px solid var(--border); border-radius:8px; backdrop-filter:blur(12px); overflow:hidden; }
+.panel-title { display:flex; align-items:center; gap:8px; padding:10px 14px; font-size:13px; font-weight:700; color:var(--cyan); border-bottom:1px solid var(--border); text-transform:uppercase; letter-spacing:1px; }
+.panel-title .dot { width:6px; height:6px; border-radius:50%; background:var(--cyan); animation:pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+.panel-body { padding:12px 14px; overflow-y:auto; max-height:calc(100vh - 56px - 24px - 36px - 24px); }
+
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.stat-card { background:rgba(17,29,51,0.6); border:1px solid var(--border); border-radius:6px; padding:10px 12px; position:relative; overflow:hidden; }
+.stat-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; }
+.stat-card.cyan::before { background:var(--cyan); }
+.stat-card.green::before { background:var(--green); }
+.stat-card.red::before { background:var(--red); }
+.stat-card.yellow::before { background:var(--yellow); }
+.stat-label { font-size:11px; color:var(--muted); margin-bottom:4px; }
+.stat-value { font-family:'Orbitron',monospace; font-size:22px; font-weight:900; }
+.stat-card.cyan .stat-value { color:var(--cyan); }
+.stat-card.green .stat-value { color:var(--green); }
+.stat-card.red .stat-value { color:var(--red); }
+.stat-card.yellow .stat-value { color:var(--yellow); }
+.stat-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+.alert-item { display:flex; gap:10px; padding:10px; border-radius:6px; background:rgba(17,29,51,0.6); border:1px solid var(--border); margin-bottom:8px; cursor:pointer; transition:all 0.3s; }
+.alert-item:hover { border-color:var(--cyan); transform:translateX(2px); }
+.alert-item.severe { border-left:3px solid var(--red); }
+.alert-item.moderate { border-left:3px solid var(--yellow); }
+.alert-badge { font-size:10px; padding:2px 6px; border-radius:3px; font-weight:700; white-space:nowrap; }
+.alert-badge.severe { background:rgba(255,71,87,0.2); color:var(--red); }
+.alert-badge.moderate { background:rgba(255,217,61,0.2); color:var(--yellow); }
+.alert-name { font-size:12px; font-weight:700; color:var(--text); }
+.alert-desc { font-size:11px; color:var(--muted); margin-top:2px; line-height:1.4; }
+.alert-impact { font-size:11px; color:var(--orange); margin-top:4px; }
+.alert-action { display:inline-block; margin-top:6px; padding:4px 10px; background:linear-gradient(135deg,var(--cyan),#0088cc); color:#fff; font-size:11px; font-weight:700; border:none; border-radius:4px; cursor:pointer; transition:all 0.2s; }
+.alert-action:hover { transform:scale(1.05); box-shadow:0 0 12px rgba(0,212,255,0.4); }
+
+.device-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.device-item { display:flex; align-items:center; gap:8px; padding:8px 10px; background:rgba(17,29,51,0.6); border:1px solid var(--border); border-radius:4px; font-size:11px; }
+.device-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.device-dot.online { background:var(--green); box-shadow:0 0 6px var(--green); }
+.device-dot.offline { background:#555; }
+.device-dot.alert { background:var(--red); box-shadow:0 0 6px var(--red); animation:pulse-dot 1s infinite; }
+.device-name { color:var(--text); font-weight:500; }
+.device-data { color:var(--muted); font-size:10px; }
+
+.map-container { position:relative; height:100%; border-radius:8px; overflow:hidden; background:rgba(10,22,40,0.6); border:1px solid var(--border); }
+.map-container svg { width:100%; height:100%; }
+.field-poly { cursor:pointer; transition:all 0.3s; stroke-width:1.5; stroke:rgba(255,255,255,0.2); }
+.field-poly:hover { stroke-width:3; stroke:var(--cyan); filter:brightness(1.3); }
+.field-poly.status-green { fill:rgba(29,185,84,0.35); }
+.field-poly.status-yellow { fill:rgba(255,217,61,0.35); animation:breathe-yellow 2s infinite; }
+.field-poly.status-red { fill:rgba(255,71,87,0.35); animation:breathe-red 1.5s infinite; }
+@keyframes breathe-yellow { 0%,100%{fill:rgba(255,217,61,0.25);stroke:rgba(255,217,61,0.4)} 50%{fill:rgba(255,217,61,0.5);stroke:rgba(255,217,61,0.8)} }
+@keyframes breathe-red { 0%,100%{fill:rgba(255,71,87,0.25);stroke:rgba(255,71,87,0.4)} 50%{fill:rgba(255,71,87,0.5);stroke:rgba(255,71,87,0.8)} }
+.field-label { font-size:9px; fill:rgba(224,230,240,0.8); pointer-events:none; font-family:'Noto Sans SC',sans-serif; }
+.device-marker { cursor:pointer; }
+.map-legend { position:absolute; bottom:12px; left:12px; display:flex; gap:12px; background:rgba(10,22,40,0.9); padding:6px 12px; border-radius:4px; border:1px solid var(--border); }
+.legend-item { display:flex; align-items:center; gap:4px; font-size:10px; color:var(--muted); }
+.legend-dot { width:8px; height:8px; border-radius:2px; }
+.map-mode-toggle { position:absolute; top:12px; right:12px; display:flex; gap:4px; }
+.mode-btn { padding:4px 10px; font-size:11px; border:1px solid var(--border); background:rgba(10,22,40,0.9); color:var(--muted); border-radius:4px; cursor:pointer; transition:all 0.2s; }
+.mode-btn.active { background:rgba(0,212,255,0.15); color:var(--cyan); border-color:var(--cyan); }
+
+.variety-card { background:rgba(17,29,51,0.6); border:1px solid var(--border); border-radius:6px; padding:10px 12px; margin-bottom:8px; }
+.variety-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.variety-name { font-size:13px; font-weight:700; color:var(--text); }
+.variety-status { font-size:10px; padding:2px 6px; border-radius:3px; }
+.variety-status.normal { background:rgba(29,185,84,0.2); color:var(--green); }
+.variety-status.warning { background:rgba(255,217,61,0.2); color:var(--yellow); }
+.variety-metrics { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.variety-metric { font-size:11px; }
+.variety-metric-label { color:var(--muted); }
+.variety-metric-value { font-family:'Orbitron',monospace; font-weight:700; color:var(--cyan); }
+
+.weather-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(30,58,95,0.5); }
+.weather-row:last-child { border-bottom:none; }
+.weather-date { font-size:11px; color:var(--muted); width:50px; }
+.weather-icon { font-size:16px; width:24px; text-align:center; }
+.weather-desc { font-size:11px; color:var(--text); flex:1; }
+.weather-temp { font-size:11px; font-family:'Orbitron',monospace; color:var(--cyan); }
+.weather-risk { font-size:10px; padding:1px 5px; border-radius:2px; }
+.weather-risk.low { background:rgba(29,185,84,0.2); color:var(--green); }
+.weather-risk.mid { background:rgba(255,217,61,0.2); color:var(--yellow); }
+.weather-risk.high { background:rgba(255,71,87,0.2); color:var(--red); }
+
+.ai-fab { position:fixed; bottom:24px; right:24px; width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,var(--cyan),#0088cc); border:none; color:#fff; font-size:22px; cursor:pointer; z-index:1100; box-shadow:0 4px 20px rgba(0,212,255,0.4); transition:all 0.3s; display:flex; align-items:center; justify-content:center; }
+.ai-fab:hover { transform:scale(1.1); box-shadow:0 6px 30px rgba(0,212,255,0.6); }
+
+.ai-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:1198; display:none; }
+.ai-overlay.show { display:block; }
+
+.ai-panel { position:fixed; bottom:0; right:0; width:400px; max-height:70vh; background:rgba(10,22,40,0.97); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:12px 12px 0 0; z-index:1199; display:none; flex-direction:column; box-shadow:0 -8px 40px rgba(0,0,0,0.5); }
+.ai-panel.show { display:flex; }
+.ai-panel.fullscreen { width:100%; max-height:100vh; height:100vh; border-radius:0; }
+.ai-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border); }
+.ai-header-title { font-size:14px; font-weight:700; color:var(--cyan); display:flex; align-items:center; gap:6px; }
+.ai-header-actions { display:flex; gap:6px; }
+.ai-header-btn { background:none; border:1px solid var(--border); color:var(--muted); width:28px; height:28px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; transition:all 0.2s; }
+.ai-header-btn:hover { border-color:var(--cyan); color:var(--cyan); }
+.ai-messages { flex:1; overflow-y:auto; padding:12px 16px; min-height:200px; }
+.ai-msg { margin-bottom:12px; }
+.ai-msg-bot { display:flex; gap:8px; }
+.ai-msg-avatar { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--cyan),#0088cc); display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+.ai-msg-content { background:rgba(17,29,51,0.8); border:1px solid var(--border); border-radius:0 8px 8px 8px; padding:8px 12px; font-size:12px; line-height:1.6; color:var(--text); max-width:85%; }
+.ai-msg-user { display:flex; justify-content:flex-end; }
+.ai-msg-user .ai-msg-content { background:rgba(0,212,255,0.15); border-color:rgba(0,212,255,0.3); border-radius:8px 0 8px 8px; }
+.ai-quick { display:flex; flex-wrap:wrap; gap:6px; padding:8px 16px; border-top:1px solid var(--border); }
+.ai-quick-btn { padding:4px 10px; font-size:11px; background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.3); color:var(--cyan); border-radius:12px; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+.ai-quick-btn:hover { background:rgba(0,212,255,0.2); }
+.ai-input-row { display:flex; gap:8px; padding:10px 16px; border-top:1px solid var(--border); }
+.ai-input { flex:1; background:rgba(10,22,40,0.8); border:1px solid var(--border); border-radius:6px; padding:8px 12px; color:var(--text); font-size:12px; outline:none; font-family:'Noto Sans SC',sans-serif; }
+.ai-input:focus { border-color:var(--cyan); }
+.ai-send { padding:8px 14px; background:linear-gradient(135deg,var(--cyan),#0088cc); border:none; color:#fff; font-size:12px; font-weight:700; border-radius:6px; cursor:pointer; transition:all 0.2s; }
+.ai-send:hover { box-shadow:0 0 12px rgba(0,212,255,0.4); }
+
+.field-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:1200; display:none; align-items:center; justify-content:center; }
+.field-modal-overlay.show { display:flex; }
+.field-modal { background:rgba(17,29,51,0.97); border:1px solid var(--border); border-radius:12px; width:90%; max-width:520px; max-height:80vh; overflow-y:auto; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
+.field-modal-header { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--border); }
+.field-modal-title { font-size:15px; font-weight:700; color:var(--cyan); }
+.field-modal-close { background:none; border:1px solid var(--border); color:var(--muted); width:28px; height:28px; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+.field-modal-close:hover { border-color:var(--red); color:var(--red); }
+.field-modal-body { padding:16px 18px; }
+.field-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.field-info-item { background:rgba(10,22,40,0.6); padding:8px 10px; border-radius:4px; }
+.field-info-label { font-size:10px; color:var(--muted); }
+.field-info-value { font-size:13px; font-weight:700; color:var(--text); margin-top:2px; }
+.field-anomaly { background:rgba(255,71,87,0.1); border:1px solid rgba(255,71,87,0.3); border-radius:6px; padding:10px 12px; margin-bottom:10px; }
+.field-anomaly-title { font-size:12px; font-weight:700; color:var(--red); margin-bottom:4px; }
+.field-anomaly-text { font-size:11px; color:var(--text); line-height:1.5; }
+.field-prescription { background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.2); border-radius:6px; padding:10px 12px; }
+.field-prescription-title { font-size:12px; font-weight:700; color:var(--cyan); margin-bottom:4px; }
+.field-prescription-text { font-size:11px; color:var(--text); line-height:1.5; }
+
+.toast { position:fixed; top:70px; left:50%; transform:translateX(-50%); padding:10px 24px; background:linear-gradient(135deg,var(--cyan),#0088cc); color:#fff; font-size:13px; font-weight:700; border-radius:6px; z-index:2000; box-shadow:0 4px 20px rgba(0,212,255,0.4); animation:fadeInUp 0.3s ease-out; }
+@keyframes fadeInUp { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+
+.typing-dots { display:inline-flex; gap:3px; }
+.typing-dots span { width:5px; height:5px; border-radius:50%; background:var(--cyan); animation:typing-bounce 1.2s infinite; }
+.typing-dots span:nth-child(2) { animation-delay:0.2s; }
+.typing-dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes typing-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-4px)} }
+
+.chart-wrap { height:140px; margin-top:8px; }
+
+@media(max-width:900px) {
+  .main-grid { grid-template-columns:1fr; }
+  .left-panel, .right-panel { max-height:400px; }
+  .map-container { min-height:350px; }
+  .ai-panel { width:100%; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="dashboard">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span style="font-family:'Orbitron',monospace;font-size:15px;font-weight:900;background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">HANJIANG SMART FARM</span>
+      </div>
+      <span style="font-size:14px;font-weight:700;color:var(--text);">网格化农情指挥中心</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse-dot 2s infinite;"></span>
+        <span style="font-size:11px;color:var(--muted);">系统运行正常</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span id="clock" style="font-family:'Orbitron',monospace;font-size:13px;color:var(--cyan);"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" onclick="toggleMode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M8 3v3M16 3v3M3 8h18M5 6h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+        <span id="modeLabel" style="font-size:11px;color:var(--yellow);">异常模式</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="main-grid">
+    <!-- Left Panel -->
+    <div class="left-panel" style="display:flex;flex-direction:column;gap:10px;overflow-y:auto;">
+      <!-- Stats -->
+      <div class="panel">
+        <div class="panel-title"><span class="dot"></span>全局概览</div>
+        <div class="panel-body">
+          <div class="stat-grid">
+            <div class="stat-card cyan">
+              <div class="stat-label">总监测面积</div>
+              <div class="stat-value"><span class="counter" data-target="300">0</span><span style="font-size:12px;color:var(--muted);"> 亩</span></div>
+              <div class="stat-sub">3个品种混种</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-label">异常田块</div>
+              <div class="stat-value"><span class="counter" data-target="5">0</span><span style="font-size:12px;color:var(--muted);"> 块</span></div>
+              <div class="stat-sub">涉及35亩</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-label">设备在线率</div>
+              <div class="stat-value"><span class="counter" data-target="96">0</span><span style="font-size:12px;color:var(--muted);">%</span></div>
+              <div class="stat-sub">24/25台在线</div>
+            </div>
+            <div class="stat-card yellow">
+              <div class="stat-label">今日预警</div>
+              <div class="stat-value"><span class="counter" data-target="3">0</span><span style="font-size:12px;color:var(--muted);"> 条</span></div>
+              <div class="stat-sub">2条未处理</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div class="panel" style="flex:1;min-height:0;">
+        <div class="panel-title"><span class="dot" style="background:var(--red);"></span>异常田块处方单</div>
+        <div class="panel-body" id="alertList"></div>
+      </div>
+
+      <!-- Devices -->
+      <div class="panel">
+        <div class="panel-title"><span class="dot" style="background:var(--green);"></span>设备监测矩阵</div>
+        <div class="panel-body">
+          <div class="device-grid" id="deviceGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Map -->
+    <div class="map-container" id="mapContainer">
+      <svg id="farmMap" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>正常</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow);"></div>预警</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--red);"></div>异常</div>
+      </div>
+      <div class="map-mode-toggle">
+        <button class="mode-btn active" onclick="setMapMode('status',this)">状态视图</button>
+        <button class="mode-btn" onclick="setMapMode('variety',this)">品种视图</button>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel" style="display:flex;flex-direction:column;gap:10px;overflow-y:auto;">
+      <!-- Variety -->
+      <div class="panel">
+        <div class="panel-title"><span class="dot" style="background:var(--gold);"></span>品种长势对标</div>
+        <div class="panel-body" id="varietyPanel"></div>
+      </div>
+
+      <!-- Weather -->
+      <div class="panel">
+        <div class="panel-title"><span class="dot" style="background:var(--yellow);"></span>气象预警预告</div>
+        <div class="panel-body" id="weatherPanel"></div>
+      </div>
+
+      <!-- Chart -->
+      <div class="panel" style="flex:1;min-height:0;">
+        <div class="panel-title"><span class="dot"></span>长势趋势分析</div>
+        <div class="panel-body">
+          <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Field Detail Modal -->
+<div class="field-modal-overlay" id="fieldModal">
+  <div class="field-modal">
+    <div class="field-modal-header">
+      <span class="field-modal-title" id="fieldModalTitle"></span>
+      <button class="field-modal-close" onclick="closeFieldModal()">&times;</button>
+    </div>
+    <div class="field-modal-body" id="fieldModalBody"></div>
+  </div>
+</div>
+
+<!-- AI Overlay -->
+<div class="ai-overlay" id="aiOverlay" onclick="toggleAI()"></div>
+
+<!-- AI Panel -->
+<div class="ai-panel" id="aiPanel">
+  <div class="ai-header">
+    <div class="ai-header-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 015 5v3l2 2H5l2-2V7a5 5 0 015-5z"/><path d="M10 21a2 2 0 004 0"/></svg>
+      农情AI助手
+    </div>
+    <div class="ai-header-actions">
+      <button class="ai-header-btn" onclick="toggleAIFullscreen()" title="全屏">⛶</button>
+      <button class="ai-header-btn" onclick="toggleAI()" title="关闭">&times;</button>
+    </div>
+  </div>
+  <div class="ai-messages" id="aiMessages">
+    <div class="ai-msg ai-msg-bot">
+      <div class="ai-msg-avatar">🤖</div>
+      <div class="ai-msg-content">您好！我是农情AI助手，可以帮您分析异常根因、推荐作业方案、预测产量、评估气象风险。请问有什么需要？</div>
+    </div>
+  </div>
+  <div class="ai-quick">
+    <button class="ai-quick-btn" onclick="aiQuick('异常根因分析')">🔍 异常根因分析</button>
+    <button class="ai-quick-btn" onclick="aiQuick('作业方案推荐')">📋 作业方案推荐</button>
+    <button class="ai-quick-btn" onclick="aiQuick('产量预测')">📊 产量预测</button>
+    <button class="ai-quick-btn" onclick="aiQuick('气象风险评估')">🌤 气象风险评估</button>
+  </div>
+  <div class="ai-input-row">
+    <input class="ai-input" id="aiInput" placeholder="输入问题..." onkeydown="if(event.key==='Enter')aiSend()">
+    <button class="ai-send" onclick="aiSend()">发送</button>
+  </div>
+</div>
+
+<!-- AI FAB -->
+<button class="ai-fab" onclick="toggleAI()">🤖</button>
+
+<script>
+// ========== DATA ==========
+var fields = [
+  { id:'east-01', name:'东区-01号', variety:'扬麦25', area:15, status:'green', points:'180,80 260,60 280,120 250,180 170,160', cx:228, cy:120, lai:5.1, lnc:3.6, moisture:75 },
+  { id:'east-02', name:'东区-02号', variety:'扬麦25', area:14, status:'green', points:'280,120 360,90 380,150 350,200 260,180', cx:334, cy:148, lai:5.3, lnc:3.7, moisture:72 },
+  { id:'east-03', name:'东区-03号', variety:'扬麦25', area:12, status:'red', points:'170,160 250,180 260,260 200,280 140,230', cx:204, cy:222,
+    anomaly:'东北角约2亩异常发黄', evidence:'鹰眼识别到东北角异常发黄，长势仪显示LNC（氮含量）极低',
+    impact:'若不处理，该2亩区域千粒重将下降15%，预估损失约300斤产量',
+    prescription:'调度植保无人机，仅对03号田东北角进行高浓度叶面肥（尿素+磷酸二氢钾）变量喷洒', lai:4.2, lnc:2.1, moisture:68 },
+  { id:'east-04', name:'东区-04号', variety:'扬麦25', area:13, status:'green', points:'260,180 350,200 340,270 270,280 260,260', cx:296, cy:238, lai:5.0, lnc:3.5, moisture:74 },
+  { id:'wangzhuang-01', name:'王庄-01号', variety:'宁麦13', area:16, status:'red', points:'400,100 490,80 510,150 480,210 390,190', cx:454, cy:146,
+    anomaly:'麦蚜密度超标（50头/百株）', evidence:'自动赶蛾杆+球机联动报警，发现麦蚜密度超标',
+    impact:'蚜虫正处于暴发初期，2天内可能蔓延至相邻02号田，导致大面积减产和煤污病',
+    prescription:'立即下发飞防任务，使用吡虫啉或啶虫脒对王庄01、02号田进行封锁式打药', lai:4.8, lnc:3.4, moisture:71 },
+  { id:'wangzhuang-02', name:'王庄-02号', variety:'宁麦13', area:15, status:'yellow', points:'480,210 560,180 580,250 550,310 470,280', cx:528, cy:246,
+    anomaly:'蚜虫蔓延风险', evidence:'与01号田相邻，蚜虫可能2天内蔓延',
+    impact:'若蔓延将导致大面积减产和煤污病',
+    prescription:'与01号田同步进行飞防作业，封锁式打药', lai:4.9, lnc:3.3, moisture:70 },
+  { id:'wangzhuang-03', name:'王庄-03号', variety:'宁麦13', area:14, status:'green', points:'390,190 480,210 470,280 400,290 370,250', cx:422, cy:244, lai:5.0, lnc:3.5, moisture:73 },
+  { id:'hedong-01', name:'河东-01号', variety:'镇麦12', area:13, status:'green', points:'100,320 180,300 200,360 170,410 90,390', cx:148, cy:356, lai:4.9, lnc:3.4, moisture:76 },
+  { id:'hedong-02', name:'河东-02号', variety:'镇麦12', area:12, status:'green', points:'200,360 280,340 300,400 270,440 190,420', cx:248, cy:392, lai:5.0, lnc:3.5, moisture:74 },
+  { id:'hedong-03', name:'河东-03号', variety:'镇麦12', area:11, status:'green', points:'90,390 170,410 160,470 100,480 70,440', cx:118, cy:438, lai:4.8, lnc:3.3, moisture:75 },
+  { id:'hedong-04', name:'河东-04号', variety:'镇麦12', area:10, status:'yellow', points:'300,400 370,380 390,440 360,480 290,460', cx:342, cy:432,
+    anomaly:'土壤偏旱', evidence:'土壤墒情仪显示20cm深度相对湿度仅58%',
+    impact:'轻度缺水会影响灌浆速率，出粉率降低',
+    prescription:'开启河东区智能灌溉电磁阀，补水2小时后自动关闭', lai:4.6, lnc:3.2, moisture:58 },
+  { id:'jizhuang-01', name:'季庄-01号', variety:'宁麦13', area:15, status:'green', points:'400,300 480,280 500,350 470,400 390,380', cx:448, cy:342, lai:5.1, lnc:3.6, moisture:72 },
+  { id:'jizhuang-02', name:'季庄-02号', variety:'宁麦13', area:14, status:'green', points:'470,400 550,370 570,440 540,490 460,460', cx:518, cy:432, lai:5.2, lnc:3.7, moisture:71 },
+  { id:'jizhuang-03', name:'季庄-03号', variety:'镇麦12', area:12, status:'yellow', points:'550,370 630,350 650,420 620,470 540,450', cx:598, cy:412,
+    anomaly:'局部倒伏风险', evidence:'长势仪检测到部分区域茎秆倾斜角度异常',
+    impact:'若遇大风可能发生倒伏，影响收割和产量',
+    prescription:'关注天气预报，必要时提前收割该区域', lai:4.7, lnc:3.3, moisture:69 },
+  { id:'jizhuang-04', name:'季庄-04号', variety:'扬麦25', area:11, status:'red', points:'620,470 700,440 720,510 690,550 610,530', cx:668, cy:490,
+    anomaly:'严重缺水', evidence:'土壤墒情仪显示20cm深度相对湿度仅42%，远低于标准值',
+    impact:'灌浆期严重缺水将导致千粒重下降20%以上',
+    prescription:'立即启动应急灌溉，持续补水4小时', lai:4.0, lnc:2.8, moisture:42 },
+  { id:'facility', name:'设施区', variety:'-', area:8, status:'green', points:'580,100 700,80 720,160 680,200 570,180', cx:650, cy:144, lai:0, lnc:0, moisture:0 }
+];
+
+var devices = [
+  { id:'eagle-01', name:'鹰眼-01', type:'鹰眼', status:'online', data:'12次全景巡航', x:228, y:120 },
+  { id:'eagle-02', name:'鹰眼-02', type:'鹰眼', status:'online', data:'8次全景巡航', x:454, y:146 },
+  { id:'eagle-03', name:'鹰眼-03', type:'鹰眼', status:'online', data:'10次全景巡航', x:148, y:356 },
+  { id:'ball-01', name:'球机-01', type:'球机', status:'online', data:'85个预置点抓拍', x:334, y:148 },
+  { id:'ball-02', name:'球机-02', type:'球机', status:'online', data:'72个预置点抓拍', x:528, y:246 },
+  { id:'ball-03', name:'球机-03', type:'球机', status:'alert', data:'检测到虫情异常', x:448, y:342 },
+  { id:'moisture-01', name:'墒情仪-01', type:'墒情仪', status:'online', data:'湿度75%', x:204, y:222 },
+  { id:'moisture-02', name:'墒情仪-02', type:'墒情仪', status:'alert', data:'湿度42%⚠', x:668, y:490 },
+  { id:'moisture-03', name:'墒情仪-03', type:'墒情仪', status:'online', data:'湿度74%', x:248, y:392 },
+  { id:'pest-01', name:'虫情灯-01', type:'虫情灯', status:'online', data:'虫情正常', x:454, y:146 },
+  { id:'pest-02', name:'虫情灯-02', type:'虫情灯', status:'alert', data:'蚜虫密度超标', x:528, y:246 },
+  { id:'growth-01', name:'长势仪-01', type:'长势仪', status:'online', data:'LAI 5.1', x:228, y:120 },
+  { id:'growth-02', name:'长势仪-02', type:'长势仪', status:'alert', data:'LNC 2.1⚠', x:204, y:222 }
+];
+
+var varieties = [
+  { name:'扬麦25', area:120, stage:'扬花-灌浆期', lai:5.2, standardLai:5.0, lnc:3.6, standardLnc:3.5, status:'正常', yieldEstimate:'98%', color:'var(--cyan)' },
+  { name:'宁麦13', area:100, stage:'扬花-灌浆期', lai:4.9, standardLai:5.0, lnc:3.4, standardLnc:3.5, status:'注意', yieldEstimate:'92%', color:'var(--yellow)' },
+  { name:'镇麦12', area:80, stage:'灌浆初期', lai:4.8, standardLai:4.9, lnc:3.3, standardLnc:3.4, status:'注意', yieldEstimate:'90%', color:'var(--orange)' }
+];
+
+var weatherData = [
+  { date:'05-07', icon:'☀️', desc:'晴', temp:'22/14', risk:'low', riskText:'低' },
+  { date:'05-08', icon:'⛅', desc:'多云', temp:'24/15', risk:'low', riskText:'低' },
+  { date:'05-09', icon:'🌤', desc:'晴转多云', temp:'25/16', risk:'low', riskText:'低' },
+  { date:'05-10', icon:'🌧', desc:'小雨', temp:'20/14', risk:'mid', riskText:'中' },
+  { date:'05-11', icon:'⛈', desc:'中到大雨', temp:'18/13', risk:'high', riskText:'高' },
+  { date:'05-12', icon:'🌬', desc:'7级阵风', temp:'19/12', risk:'high', riskText:'高' },
+  { date:'05-13', icon:'☀️', desc:'晴', temp:'23/14', risk:'low', riskText:'低' }
+];
+
+var aiResponses = {
+  '异常根因分析': '🔍 异常根因分析报告<br><br><b>1. 东区-03号田（🔴重度）</b><br>根因：氮素严重缺乏<br>证据链：鹰眼→叶色发黄 → 长势仪→LNC仅2.1（标准3.5） → 墒情仪→湿度68%（略低）<br>结论：前期追肥不均匀，东北角区域漏施<br><br><b>2. 王庄-01号田（🔴重度）</b><br>根因：麦蚜暴发初期<br>证据链：赶蛾杆→触发报警 → 球机→确认蚜虫密度50头/百株 → 虫情灯→诱捕量激增<br>结论：气温回升+湿度适宜，蚜虫繁殖加速<br><br><b>3. 季庄-04号田（🔴重度）</b><br>根因：灌溉系统故障导致严重缺水<br>证据链：墒情仪→湿度42%（标准70%+） → 长势仪→LAI 4.0（低于标准5.0）<br>结论：该区域电磁阀疑似故障，需检修',
+  '作业方案推荐': '📋 智能作业方案推荐<br><br><b>紧急作业（今日必执行）：</b><br><br>① <b>飞防作业 - 王庄01/02号田</b><br>任务：吡虫啉封锁式喷洒<br>时间：今日16:00前（蚜虫2天内可能蔓延）<br>设备：植保无人机X2<br>药剂：10%吡虫啉可湿性粉剂<br><br>② <b>叶面肥喷施 - 东区03号田</b><br>任务：尿素+磷酸二氢钾变量喷洒<br>时间：今日下午<br>设备：植保无人机X1<br>浓度：仅东北角2亩区域加量30%<br><br><b>常规作业（2日内执行）：</b><br><br>③ <b>应急灌溉 - 季庄04号田</b><br>任务：持续补水4小时<br>时间：今日启动<br>注意：检查电磁阀是否故障<br><br>④ <b>补灌 - 河东04号田</b><br>任务：补水2小时后自动关闭',
+  '产量预测': '📊 产量预测分析<br><br><b>全域产量预估：</b><br>基于当前长势数据、气象预报及历史产量模型<br><br>🟢 扬麦25（120亩）<br>预估亩产：512kg | 达标率：98%<br>若03号田及时补肥，损失可挽回80%<br><br>🟡 宁麦13（100亩）<br>预估亩产：486kg | 达标率：92%<br>若蚜虫及时控制，达标率可回升至96%<br><br>🟡 镇麦12（80亩）<br>预估亩产：478kg | 达标率：90%<br>04号田灌溉恢复后，达标率可回升至94%<br><br><b>全域总产预估：14.56万kg</b><br>较去年+3.2% | 较目标-1.8%<br><br>⚠️ 风险提示：5月12日7级阵风可能影响宁麦13倒伏',
+  '气象风险评估': '🌤 气象风险评估<br><br><b>未来7天风险等级：🟡 中等</b><br><br><b>重点关注事件：</b><br><br>🔴 <b>5月11-12日 强降水+大风</b><br>影响：7级阵风+中到大雨<br>风险田块：宁麦13（抗倒伏能力较弱）<br>预防措施：<br>• 明后两天重点检查宁麦13田块沟渠通畅度<br>• 确保雨后能迅速排水，降低倒伏风险<br>• 提前加固赶蛾杆等田间设施<br><br>🟡 <b>5月10日 小雨</b><br>影响：可能影响飞防作业<br>建议：今日完成王庄01/02号田飞防任务<br><br>🟢 <b>5月13日后 天气转好</b><br>适合开展补肥、灌溉等田间作业'
+};
+
+var isAnomalyMode = true;
+var currentMapMode = 'status';
+
+// ========== PARTICLES ==========
+(function(){
+  var c = document.getElementById('particles');
+  var ctx = c.getContext('2d');
+  var w, h, pts = [];
+  function resize(){ w=c.width=window.innerWidth; h=c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  for(var i=0;i<60;i++) pts.push({x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, r:Math.random()*1.5+0.5});
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    pts.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=w; if(p.x>w)p.x=0; if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,212,255,0.15)'; ctx.fill();
+    });
+    for(var i=0;i<pts.length;i++) for(var j=i+1;j<pts.length;j++){
+      var dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){ ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle='rgba(0,212,255,'+(0.06*(1-d/120))+')'; ctx.stroke(); }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ========== CLOCK ==========
+function updateClock(){
+  var n=new Date();
+  document.getElementById('clock').textContent=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0')+' '+String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
+}
+setInterval(updateClock,1000); updateClock();
+
+// ========== COUNTERS ==========
+function animateCounters(){
+  document.querySelectorAll('.counter').forEach(function(el){
+    var target=parseInt(el.getAttribute('data-target'));
+    var current=0; var step=target/40;
+    var timer=setInterval(function(){
+      current+=step;
+      if(current>=target){current=target;clearInterval(timer);}
+      el.textContent=Math.round(current);
+    },30);
+  });
+}
+
+// ========== MAP ==========
+function renderMap(){
+  var svg = document.getElementById('farmMap');
+  var html = '';
+  // Background grid
+  html += '<defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(30,58,95,0.3)" stroke-width="0.5"/></pattern></defs>';
+  html += '<rect width="800" height="600" fill="url(#grid)"/>';
+
+  // Roads
+  html += '<line x1="0" y1="290" x2="800" y2="290" stroke="rgba(30,58,95,0.6)" stroke-width="2" stroke-dasharray="8,4"/>';
+  html += '<line x1="380" y1="0" x2="380" y2="600" stroke="rgba(30,58,95,0.6)" stroke-width="2" stroke-dasharray="8,4"/>';
+
+  // River
+  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.25)" stroke-width="8" stroke-linecap="round"/>';
+  html += '<path d="M0,280 Q200,260 400,285 Q600,310 800,275" fill="none" stroke="rgba(0,150,255,0.1)" stroke-width="16" stroke-linecap="round"/>';
+
+  // Fields
+  fields.forEach(function(f){
+    var fillClass = 'status-' + f.status;
+    if(!isAnomalyMode && f.id !== 'facility') fillClass = 'status-green';
+    var varietyColor = '';
+    if(currentMapMode === 'variety' && f.id !== 'facility'){
+      if(f.variety === '扬麦25') varietyColor = 'fill:rgba(0,212,255,0.3);stroke:rgba(0,212,255,0.5);';
+      else if(f.variety === '宁麦13') varietyColor = 'fill:rgba(29,185,84,0.3);stroke:rgba(29,185,84,0.5);';
+      else if(f.variety === '镇麦12') varietyColor = 'fill:rgba(212,168,67,0.3);stroke:rgba(212,168,67,0.5);';
+    }
+    html += '<polygon class="field-poly ' + (currentMapMode==='variety'?'':fillClass) + '" points="' + f.points + '" ' +
+      (varietyColor ? 'style="'+varietyColor+'"' : '') +
+      ' onclick="showFieldDetail(\'' + f.id + '\')" onmouseenter="highlightField(this)" onmouseleave="unhighlightField(this)"/>';
+    html += '<text class="field-label" x="' + f.cx + '" y="' + (f.cy+3) + '" text-anchor="middle">' + f.name + '</text>';
+  });
+
+  // Device markers
+  devices.forEach(function(d){
+    var color = d.status==='online' ? 'var(--green)' : d.status==='alert' ? 'var(--red)' : '#555';
+    html += '<g class="device-marker" onclick="showToast(\'' + d.name + ': ' + d.data + '\')">';
+    html += '<circle cx="' + d.x + '" cy="' + d.y + '" r="4" fill="' + color + '" opacity="0.8">';
+    if(d.status==='alert') html += '<animate attributeName="r" values="4;7;4" dur="1.5s" repeatCount="indefinite"/>';
+    html += '</circle>';
+    html += '</g>';
+  });
+
+  // Zone labels
+  html += '<text x="240" y="50" fill="rgba(0,212,255,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">东区</text>';
+  html += '<text x="490" y="70" fill="rgba(29,185,84,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">王庄区</text>';
+  html += '<text x="180" y="310" fill="rgba(212,168,67,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">河东区</text>';
+  html += '<text x="520" y="330" fill="rgba(29,185,84,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">季庄区</text>';
+
+  svg.innerHTML = html;
+}
+
+function highlightField(el){ el.style.strokeWidth='3'; el.style.stroke='var(--cyan)'; el.style.filter='brightness(1.3)'; }
+function unhighlightField(el){ el.style.strokeWidth='1.5'; el.style.stroke='rgba(255,255,255,0.2)'; el.style.filter=''; }
+
+function setMapMode(mode, btn){
+  currentMapMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderMap();
+}
+
+// ========== FIELD DETAIL ==========
+function showFieldDetail(id){
+  var f = fields.find(function(x){ return x.id===id; });
+  if(!f || f.id==='facility') return;
+  document.getElementById('fieldModalTitle').textContent = f.name + ' · ' + f.variety;
+  var body = '<div class="field-info-grid">';
+  body += '<div class="field-info-item"><div class="field-info-label">面积</div><div class="field-info-value">' + f.area + ' 亩</div></div>';
+  body += '<div class="field-info-item"><div class="field-info-label">品种</div><div class="field-info-value">' + f.variety + '</div></div>';
+  body += '<div class="field-info-item"><div class="field-info-label">叶面积指数</div><div class="field-info-value" style="color:' + (f.lai<4.5?'var(--red)':'var(--cyan)') + '">' + f.lai + '</div></div>';
+  body += '<div class="field-info-item"><div class="field-info-label">叶层氮含量</div><div class="field-info-value" style="color:' + (f.lnc<3.0?'var(--red)':'var(--cyan)') + '">' + f.lnc + '</div></div>';
+  body += '<div class="field-info-item"><div class="field-info-label">土壤湿度</div><div class="field-info-value" style="color:' + (f.moisture<60?'var(--red)':'var(--cyan)') + '">' + f.moisture + '%</div></div>';
+  body += '<div class="field-info-item"><div class="field-info-label">状态</div><div class="field-info-value" style="color:' + (f.status==='red'?'var(--red)':f.status==='yellow'?'var(--yellow)':'var(--green)') + '">' + (f.status==='red'?'严重异常':f.status==='yellow'?'轻度预警':'正常') + '</div></div>';
+  body += '</div>';
+  if(f.anomaly){
+    body += '<div class="field-anomaly"><div class="field-anomaly-title">⚠ 异常信息</div><div class="field-anomaly-text"><b>异常：</b>' + f.anomaly + '<br><b>证据链：</b>' + f.evidence + '<br><b>预估影响：</b><span style="color:var(--orange)">' + f.impact + '</span></div></div>';
+    body += '<div class="field-prescription"><div class="field-prescription-title">💊 智能处方</div><div class="field-prescription-text">' + f.prescription + '</div>';
+    body += '<button class="alert-action" style="margin-top:10px;width:100%;text-align:center;padding:8px;" onclick="dispatchOrder(\'' + f.id + '\')">🚀 一键派单执行</button></div>';
+  }
+  document.getElementById('fieldModalBody').innerHTML = body;
+  document.getElementById('fieldModal').classList.add('show');
+}
+
+function closeFieldModal(){ document.getElementById('fieldModal').classList.remove('show'); }
+
+function dispatchOrder(id){
+  var f = fields.find(function(x){ return x.id===id; });
+  showToast('✅ 已派单：' + f.name + ' - ' + f.prescription.substring(0,20) + '...');
+  closeFieldModal();
+}
+
+// ========== ALERTS ==========
+function renderAlerts(){
+  var list = document.getElementById('alertList');
+  var alerts = fields.filter(function(f){ return f.status==='red'||f.status==='yellow'; });
+  alerts.sort(function(a,b){ return a.status==='red'?-1:1; });
+  var html = '';
+  alerts.forEach(function(f){
+    var cls = f.status==='red'?'severe':'moderate';
+    html += '<div class="alert-item '+cls+'" onclick="showFieldDetail(\''+f.id+'\')">';
+    html += '<div><span class="alert-badge '+cls+'">'+(f.status==='red'?'🔴 重度':'🟡 轻度')+'</span></div>';
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<div class="alert-name">'+f.name+' · '+f.variety+'</div>';
+    html += '<div class="alert-desc">'+f.anomaly+'</div>';
+    html += '<div class="alert-impact">⚡ '+f.impact.substring(0,30)+'...</div>';
+    html += '<button class="alert-action" onclick="event.stopPropagation();dispatchOrder(\''+f.id+'\')">一键派单</button>';
+    html += '</div></div>';
+  });
+  list.innerHTML = html;
+}
+
+// ========== DEVICES ==========
+function renderDevices(){
+  var grid = document.getElementById('deviceGrid');
+  var html = '';
+  devices.forEach(function(d){
+    html += '<div class="device-item">';
+    html += '<span class="device-dot '+d.status+'"></span>';
+    html += '<span class="device-name">'+d.name+'</span>';
+    html += '<span class="device-data">'+d.data+'</span>';
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+// ========== VARIETIES ==========
+function renderVarieties(){
+  var panel = document.getElementById('varietyPanel');
+  var html = '';
+  varieties.forEach(function(v){
+    var statusCls = v.status==='正常'?'normal':'warning';
+    html += '<div class="variety-card">';
+    html += '<div class="variety-header"><span class="variety-name" style="color:'+v.color+'">'+v.name+'</span><span class="variety-status '+statusCls+'">'+v.status+'</span></div>';
+    html += '<div style="font-size:10px;color:var(--muted);margin-bottom:6px;">'+v.stage+' | '+v.area+'亩 | 产量达标率 '+v.yieldEstimate+'</div>';
+    html += '<div class="variety-metrics">';
+    html += '<div class="variety-metric"><span class="variety-metric-label">LAI </span><span class="variety-metric-value">'+v.lai+'</span><span style="font-size:10px;color:var(--muted)"> / '+v.standardLai+'</span></div>';
+    html += '<div class="variety-metric"><span class="variety-metric-label">LNC </span><span class="variety-metric-value">'+v.lnc+'</span><span style="font-size:10px;color:var(--muted)"> / '+v.standardLnc+'</span></div>';
+    html += '</div>';
+    var laiPct = Math.min(100, v.lai/v.standardLai*100);
+    var lncPct = Math.min(100, v.lnc/v.standardLnc*100);
+    html += '<div style="margin-top:6px;">';
+    html += '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:2px;"><span>LAI达标</span><span>'+laiPct.toFixed(0)+'%</span></div>';
+    html += '<div style="height:3px;background:rgba(30,58,95,0.5);border-radius:2px;overflow:hidden;"><div style="height:100%;width:'+laiPct+'%;background:'+v.color+';border-radius:2px;"></div></div>';
+    html += '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:2px;margin-top:4px;"><span>LNC达标</span><span>'+lncPct.toFixed(0)+'%</span></div>';
+    html += '<div style="height:3px;background:rgba(30,58,95,0.5);border-radius:2px;overflow:hidden;"><div style="height:100%;width:'+lncPct+'%;background:'+v.color+';border-radius:2px;"></div></div>';
+    html += '</div></div>';
+  });
+  panel.innerHTML = html;
+}
+
+// ========== WEATHER ==========
+function renderWeather(){
+  var panel = document.getElementById('weatherPanel');
+  var html = '';
+  weatherData.forEach(function(w){
+    html += '<div class="weather-row">';
+    html += '<span class="weather-date">'+w.date+'</span>';
+    html += '<span class="weather-icon">'+w.icon+'</span>';
+    html += '<span class="weather-desc">'+w.desc+'</span>';
+    html += '<span class="weather-temp">'+w.temp+'°</span>';
+    html += '<span class="weather-risk '+w.risk+'">'+w.riskText+'</span>';
+    html += '</div>';
+  });
+  html += '<div style="margin-top:10px;padding:8px 10px;background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.2);border-radius:4px;font-size:11px;color:var(--orange);line-height:1.5;">⚠️ <b>5月12日7级阵风</b>：宁麦13抗倒伏能力较弱，建议明后两天重点检查沟渠通畅度，确保雨后迅速排水。</div>';
+  panel.innerHTML = html;
+}
+
+// ========== CHART ==========
+function initGrowthChart(){
+  var ctx = document.getElementById('growthChart').getContext('2d');
+  new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:['3月','4月上','4月中','4月下','5月上','5月中'],
+      datasets:[
+        { label:'扬麦25', data:[2.1,3.2,4.0,4.6,5.2,5.3], borderColor:'#00D4FF', backgroundColor:'rgba(0,212,255,0.1)', tension:0.4, pointRadius:3, borderWidth:2 },
+        { label:'宁麦13', data:[2.0,3.0,3.8,4.4,4.9,5.0], borderColor:'#1DB954', backgroundColor:'rgba(29,185,84,0.1)', tension:0.4, pointRadius:3, borderWidth:2 },
+        { label:'镇麦12', data:[1.9,2.9,3.7,4.3,4.8,4.9], borderColor:'#D4A843', backgroundColor:'rgba(212,168,67,0.1)', tension:0.4, pointRadius:3, borderWidth:2 },
+        { label:'标准曲线', data:[2.0,3.1,3.9,4.5,5.0,5.1], borderColor:'rgba(255,255,255,0.3)', borderDash:[5,5], tension:0.4, pointRadius:0, borderWidth:1, fill:false }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ color:'#6B7FA0', font:{size:10} }, position:'bottom' }, tooltip:{ mode:'index', intersect:false } },
+      scales:{
+        x:{ grid:{color:'rgba(30,58,95,0.3)'}, ticks:{color:'#6B7FA0',font:{size:10}} },
+        y:{ grid:{color:'rgba(30,58,95,0.3)'}, ticks:{color:'#6B7FA0',font:{size:10}}, title:{display:true,text:'LAI',color:'#6B7FA0',font:{size:10}} }
+      }
+    }
+  });
+}
+
+// ========== MODE TOGGLE ==========
+function toggleMode(){
+  isAnomalyMode = !isAnomalyMode;
+  document.getElementById('modeLabel').textContent = isAnomalyMode ? '异常模式' : '安全模式';
+  document.getElementById('modeLabel').style.color = isAnomalyMode ? 'var(--yellow)' : 'var(--green)';
+  renderMap();
+  renderAlerts();
+  if(!isAnomalyMode){
+    document.getElementById('alertList').innerHTML = '<div style="text-align:center;padding:20px;"><div style="font-size:32px;margin-bottom:8px;">✅</div><div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:8px;">全域安全</div><div style="font-size:11px;color:var(--muted);line-height:1.6;">过去24小时内，鹰眼已完成12次全景巡航<br>球机完成85个预置点微距抓拍<br>虫情灯/赶蛾杆彻夜值守<br>全场300亩未发现任何病虫害与长势异常</div></div>';
+  }
+}
+
+// ========== AI ==========
+function toggleAI(){
+  var panel = document.getElementById('aiPanel');
+  var overlay = document.getElementById('aiOverlay');
+  panel.classList.toggle('show');
+  overlay.classList.toggle('show');
+}
+
+function toggleAIFullscreen(){
+  var panel = document.getElementById('aiPanel');
+  panel.classList.toggle('fullscreen');
+}
+
+function aiQuick(q){
+  addAiMsg(q, true);
+  var typing = document.createElement('div');
+  typing.className = 'ai-msg ai-msg-bot';
+  typing.innerHTML = '<div class="ai-msg-avatar">🤖</div><div class="ai-msg-content"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  document.getElementById('aiMessages').appendChild(typing);
+  scrollAi();
+  setTimeout(function(){
+    typing.remove();
+    var resp = aiResponses[q] || '正在分析中，请稍候...';
+    addAiMsg(resp, false);
+  }, 1200);
+}
+
+function aiSend(){
+  var input = document.getElementById('aiInput');
+  var q = input.value.trim();
+  if(!q) return;
+  input.value = '';
+  addAiMsg(q, true);
+  var typing = document.createElement('div');
+  typing.className = 'ai-msg ai-msg-bot';
+  typing.innerHTML = '<div class="ai-msg-avatar">🤖</div><div class="ai-msg-content"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  document.getElementById('aiMessages').appendChild(typing);
+  scrollAi();
+  setTimeout(function(){
+    typing.remove();
+    var resp = matchAiResponse(q);
+    addAiMsg(resp, false);
+  }, 1000);
+}
+
+function matchAiResponse(q){
+  q = q.toLowerCase();
+  if(q.includes('异常')||q.includes('根因')) return aiResponses['异常根因分析'];
+  if(q.includes('作业')||q.includes('方案')||q.includes('处方')) return aiResponses['作业方案推荐'];
+  if(q.includes('产量')||q.includes('预测')) return aiResponses['产量预测'];
+  if(q.includes('气象')||q.includes('天气')||q.includes('风')) return aiResponses['气象风险评估'];
+  if(q.includes('蚜虫')||q.includes('虫')) return '🐛 虫情分析<br><br>当前王庄-01号田检测到<b>麦蚜密度超标</b>（50头/百株），处于暴发初期。<br><br>建议措施：<br>1. 立即使用吡虫啉进行飞防作业<br>2. 对相邻02号田同步封锁式打药<br>3. 48小时后复查虫口密度';
+  if(q.includes('缺水')||q.includes('干旱')||q.includes('灌溉')) return '💧 灌溉分析<br><br>当前有2个田块存在缺水问题：<br><br>🔴 季庄-04号田：湿度仅42%，严重缺水<br>→ 建议：立即启动应急灌溉4小时<br><br>🟡 河东-04号田：湿度58%，轻度偏旱<br>→ 建议：补水2小时后自动关闭';
+  if(q.includes('倒伏')) return '🌾 倒伏风险评估<br><br>🟡 季庄-03号田存在局部倒伏风险<br><br>风险因素：<br>• 长势仪检测到部分区域茎秆倾斜<br>• 5月12日预报7级阵风<br>• 宁麦13品种抗倒伏能力较弱<br><br>预防措施：<br>1. 检查沟渠通畅度确保排水<br>2. 必要时提前收割风险区域<br>3. 加固田间设施';
+  return '🤖 收到您的问题，正在分析中...<br><br>基于当前农情数据，全域300亩中5个田块存在异常。建议优先处理：<br>1. 王庄-01号田蚜虫暴发（最紧急）<br>2. 东区-03号田氮素缺乏<br>3. 季庄-04号田严重缺水<br><br>您可以点击快捷按钮获取详细分析。';
+}
+
+function addAiMsg(text, isUser){
+  var container = document.getElementById('aiMessages');
+  var div = document.createElement('div');
+  div.className = 'ai-msg ' + (isUser ? 'ai-msg-user' : 'ai-msg-bot');
+  if(isUser){
+    div.innerHTML = '<div class="ai-msg-content">' + text + '</div>';
+  } else {
+    div.innerHTML = '<div class="ai-msg-avatar">🤖</div><div class="ai-msg-content">' + text + '</div>';
+  }
+  container.appendChild(div);
+  scrollAi();
+}
+
+function scrollAi(){
+  var el = document.getElementById('aiMessages');
+  el.scrollTop = el.scrollHeight;
+}
+
+// ========== TOAST ==========
+function showToast(msg){
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2500);
+}
+
+// ========== INIT ==========
+renderMap();
+renderAlerts();
+renderDevices();
+renderVarieties();
+renderWeather();
+initGrowthChart();
+animateCounters();
+</script>
+</body>
+</html>
