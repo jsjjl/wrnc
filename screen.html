@@ -357,56 +357,68 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
 <script>
 // ========== DATA ==========
 var fields = [
-  { id:'east-01', name:'东区-01号', variety:'扬麦25', area:15, status:'green', points:'180,80 260,60 280,120 250,180 170,160', cx:228, cy:120, lai:5.1, lnc:3.6, moisture:75 },
-  { id:'east-02', name:'东区-02号', variety:'扬麦25', area:14, status:'green', points:'280,120 360,90 380,150 350,200 260,180', cx:334, cy:148, lai:5.3, lnc:3.7, moisture:72 },
-  { id:'east-03', name:'东区-03号', variety:'扬麦25', area:12, status:'red', points:'170,160 250,180 260,260 200,280 140,230', cx:204, cy:222,
-    anomaly:'东北角约2亩异常发黄', evidence:'鹰眼识别到东北角异常发黄，长势仪显示LNC（氮含量）极低',
-    impact:'若不处理，该2亩区域千粒重将下降15%，预估损失约300斤产量',
-    prescription:'调度植保无人机，仅对03号田东北角进行高浓度叶面肥（尿素+磷酸二氢钾）变量喷洒', lai:4.2, lnc:2.1, moisture:68 },
-  { id:'east-04', name:'东区-04号', variety:'扬麦25', area:13, status:'green', points:'260,180 350,200 340,270 270,280 260,260', cx:296, cy:238, lai:5.0, lnc:3.5, moisture:74 },
-  { id:'wangzhuang-01', name:'王庄-01号', variety:'宁麦13', area:16, status:'red', points:'400,100 490,80 510,150 480,210 390,190', cx:454, cy:146,
-    anomaly:'麦蚜密度超标（50头/百株）', evidence:'自动赶蛾杆+球机联动报警，发现麦蚜密度超标',
-    impact:'蚜虫正处于暴发初期，2天内可能蔓延至相邻02号田，导致大面积减产和煤污病',
-    prescription:'立即下发飞防任务，使用吡虫啉或啶虫脒对王庄01、02号田进行封锁式打药', lai:4.8, lnc:3.4, moisture:71 },
-  { id:'wangzhuang-02', name:'王庄-02号', variety:'宁麦13', area:15, status:'yellow', points:'480,210 560,180 580,250 550,310 470,280', cx:528, cy:246,
-    anomaly:'蚜虫蔓延风险', evidence:'与01号田相邻，蚜虫可能2天内蔓延',
-    impact:'若蔓延将导致大面积减产和煤污病',
-    prescription:'与01号田同步进行飞防作业，封锁式打药', lai:4.9, lnc:3.3, moisture:70 },
-  { id:'wangzhuang-03', name:'王庄-03号', variety:'宁麦13', area:14, status:'green', points:'390,190 480,210 470,280 400,290 370,250', cx:422, cy:244, lai:5.0, lnc:3.5, moisture:73 },
-  { id:'hedong-01', name:'河东-01号', variety:'镇麦12', area:13, status:'green', points:'100,320 180,300 200,360 170,410 90,390', cx:148, cy:356, lai:4.9, lnc:3.4, moisture:76 },
-  { id:'hedong-02', name:'河东-02号', variety:'镇麦12', area:12, status:'green', points:'200,360 280,340 300,400 270,440 190,420', cx:248, cy:392, lai:5.0, lnc:3.5, moisture:74 },
-  { id:'hedong-03', name:'河东-03号', variety:'镇麦12', area:11, status:'green', points:'90,390 170,410 160,470 100,480 70,440', cx:118, cy:438, lai:4.8, lnc:3.3, moisture:75 },
-  { id:'hedong-04', name:'河东-04号', variety:'镇麦12', area:10, status:'yellow', points:'300,400 370,380 390,440 360,480 290,460', cx:342, cy:432,
-    anomaly:'土壤偏旱', evidence:'土壤墒情仪显示20cm深度相对湿度仅58%',
-    impact:'轻度缺水会影响灌浆速率，出粉率降低',
-    prescription:'开启河东区智能灌溉电磁阀，补水2小时后自动关闭', lai:4.6, lnc:3.2, moisture:58 },
-  { id:'jizhuang-01', name:'季庄-01号', variety:'宁麦13', area:15, status:'green', points:'400,300 480,280 500,350 470,400 390,380', cx:448, cy:342, lai:5.1, lnc:3.6, moisture:72 },
-  { id:'jizhuang-02', name:'季庄-02号', variety:'宁麦13', area:14, status:'green', points:'470,400 550,370 570,440 540,490 460,460', cx:518, cy:432, lai:5.2, lnc:3.7, moisture:71 },
-  { id:'jizhuang-03', name:'季庄-03号', variety:'镇麦12', area:12, status:'yellow', points:'550,370 630,350 650,420 620,470 540,450', cx:598, cy:412,
-    anomaly:'局部倒伏风险', evidence:'长势仪检测到部分区域茎秆倾斜角度异常',
-    impact:'若遇大风可能发生倒伏，影响收割和产量',
-    prescription:'关注天气预报，必要时提前收割该区域', lai:4.7, lnc:3.3, moisture:69 },
-  { id:'jizhuang-04', name:'季庄-04号', variety:'扬麦25', area:11, status:'red', points:'620,470 700,440 720,510 690,550 610,530', cx:668, cy:490,
-    anomaly:'严重缺水', evidence:'土壤墒情仪显示20cm深度相对湿度仅42%，远低于标准值',
-    impact:'灌浆期严重缺水将导致千粒重下降20%以上',
+  { id:'b1-01', name:'B1-01', variety:'扬麦25', area:8, status:'green', points:'50,50 150,48 150,100 50,102', cx:100, cy:76, lai:5.1, lnc:3.6, moisture:75 },
+  { id:'b1-02', name:'B1-02', variety:'扬麦25', area:8, status:'green', points:'160,48 260,46 260,98 160,100', cx:210, cy:72, lai:5.3, lnc:3.7, moisture:72 },
+  { id:'b1-03', name:'B1-03', variety:'扬麦25', area:8, status:'green', points:'270,46 370,44 370,96 270,98', cx:320, cy:70, lai:5.0, lnc:3.5, moisture:74 },
+  { id:'b1-04', name:'B1-04', variety:'宁麦13', area:8, status:'green', points:'380,44 480,42 480,94 380,96', cx:430, cy:68, lai:5.1, lnc:3.6, moisture:72 },
+  { id:'b1-05', name:'B1-05', variety:'宁麦13', area:8, status:'yellow', points:'490,42 590,40 590,92 490,94', cx:540, cy:66,
+    anomaly:'蚜虫监测预警', evidence:'虫情灯监测到蚜虫诱捕量上升',
+    impact:'如不及时防治，3-5天内可能蔓延',
+    prescription:'建议48小时内进行预防性喷药', lai:4.8, lnc:3.2, moisture:70 },
+  { id:'b1-06', name:'B1-06', variety:'宁麦13', area:8, status:'green', points:'600,40 700,38 700,90 600,92', cx:650, cy:64, lai:5.0, lnc:3.5, moisture:73 },
+  { id:'b2-01', name:'B2-01', variety:'镇麦12', area:10, status:'green', points:'50,110 200,108 200,170 50,172', cx:125, cy:140, lai:4.9, lnc:3.4, moisture:76 },
+  { id:'b2-02', name:'B2-02', variety:'镇麦12', area:10, status:'green', points:'210,108 360,106 360,168 210,170', cx:285, cy:137, lai:5.0, lnc:3.5, moisture:74 },
+  { id:'b2-03', name:'B2-03', variety:'扬麦25', area:10, status:'red', points:'370,106 520,104 520,166 370,168', cx:445, cy:135,
+    anomaly:'麦蚜密度超标', evidence:'球机确认蚜虫密度50头/百株',
+    impact:'蚜虫暴发初期，2天内可能蔓延至相邻田块',
+    prescription:'立即下发飞防任务，使用吡虫啉封锁式打药', lai:4.5, lnc:3.0, moisture:68 },
+  { id:'b2-04', name:'B2-04', variety:'扬麦25', area:10, status:'yellow', points:'530,104 680,102 680,164 530,166', cx:605, cy:133,
+    anomaly:'蚜虫蔓延风险', evidence:'与B2-03号田相邻',
+    impact:'若不处理将导致大面积减产',
+    prescription:'与B2-03号田同步进行飞防作业', lai:4.7, lnc:3.1, moisture:69 },
+  { id:'b2-05', name:'B2-05', variety:'宁麦13', area:8, status:'green', points:'690,102 790,100 790,162 690,164', cx:740, cy:131, lai:5.0, lnc:3.5, moisture:71 },
+  { id:'b3-01', name:'B3-01', variety:'扬麦25', area:10, status:'green', points:'50,180 200,178 200,240 50,242', cx:125, cy:210, lai:5.2, lnc:3.7, moisture:73 },
+  { id:'b3-02', name:'B3-02', variety:'扬麦25', area:10, status:'yellow', points:'210,178 360,176 360,238 210,240', cx:285, cy:207,
+    anomaly:'土壤偏旱', evidence:'墒情仪显示20cm深度湿度58%',
+    impact:'轻度缺水影响灌浆速率',
+    prescription:'开启智能灌溉电磁阀补水2小时', lai:4.6, lnc:3.2, moisture:58 },
+  { id:'b3-03', name:'B3-03', variety:'镇麦12', area:10, status:'green', points:'370,176 520,174 520,236 370,238', cx:445, cy:205, lai:4.8, lnc:3.3, moisture:75 },
+  { id:'b3-04', name:'B3-04', variety:'镇麦12', area:10, status:'green', points:'530,174 680,172 680,234 530,236', cx:605, cy:203, lai:4.9, lnc:3.4, moisture:74 },
+  { id:'b3-05', name:'B3-05', variety:'宁麦13', area:8, status:'green', points:'690,172 790,170 790,232 690,234', cx:740, cy:201, lai:5.1, lnc:3.6, moisture:72 },
+  { id:'b4-01', name:'B4-01', variety:'宁麦13', area:10, status:'green', points:'50,250 200,248 200,310 50,312', cx:125, cy:280, lai:5.0, lnc:3.5, moisture:76 },
+  { id:'b4-02', name:'B4-02', variety:'宁麦13', area:10, status:'green', points:'210,248 360,246 360,308 210,310', cx:285, cy:277, lai:5.1, lnc:3.6, moisture:74 },
+  { id:'b4-03', name:'B4-03', variety:'扬麦25', area:10, status:'green', points:'370,246 520,244 520,306 370,308', cx:445, cy:275, lai:5.2, lnc:3.7, moisture:73 },
+  { id:'b4-04', name:'B4-04', variety:'扬麦25', area:10, status:'red', points:'530,244 680,242 680,304 530,306', cx:605, cy:273,
+    anomaly:'严重缺水', evidence:'墒情仪显示湿度仅42%',
+    impact:'灌浆期缺水将导致千粒重下降20%',
     prescription:'立即启动应急灌溉，持续补水4小时', lai:4.0, lnc:2.8, moisture:42 },
-  { id:'facility', name:'设施区', variety:'-', area:8, status:'green', points:'580,100 700,80 720,160 680,200 570,180', cx:650, cy:144, lai:0, lnc:0, moisture:0 }
+  { id:'b4-05', name:'B4-05', variety:'镇麦12', area:8, status:'yellow', points:'690,242 790,240 790,302 690,304', cx:740, cy:271,
+    anomaly:'局部倒伏风险', evidence:'长势仪检测到茎秆倾斜',
+    impact:'大风天气可能发生倒伏',
+    prescription:'关注天气预报，必要时提前收割', lai:4.7, lnc:3.3, moisture:69 },
+  { id:'b5-01', name:'B5-01', variety:'镇麦12', area:10, status:'green', points:'50,320 200,318 200,380 50,382', cx:125, cy:350, lai:4.9, lnc:3.4, moisture:75 },
+  { id:'b5-02', name:'B5-02', variety:'镇麦12', area:10, status:'green', points:'210,318 360,316 360,378 210,380', cx:285, cy:347, lai:5.0, lnc:3.5, moisture:74 },
+  { id:'b5-03', name:'B5-03', variety:'宁麦13', area:10, status:'green', points:'370,316 520,314 520,376 370,378', cx:445, cy:345, lai:5.1, lnc:3.6, moisture:72 },
+  { id:'b5-04', name:'B5-04', variety:'宁麦13', area:10, status:'green', points:'530,314 680,312 680,374 530,376', cx:605, cy:343, lai:5.0, lnc:3.5, moisture:73 },
+  { id:'b5-05', name:'B5-05', variety:'扬麦25', area:8, status:'green', points:'690,312 790,310 790,372 690,374', cx:740, cy:341, lai:5.2, lnc:3.7, moisture:71 },
+  { id:'facility-n', name:'北区设施', variety:'-', area:0, status:'green', points:'0,10 800,8 800,38 0,40', cx:400, cy:24, lai:0, lnc:0, moisture:0 },
+  { id:'facility-s', name:'南区设施', variety:'-', area:0, status:'green', points:'0,390 800,388 800,410 0,412', cx:400, cy:400, lai:0, lnc:0, moisture:0 }
 ];
 
 var devices = [
-  { id:'eagle-01', name:'鹰眼-01', type:'鹰眼', status:'online', data:'12次全景巡航', x:228, y:120 },
-  { id:'eagle-02', name:'鹰眼-02', type:'鹰眼', status:'online', data:'8次全景巡航', x:454, y:146 },
-  { id:'eagle-03', name:'鹰眼-03', type:'鹰眼', status:'online', data:'10次全景巡航', x:148, y:356 },
-  { id:'ball-01', name:'球机-01', type:'球机', status:'online', data:'85个预置点抓拍', x:334, y:148 },
-  { id:'ball-02', name:'球机-02', type:'球机', status:'online', data:'72个预置点抓拍', x:528, y:246 },
-  { id:'ball-03', name:'球机-03', type:'球机', status:'alert', data:'检测到虫情异常', x:448, y:342 },
-  { id:'moisture-01', name:'墒情仪-01', type:'墒情仪', status:'online', data:'湿度75%', x:204, y:222 },
-  { id:'moisture-02', name:'墒情仪-02', type:'墒情仪', status:'alert', data:'湿度42%⚠', x:668, y:490 },
-  { id:'moisture-03', name:'墒情仪-03', type:'墒情仪', status:'online', data:'湿度74%', x:248, y:392 },
-  { id:'pest-01', name:'虫情灯-01', type:'虫情灯', status:'online', data:'虫情正常', x:454, y:146 },
-  { id:'pest-02', name:'虫情灯-02', type:'虫情灯', status:'alert', data:'蚜虫密度超标', x:528, y:246 },
-  { id:'growth-01', name:'长势仪-01', type:'长势仪', status:'online', data:'LAI 5.1', x:228, y:120 },
-  { id:'growth-02', name:'长势仪-02', type:'长势仪', status:'alert', data:'LNC 2.1⚠', x:204, y:222 }
+  { id:'eagle-01', name:'鹰眼-01', type:'鹰眼', status:'online', data:'12次全景巡航', x:125, y:140 },
+  { id:'eagle-02', name:'鹰眼-02', type:'鹰眼', status:'online', data:'8次全景巡航', x:445, y:205 },
+  { id:'eagle-03', name:'鹰眼-03', type:'鹰眼', status:'online', data:'10次全景巡航', x:605, y:343 },
+  { id:'ball-01', name:'球机-01', type:'球机', status:'online', data:'85个预置点抓拍', x:285, y:137 },
+  { id:'ball-02', name:'球机-02', type:'球机', status:'alert', data:'检测到虫情异常', x:445, y:135 },
+  { id:'ball-03', name:'球机-03', type:'球机', status:'online', data:'72个预置点抓拍', x:285, y:347 },
+  { id:'moisture-01', name:'墒情仪-01', type:'墒情仪', status:'online', data:'湿度75%', x:125, y:280 },
+  { id:'moisture-02', name:'墒情仪-02', type:'墒情仪', status:'alert', data:'湿度42%⚠', x:605, y:273 },
+  { id:'moisture-03', name:'墒情仪-03', type:'墒情仪', status:'online', data:'湿度74%', x:445, y:345 },
+  { id:'pest-01', name:'虫情灯-01', type:'虫情灯', status:'online', data:'虫情正常', x:125, y:210 },
+  { id:'pest-02', name:'虫情灯-02', type:'虫情灯', status:'alert', data:'蚜虫密度超标', x:445, y:135 },
+  { id:'growth-01', name:'长势仪-01', type:'长势仪', status:'online', data:'LAI 5.1', x:285, y:207 },
+  { id:'growth-02', name:'长势仪-02', type:'长势仪', status:'alert', data:'LNC 2.8⚠', x:605, y:273 }
 ];
 
 var varieties = [
@@ -426,10 +438,10 @@ var weatherData = [
 ];
 
 var aiResponses = {
-  '异常根因分析': '🔍 异常根因分析报告<br><br><b>1. 东区-03号田（🔴重度）</b><br>根因：氮素严重缺乏<br>证据链：鹰眼→叶色发黄 → 长势仪→LNC仅2.1（标准3.5） → 墒情仪→湿度68%（略低）<br>结论：前期追肥不均匀，东北角区域漏施<br><br><b>2. 王庄-01号田（🔴重度）</b><br>根因：麦蚜暴发初期<br>证据链：赶蛾杆→触发报警 → 球机→确认蚜虫密度50头/百株 → 虫情灯→诱捕量激增<br>结论：气温回升+湿度适宜，蚜虫繁殖加速<br><br><b>3. 季庄-04号田（🔴重度）</b><br>根因：灌溉系统故障导致严重缺水<br>证据链：墒情仪→湿度42%（标准70%+） → 长势仪→LAI 4.0（低于标准5.0）<br>结论：该区域电磁阀疑似故障，需检修',
-  '作业方案推荐': '📋 智能作业方案推荐<br><br><b>紧急作业（今日必执行）：</b><br><br>① <b>飞防作业 - 王庄01/02号田</b><br>任务：吡虫啉封锁式喷洒<br>时间：今日16:00前（蚜虫2天内可能蔓延）<br>设备：植保无人机X2<br>药剂：10%吡虫啉可湿性粉剂<br><br>② <b>叶面肥喷施 - 东区03号田</b><br>任务：尿素+磷酸二氢钾变量喷洒<br>时间：今日下午<br>设备：植保无人机X1<br>浓度：仅东北角2亩区域加量30%<br><br><b>常规作业（2日内执行）：</b><br><br>③ <b>应急灌溉 - 季庄04号田</b><br>任务：持续补水4小时<br>时间：今日启动<br>注意：检查电磁阀是否故障<br><br>④ <b>补灌 - 河东04号田</b><br>任务：补水2小时后自动关闭',
-  '产量预测': '📊 产量预测分析<br><br><b>全域产量预估：</b><br>基于当前长势数据、气象预报及历史产量模型<br><br>🟢 扬麦25（120亩）<br>预估亩产：512kg | 达标率：98%<br>若03号田及时补肥，损失可挽回80%<br><br>🟡 宁麦13（100亩）<br>预估亩产：486kg | 达标率：92%<br>若蚜虫及时控制，达标率可回升至96%<br><br>🟡 镇麦12（80亩）<br>预估亩产：478kg | 达标率：90%<br>04号田灌溉恢复后，达标率可回升至94%<br><br><b>全域总产预估：14.56万kg</b><br>较去年+3.2% | 较目标-1.8%<br><br>⚠️ 风险提示：5月12日7级阵风可能影响宁麦13倒伏',
-  '气象风险评估': '🌤 气象风险评估<br><br><b>未来7天风险等级：🟡 中等</b><br><br><b>重点关注事件：</b><br><br>🔴 <b>5月11-12日 强降水+大风</b><br>影响：7级阵风+中到大雨<br>风险田块：宁麦13（抗倒伏能力较弱）<br>预防措施：<br>• 明后两天重点检查宁麦13田块沟渠通畅度<br>• 确保雨后能迅速排水，降低倒伏风险<br>• 提前加固赶蛾杆等田间设施<br><br>🟡 <b>5月10日 小雨</b><br>影响：可能影响飞防作业<br>建议：今日完成王庄01/02号田飞防任务<br><br>🟢 <b>5月13日后 天气转好</b><br>适合开展补肥、灌溉等田间作业'
+  '异常根因分析': '🔍 异常根因分析报告<br><br><b>1. B2-03号田（🔴重度）</b><br>根因：麦蚜暴发初期<br>证据链：球机→确认蚜虫密度50头/百株 → 虫情灯→诱捕量激增 → 鹰眼→叶片轻微发黄<br>结论：气温回升+湿度适宜，蚜虫繁殖加速<br><br><b>2. B4-04号田（🔴重度）</b><br>根因：灌溉系统故障导致严重缺水<br>证据链：墒情仪→湿度42%（标准70%+） → 长势仪→LAI 4.0（低于标准5.0）<br>结论：该区域电磁阀疑似故障，需检修<br><br><b>3. B1-05号田（🟡轻度）</b><br>根因：蚜虫监测预警<br>证据链：虫情灯监测到蚜虫诱捕量上升趋势<br>结论：需48小时内进行预防性喷药',
+  '作业方案推荐': '📋 智能作业方案推荐<br><br><b>紧急作业（今日必执行）：</b><br><br>① <b>飞防作业 - B2-03/B2-04号田</b><br>任务：吡虫啉封锁式喷洒<br>时间：今日16:00前（蚜虫2天内可能蔓延）<br>设备：植保无人机X2<br>药剂：10%吡虫啉可湿性粉剂<br><br>② <b>应急灌溉 - B4-04号田</b><br>任务：持续补水4小时<br>时间：立即启动<br>注意：同时检查电磁阀是否故障<br><br><b>常规作业（48小时内执行）：</b><br><br>③ <b>预防性喷药 - B1-05号田</b><br>任务：吡虫啉预防性喷洒<br><br>④ <b>补灌 - B3-02号田</b><br>任务：补水2小时后自动关闭',
+  '产量预测': '📊 产量预测分析<br><br><b>全域产量预估：</b><br>基于当前长势数据、气象预报及历史产量模型<br><br>🟢 扬麦25（120亩）<br>预估亩产：512kg | 达标率：98%<br>B2-03号田虫害控制后可挽回90%损失<br><br>🟡 宁麦13（100亩）<br>预估亩产：486kg | 达标率：92%<br>B1-05号田预防性喷药后达标率可回升至96%<br><br>🟡 镇麦12（80亩）<br>预估亩产：478kg | 达标率：90%<br>B4-04号田灌溉恢复后，达标率可回升至94%<br><br><b>全域总产预估：14.56万kg</b><br>较去年+3.2% | 较目标-1.8%<br><br>⚠️ 风险提示：5月12日7级阵风可能影响宁麦13倒伏',
+  '气象风险评估': '🌤 气象风险评估<br><br><b>未来7天风险等级：🟡 中等</b><br><br><b>重点关注事件：</b><br><br>🔴 <b>5月11-12日 强降水+大风</b><br>影响：7级阵风+中到大雨<br>风险田块：宁麦13（抗倒伏能力较弱）、B4-05号田（已监测到茎秆倾斜）<br>预防措施：<br>• 明后两天重点检查宁麦13田块沟渠通畅度<br>• 确保雨后能迅速排水，降低倒伏风险<br>• 提前加固赶蛾杆等田间设施<br><br>🟡 <b>5月10日 小雨</b><br>影响：可能影响飞防作业<br>建议：今日完成B2-03/B2-04号田飞防任务<br><br>🟢 <b>5月13日后 天气转好</b><br>适合开展补肥、灌溉等田间作业'
 };
 
 var isAnomalyMode = true;
@@ -500,9 +512,9 @@ function renderMap(){
   // Fields
   fields.forEach(function(f){
     var fillClass = 'status-' + f.status;
-    if(!isAnomalyMode && f.id !== 'facility') fillClass = 'status-green';
+    if(!isAnomalyMode && !f.id.startsWith('facility')) fillClass = 'status-green';
     var varietyColor = '';
-    if(currentMapMode === 'variety' && f.id !== 'facility'){
+    if(currentMapMode === 'variety' && !f.id.startsWith('facility')){
       if(f.variety === '扬麦25') varietyColor = 'fill:rgba(0,212,255,0.3);stroke:rgba(0,212,255,0.5);';
       else if(f.variety === '宁麦13') varietyColor = 'fill:rgba(29,185,84,0.3);stroke:rgba(29,185,84,0.5);';
       else if(f.variety === '镇麦12') varietyColor = 'fill:rgba(212,168,67,0.3);stroke:rgba(212,168,67,0.5);';
@@ -510,7 +522,7 @@ function renderMap(){
     html += '<polygon class="field-poly ' + (currentMapMode==='variety'?'':fillClass) + '" points="' + f.points + '" ' +
       (varietyColor ? 'style="'+varietyColor+'"' : '') +
       ' onclick="showFieldDetail(\'' + f.id + '\')" onmouseenter="highlightField(this)" onmouseleave="unhighlightField(this)"/>';
-    html += '<text class="field-label" x="' + f.cx + '" y="' + (f.cy+3) + '" text-anchor="middle">' + f.name + '</text>';
+    if(!f.id.startsWith('facility')) html += '<text class="field-label" x="' + f.cx + '" y="' + (f.cy+3) + '" text-anchor="middle">' + f.name + '</text>';
   });
 
   // Device markers
@@ -524,10 +536,21 @@ function renderMap(){
   });
 
   // Zone labels
-  html += '<text x="240" y="50" fill="rgba(0,212,255,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">东区</text>';
-  html += '<text x="490" y="70" fill="rgba(29,185,84,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">王庄区</text>';
-  html += '<text x="180" y="310" fill="rgba(212,168,67,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">河东区</text>';
-  html += '<text x="520" y="330" fill="rgba(29,185,84,0.4)" font-size="14" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">季庄区</text>';
+  html += '<text x="400" y="480" fill="rgba(224,230,240,0.5)" font-size="16" font-weight="700" text-anchor="middle" font-family="Noto Sans SC,sans-serif">邗江五好两宜项目 · 田间监测站</text>';
+  
+  // Row labels
+  html += '<text x="20" y="76" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">B1</text>';
+  html += '<text x="20" y="140" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">B2</text>';
+  html += '<text x="20" y="210" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">B3</text>';
+  html += '<text x="20" y="280" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">B4</text>';
+  html += '<text x="20" y="350" fill="rgba(224,230,240,0.4)" font-size="11" font-weight="700" font-family="Noto Sans SC,sans-serif">B5</text>';
+  
+  // Col labels
+  html += '<text x="100" y="430" fill="rgba(224,230,240,0.3)" font-size="10" font-family="Noto Sans SC,sans-serif">Col1</text>';
+  html += '<text x="285" y="430" fill="rgba(224,230,240,0.3)" font-size="10" font-family="Noto Sans SC,sans-serif">Col2</text>';
+  html += '<text x="445" y="430" fill="rgba(224,230,240,0.3)" font-size="10" font-family="Noto Sans SC,sans-serif">Col3</text>';
+  html += '<text x="605" y="430" fill="rgba(224,230,240,0.3)" font-size="10" font-family="Noto Sans SC,sans-serif">Col4</text>';
+  html += '<text x="740" y="430" fill="rgba(224,230,240,0.3)" font-size="10" font-family="Noto Sans SC,sans-serif">Col5</text>';
 
   svg.innerHTML = html;
 }
