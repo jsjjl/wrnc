@@ -499,7 +499,7 @@ body { font-family: 'Noto Sans SC', sans-serif; background: #FAFAF5; color: #333
     <!-- Product Info Card -->
     <div class="bg-white rounded-3xl shadow-sm p-6 sm:p-8 mb-8 animate-fadeInUp">
       <div class="flex flex-col sm:flex-row gap-6">
-        <div class="w-full sm:w-48 h-48 rounded-2xl product-img-placeholder flex-shrink-0">
+        <div class="w-full sm:w-48 h-48 rounded-2xl product-img-placeholder flex-shrink-0 bg-gradient-to-br from-primary-light to-warm-gray flex items-center justify-center overflow-hidden">
           <svg class="w-16 h-16 text-primary/30" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-9-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm4.5-4c-3.5 0-6.5 2-8 5 1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z"/></svg>
         </div>
         <div class="flex-1">
@@ -714,6 +714,7 @@ var traceData = {
   shelfLife: "12个月",
   certifications: ["有机认证", "绿色食品", "ISO22000"],
   qualityScore: 98.5,
+  img: "rice",
   timeline: [
     { stage: "播种", date: "2025-03-15", desc: "精选南粳46号种子，智能精量播种", icon: "seed" },
     { stage: "施肥", date: "2025-03-20", desc: "有机肥施用，AI精准配比", icon: "fertilizer" },
@@ -798,6 +799,13 @@ function doTrace() {
     return;
   }
 
+  // 更新traceData
+  traceData.traceCode = found.id;
+  traceData.name = found.name;
+  traceData.category = found.category;
+  traceData.qualityScore = found.score;
+  traceData.img = found.img;
+
   var section = document.getElementById('trace-detail');
   section.classList.remove('hidden');
 
@@ -809,6 +817,12 @@ function doTrace() {
   document.getElementById('traceHarvestDate').textContent = traceData.harvestDate;
   document.getElementById('traceShelfLife').textContent = traceData.shelfLife;
   document.getElementById('traceCategory').textContent = traceData.category;
+
+  // 替换产品图片
+  var imgContainer = document.querySelector('#trace-detail .w-full.sm\\:w-48.h-48');
+  var imgUrl = imgPlaceholder[traceData.img];
+  imgContainer.innerHTML = '<img src="' + imgUrl + '" alt="' + traceData.name + '" class="w-full h-full object-cover rounded-2xl">';
+  imgContainer.classList.remove('bg-gradient-to-br', 'from-primary-light', 'to-warm-gray', 'flex', 'items-center', 'justify-center');
 
   var certHTML = traceData.certifications.map(function(c) {
     return '<span class="cert-badge"><svg class="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' + c + '</span>';
