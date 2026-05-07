@@ -227,6 +227,66 @@ main { flex: 1; display: flex; flex-direction: column; }
   transform: translateY(0);
 }
 
+.dispatch-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 9100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.dispatch-overlay.active { display: flex; }
+.dispatch-modal {
+  background: #111D33;
+  border: 1px solid #1E3A5F;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.dispatch-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.4s ease-out;
+}
+.dispatch-step.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.dispatch-step-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+.dispatch-progress-bar {
+  height: 4px;
+  background: rgba(30,58,95,0.5);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+.dispatch-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1DB954, #00B4D8);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.6s ease-out;
+}
+
 @media (max-width: 767px) {
   .mobile-nav { display: flex; }
   .desktop-nav { display: none; }
@@ -274,6 +334,10 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 <div class="ai-modal-overlay" id="aiModalOverlay" onclick="if(event.target===this)closeAIModal()">
   <div class="ai-modal" id="aiModal"></div>
+</div>
+
+<div class="dispatch-overlay" id="dispatchOverlay" onclick="if(event.target===this)closeDispatchModal()">
+  <div class="dispatch-modal" id="dispatchModal"></div>
 </div>
 
 <aside class="desktop-sidebar fixed left-0 top-0 h-full w-56 bg-farm-card border-r border-farm-border z-40 flex flex-col" style="display:flex">
@@ -482,7 +546,7 @@ main { flex: 1; display: flex; flex-direction: column; }
               <p class="text-xs text-farm-green">
                 <b>智能处方：</b>调度植保无人机，仅对03号田东北角进行高浓度叶面肥喷洒。
               </p>
-              <button class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors">
+              <button onclick="openDispatchModal('东区-03号田','扬麦25','重度','调度植保无人机，仅对03号田东北角进行高浓度叶面肥（尿素+磷酸二氢钾）变量喷洒','叶面肥喷洒','植保无人机')" class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors flex-shrink-0 ml-2">
                 一键派单
               </button>
             </div>
@@ -503,7 +567,7 @@ main { flex: 1; display: flex; flex-direction: column; }
               <p class="text-xs text-farm-green">
                 <b>智能处方：</b>立即下发飞防任务，使用吡虫啉进行封锁式打药。
               </p>
-              <button class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors">
+              <button onclick="openDispatchModal('王庄-01号田','宁麦13','重度','立即下发飞防任务，使用吡虫啉对王庄01、02号田进行封锁式打药','飞防打药','植保无人机')" class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors flex-shrink-0 ml-2">
                 一键派单
               </button>
             </div>
@@ -524,7 +588,7 @@ main { flex: 1; display: flex; flex-direction: column; }
               <p class="text-xs text-farm-green">
                 <b>智能处方：</b>开启河东区智能灌溉电磁阀，补水2小时后自动关闭。
               </p>
-              <button class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors">
+              <button onclick="openDispatchModal('河东-05号田','镇麦12','轻度','开启河东区智能灌溉电磁阀，补水2小时后自动关闭','智能灌溉','灌溉系统')" class="text-xs bg-farm-green text-white px-3 py-1 rounded-full hover:bg-farm-green/80 transition-colors flex-shrink-0 ml-2">
                 一键派单
               </button>
             </div>
@@ -1808,6 +1872,158 @@ function closeAIModal() {
 function confirmAI(title) {
   closeAIModal();
   showToast('AI决策已确认执行：' + title, 'success');
+}
+
+var dispatchTimer = null;
+var currentDispatchBtn = null;
+
+function openDispatchModal(field, variety, severity, prescription, taskType, equipment) {
+  var modal = document.getElementById('dispatchModal');
+  var severityColor = severity === '重度' ? '#EF4444' : '#EAB308';
+  var severityBg = severity === '重度' ? 'rgba(239,68,68,0.15)' : 'rgba(234,179,8,0.15)';
+  var now = new Date();
+  var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  var orderId = 'WO' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + String(Math.floor(Math.random()*900+100));
+
+  modal.innerHTML =
+    '<div class="p-5 border-b border-farm-border">' +
+      '<div class="flex items-center justify-between">' +
+        '<h3 class="text-sm font-bold text-farm-text flex items-center gap-2">📋 作业派单确认</h3>' +
+        '<button onclick="closeDispatchModal()" class="text-farm-muted hover:text-farm-text text-lg leading-none">&times;</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="p-5 space-y-4">' +
+      '<div class="flex items-center gap-3 p-3 rounded-lg" style="background:' + severityBg + '">' +
+        '<div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:' + severityBg + ';border:2px solid ' + severityColor + '">' +
+          '<span style="color:' + severityColor + ';font-weight:900;font-size:12px">' + severity + '</span>' +
+        '</div>' +
+        '<div>' +
+          '<p class="text-sm font-bold text-farm-text">' + field + '</p>' +
+          '<p class="text-xs text-farm-muted">' + variety + ' · ' + severity + '异常</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="space-y-2">' +
+        '<div class="flex justify-between text-xs">' +
+          '<span class="text-farm-muted">工单编号</span>' +
+          '<span class="text-farm-text font-mono">' + orderId + '</span>' +
+        '</div>' +
+        '<div class="flex justify-between text-xs">' +
+          '<span class="text-farm-muted">生成时间</span>' +
+          '<span class="text-farm-text">' + timeStr + '</span>' +
+        '</div>' +
+        '<div class="flex justify-between text-xs">' +
+          '<span class="text-farm-muted">任务类型</span>' +
+          '<span class="text-farm-text">' + taskType + '</span>' +
+        '</div>' +
+        '<div class="flex justify-between text-xs">' +
+          '<span class="text-farm-muted">执行设备</span>' +
+          '<span class="text-farm-text">' + equipment + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="bg-farm-surface rounded-lg p-3">' +
+        '<p class="text-xs text-farm-muted mb-1">处方内容</p>' +
+        '<p class="text-xs text-farm-text leading-relaxed">' + prescription + '</p>' +
+      '</div>' +
+      '<div id="dispatchSteps" class="space-y-0">' +
+        '<div class="dispatch-step" id="ds0">' +
+          '<div class="dispatch-step-icon bg-farm-surface text-farm-muted">1</div>' +
+          '<div><p class="text-xs text-farm-text font-medium">生成作业工单</p><p class="text-xs text-farm-muted">系统自动创建并编号</p></div>' +
+        '</div>' +
+        '<div class="dispatch-step" id="ds1">' +
+          '<div class="dispatch-step-icon bg-farm-surface text-farm-muted">2</div>' +
+          '<div><p class="text-xs text-farm-text font-medium">调度执行设备</p><p class="text-xs text-farm-muted">匹配最近的' + equipment + '</p></div>' +
+        '</div>' +
+        '<div class="dispatch-step" id="ds2">' +
+          '<div class="dispatch-step-icon bg-farm-surface text-farm-muted">3</div>' +
+          '<div><p class="text-xs text-farm-text font-medium">下发飞行航线/作业路径</p><p class="text-xs text-farm-muted">AI自动规划最优路线</p></div>' +
+        '</div>' +
+        '<div class="dispatch-step" id="ds3">' +
+          '<div class="dispatch-step-icon bg-farm-surface text-farm-muted">4</div>' +
+          '<div><p class="text-xs text-farm-text font-medium">设备启动执行</p><p class="text-xs text-farm-muted">实时状态回传监控</p></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="dispatch-progress-bar" id="dispatchProgress">' +
+        '<div class="dispatch-progress-fill" id="dispatchProgressFill"></div>' +
+      '</div>' +
+      '<div class="flex gap-3" id="dispatchActions">' +
+        '<button onclick="closeDispatchModal()" class="flex-1 text-xs px-4 py-2.5 rounded-lg bg-farm-surface text-farm-muted hover:bg-farm-border transition-colors">取消</button>' +
+        '<button onclick="confirmDispatch(\'' + field + '\',\'' + orderId + '\')" class="flex-1 text-xs px-4 py-2.5 rounded-lg bg-farm-green text-white hover:bg-farm-green/80 transition-colors font-bold">确认派单</button>' +
+      '</div>' +
+    '</div>';
+
+  document.getElementById('dispatchOverlay').classList.add('active');
+}
+
+function confirmDispatch(field, orderId) {
+  var actionsEl = document.getElementById('dispatchActions');
+  actionsEl.innerHTML = '<p class="text-xs text-farm-muted text-center w-full py-2">派单执行中...</p>';
+
+  var steps = ['ds0','ds1','ds2','ds3'];
+  var stepIcons = [
+    { bg: 'rgba(29,185,84,0.15)', color: '#1DB954', text: '✓' },
+    { bg: 'rgba(29,185,84,0.15)', color: '#1DB954', text: '✓' },
+    { bg: 'rgba(0,180,216,0.15)', color: '#00B4D8', text: '✓' },
+    { bg: 'rgba(0,180,216,0.15)', color: '#00B4D8', text: '▶' }
+  ];
+  var progressFill = document.getElementById('dispatchProgressFill');
+  var stepIndex = 0;
+
+  function animateStep() {
+    if (stepIndex >= steps.length) {
+      setTimeout(function() {
+        var lastIcon = document.querySelector('#ds3 .dispatch-step-icon');
+        if (lastIcon) {
+          lastIcon.style.background = 'rgba(29,185,84,0.15)';
+          lastIcon.style.color = '#1DB954';
+          lastIcon.textContent = '✓';
+        }
+        progressFill.style.width = '100%';
+        actionsEl.innerHTML =
+          '<div class="w-full text-center space-y-3">' +
+            '<div class="flex items-center justify-center gap-2">' +
+              '<span class="text-farm-green text-lg">✅</span>' +
+              '<span class="text-sm font-bold text-farm-green">派单成功</span>' +
+            '</div>' +
+            '<p class="text-xs text-farm-muted">工单 ' + orderId + ' 已下发至 ' + field + '</p>' +
+            '<button onclick="closeDispatchModal()" class="text-xs px-6 py-2 rounded-lg bg-farm-green/15 text-farm-green hover:bg-farm-green/25 transition-colors">完成</button>' +
+          '</div>';
+        showToast(field + ' 作业工单已派发成功', 'success');
+        updateDispatchButton(field);
+      }, 600);
+      return;
+    }
+    var stepEl = document.getElementById(steps[stepIndex]);
+    if (stepEl) {
+      stepEl.classList.add('visible');
+      var icon = stepEl.querySelector('.dispatch-step-icon');
+      if (icon) {
+        icon.style.background = stepIcons[stepIndex].bg;
+        icon.style.color = stepIcons[stepIndex].color;
+        icon.textContent = stepIcons[stepIndex].text;
+      }
+    }
+    progressFill.style.width = ((stepIndex + 1) / steps.length * 100) + '%';
+    stepIndex++;
+    dispatchTimer = setTimeout(animateStep, 700);
+  }
+
+  animateStep();
+}
+
+function updateDispatchButton(field) {
+  var buttons = document.querySelectorAll('button[onclick*="openDispatchModal"]');
+  buttons.forEach(function(btn) {
+    if (btn.getAttribute('onclick').indexOf(field) !== -1) {
+      btn.className = 'text-xs bg-farm-green/30 text-farm-green px-3 py-1 rounded-full flex-shrink-0 ml-2 cursor-default';
+      btn.textContent = '已派单';
+      btn.onclick = null;
+    }
+  });
+}
+
+function closeDispatchModal() {
+  document.getElementById('dispatchOverlay').classList.remove('active');
+  if (dispatchTimer) { clearTimeout(dispatchTimer); dispatchTimer = null; }
 }
 
 var sectionTitles = {
