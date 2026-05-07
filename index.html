@@ -171,6 +171,8 @@ main { flex: 1; display: flex; flex-direction: column; }
 .tab-btn { transition: all 0.3s ease; }
 
 .mobile-nav { display: none; }
+.mobile-nav-scroll::-webkit-scrollbar { display: none; }
+.mobile-nav-item.active { color: #1DB954 !important; background: rgba(29,185,84,0.1); }
 .desktop-nav { display: flex; }
 
 .toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
@@ -261,6 +263,8 @@ main { flex: 1; display: flex; flex-direction: column; }
 .typing-dots span:nth-child(2){animation-delay:.2s}
 .typing-dots span:nth-child(3){animation-delay:.4s}
 .chat-fullscreen{bottom:0!important;right:0!important;width:100%!important;max-width:100%!important;height:100vh!important;max-height:100vh!important;border-radius:0!important}
+.chat-overlay{position:fixed;inset:0;background:rgba(10,22,40,0.6);backdrop-filter:blur(4px);z-index:7999;display:none;animation:fadeIn .3s ease-out}
+.chat-overlay.open{display:block}
 @media(max-width:767px){.chat-panel{bottom:80px;right:12px;left:12px;width:auto;height:60vh}.chat-fab{bottom:80px;right:16px}.chat-fullscreen{bottom:0!important;left:0!important;height:100vh!important;max-height:100vh!important}}
 </style>
 </head>
@@ -289,6 +293,10 @@ main { flex: 1; display: flex; flex-direction: column; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="nav-text">首页总览</span>
     </a>
+    <a href="#plan" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="plan" onclick="switchSection('plan')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span class="nav-text">生产规划</span>
+    </a>
     <a href="#monitor" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="monitor" onclick="switchSection('monitor')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
       <span class="nav-text">农情监测</span>
@@ -313,10 +321,6 @@ main { flex: 1; display: flex; flex-direction: column; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2h2a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8a2 2 0 012-2h2V6a4 4 0 014-4z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>
       <span class="nav-text">AI智能体</span>
     </a>
-    <a href="#plan" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="plan" onclick="switchSection('plan')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      <span class="nav-text">生产规划</span>
-    </a>
     <a href="#report" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="report" onclick="switchSection('report')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       <span class="nav-text">数据报告</span>
@@ -335,35 +339,45 @@ main { flex: 1; display: flex; flex-direction: column; }
   </div>
 </aside>
 
-<nav class="mobile-nav fixed bottom-0 left-0 right-0 bg-farm-card border-t border-farm-border z-50 justify-around items-center py-2 px-1">
-  <a href="#home" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-green" data-section="home" onclick="switchSection('home')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span class="text-[10px]">总览</span>
-  </a>
-  <a href="#monitor" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="monitor" onclick="switchSection('monitor')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-    <span class="text-[10px]">农情</span>
-  </a>
-  <a href="#device" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="device" onclick="switchSection('device')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-    <span class="text-[10px]">设备</span>
-  </a>
-  <a href="#ai" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="ai" onclick="switchSection('ai')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2h2a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8a2 2 0 012-2h2V6a4 4 0 014-4z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>
-    <span class="text-[10px]">AI</span>
-  </a>
-  <a href="#alert" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="alert" onclick="switchSection('alert')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-    <span class="text-[10px]">预警</span>
-  </a>
-  <a href="#plan" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="plan" onclick="switchSection('plan')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-    <span class="text-[10px]">规划</span>
-  </a>
-  <a href="#report" class="flex flex-col items-center gap-0.5 px-2 py-1 text-farm-muted" data-section="report" onclick="switchSection('report')">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-    <span class="text-[10px]">报告</span>
-  </a>
+<nav class="mobile-nav fixed bottom-0 left-0 right-0 bg-farm-card border-t border-farm-border z-50 flex-col" id="mobileNav">
+  <div class="mobile-nav-scroll flex items-center py-1.5 px-2 gap-1 overflow-x-auto" id="mobileNavScroll" style="-webkit-overflow-scrolling:touch;scrollbar-width:none">
+    <a href="#home" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-green flex-shrink-0" data-section="home" onclick="switchSection('home')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="text-[10px] whitespace-nowrap">总览</span>
+    </a>
+    <a href="#plan" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="plan" onclick="switchSection('plan')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span class="text-[10px] whitespace-nowrap">规划</span>
+    </a>
+    <a href="#monitor" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="monitor" onclick="switchSection('monitor')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span class="text-[10px] whitespace-nowrap">农情</span>
+    </a>
+    <a href="#video" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="video" onclick="switchSection('video')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      <span class="text-[10px] whitespace-nowrap">视频</span>
+    </a>
+    <a href="#device" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="device" onclick="switchSection('device')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span class="text-[10px] whitespace-nowrap">设备</span>
+    </a>
+    <a href="#operation" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="operation" onclick="switchSection('operation')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <span class="text-[10px] whitespace-nowrap">作业</span>
+    </a>
+    <a href="#alert" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="alert" onclick="switchSection('alert')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="text-[10px] whitespace-nowrap">预警</span>
+    </a>
+    <a href="#ai" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="ai" onclick="switchSection('ai')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v2h2a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8a2 2 0 012-2h2V6a4 4 0 014-4z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>
+      <span class="text-[10px] whitespace-nowrap">AI</span>
+    </a>
+    <a href="#report" class="mobile-nav-item flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-lg text-farm-muted flex-shrink-0" data-section="report" onclick="switchSection('report')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span class="text-[10px] whitespace-nowrap">报告</span>
+    </a>
+  </div>
 </nav>
 
 <main class="main-content" style="margin-left:224px">
@@ -1020,18 +1034,18 @@ main { flex: 1; display: flex; flex-direction: column; }
             <!-- Facilities -->
             <rect x="620" y="55" width="160" height="285" rx="8" fill="rgba(30,58,95,0.3)" stroke="#1E3A5F" stroke-width="1"/>
             <text x="700" y="80" text-anchor="middle" fill="#7B93B0" font-size="11" font-weight="bold">设施区</text>
-            <text x="700" y="100" text-anchor="middle" fill="#5A6F8A" font-size="9">🏠 综合农情监测站</text>
-            <text x="700" y="118" text-anchor="middle" fill="#5A6F8A" font-size="9">📹 鹰眼摄像机</text>
-            <text x="700" y="136" text-anchor="middle" fill="#5A6F8A" font-size="9">💡 虫情测报灯</text>
-            <text x="700" y="154" text-anchor="middle" fill="#5A6F8A" font-size="9">🚰 灌溉泵站</text>
-            <text x="700" y="172" text-anchor="middle" fill="#5A6F8A" font-size="9">🔋 前沿智慧农业站</text>
-            <text x="700" y="190" text-anchor="middle" fill="#5A6F8A" font-size="9">🤖 无人车库</text>
-            <text x="700" y="208" text-anchor="middle" fill="#5A6F8A" font-size="9">📺 指挥中心</text>
-            <text x="700" y="226" text-anchor="middle" fill="#5A6F8A" font-size="9">🌾 烘干仓储中心</text>
-            <text x="700" y="244" text-anchor="middle" fill="#5A6F8A" font-size="9">💧 蓄水池(2,000m³)</text>
-            <text x="700" y="262" text-anchor="middle" fill="#5A6F8A" font-size="9">⚡ 配电房</text>
-            <text x="700" y="280" text-anchor="middle" fill="#5A6F8A" font-size="9">🅿️ 农机停放场</text>
-            <text x="700" y="298" text-anchor="middle" fill="#5A6F8A" font-size="9">🧪 土壤检测室</text>
+            <text x="700" y="100" text-anchor="middle" fill="#E8F0FE" font-size="9">🏠 综合农情监测站</text>
+            <text x="700" y="118" text-anchor="middle" fill="#E8F0FE" font-size="9">📹 鹰眼摄像机</text>
+            <text x="700" y="136" text-anchor="middle" fill="#E8F0FE" font-size="9">💡 虫情测报灯</text>
+            <text x="700" y="154" text-anchor="middle" fill="#E8F0FE" font-size="9">🚰 灌溉泵站</text>
+            <text x="700" y="172" text-anchor="middle" fill="#E8F0FE" font-size="9">🔋 前沿智慧农业站</text>
+            <text x="700" y="190" text-anchor="middle" fill="#E8F0FE" font-size="9">🤖 无人车库</text>
+            <text x="700" y="208" text-anchor="middle" fill="#E8F0FE" font-size="9">📺 指挥中心</text>
+            <text x="700" y="226" text-anchor="middle" fill="#E8F0FE" font-size="9">🌾 烘干仓储中心</text>
+            <text x="700" y="244" text-anchor="middle" fill="#E8F0FE" font-size="9">💧 蓄水池(2,000m³)</text>
+            <text x="700" y="262" text-anchor="middle" fill="#E8F0FE" font-size="9">⚡ 配电房</text>
+            <text x="700" y="280" text-anchor="middle" fill="#E8F0FE" font-size="9">🅿️ 农机停放场</text>
+            <text x="700" y="298" text-anchor="middle" fill="#E8F0FE" font-size="9">🧪 土壤检测室</text>
             <!-- Water channels -->
             <path d="M30 190 L600 190" stroke="#00B4D8" stroke-width="1.5" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
             <text x="300" y="186" text-anchor="middle" fill="#00B4D8" font-size="8" opacity="0.7">灌溉水渠</text>
@@ -1767,9 +1781,18 @@ function switchSection(section) {
   document.querySelectorAll('.section-page').forEach(function(el){ el.classList.remove('active'); });
   document.getElementById('section-' + section).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(function(el){ el.classList.remove('active'); el.classList.add('text-farm-muted'); });
+  document.querySelectorAll('.mobile-nav-item').forEach(function(el){ el.classList.remove('active'); el.classList.add('text-farm-muted'); });
   document.querySelectorAll('[data-section="'+section+'"]').forEach(function(el){ el.classList.add('active'); el.classList.remove('text-farm-muted'); });
   var titleEl = document.getElementById('page-title');
   if (titleEl) titleEl.textContent = sectionTitles[section] || '';
+  var mobileActive = document.querySelector('.mobile-nav-item[data-section="'+section+'"]');
+  if (mobileActive) {
+    var scroll = document.getElementById('mobileNavScroll');
+    if (scroll) {
+      var left = mobileActive.offsetLeft - scroll.offsetWidth / 2 + mobileActive.offsetWidth / 2;
+      scroll.scrollTo({ left: left, behavior: 'smooth' });
+    }
+  }
   setTimeout(function() {
     if (section === 'home') initWeatherChart();
     if (section === 'monitor') switchMonitorTab('weather');
@@ -1777,6 +1800,7 @@ function switchSection(section) {
     if (section === 'operation') switchOperationTab('irrigation');
     if (section === 'alert') renderAlerts();
     if (section === 'ai') renderAIScenarios();
+    if (section === 'plan') switchPlanTab('overview');
     if (section === 'report') switchReportTab('daily');
   }, 100);
 }
@@ -1890,7 +1914,25 @@ var planSteps = {
   ]
 };
 
+var activeFieldIdx = -1;
+function highlightField(idx) {
+  var map = document.getElementById('farmMap');
+  if (!map) return;
+  var rects = map.querySelectorAll('g[class*="cursor-pointer"] rect');
+  rects.forEach(function(r, i) {
+    if (i === idx) {
+      r.setAttribute('stroke-width', '4');
+      r.style.filter = 'drop-shadow(0 0 12px ' + fieldData[idx].color + ')';
+    } else {
+      r.setAttribute('stroke-width', '2');
+      r.style.filter = '';
+    }
+  });
+  activeFieldIdx = idx;
+}
+
 function showFieldDetail(idx) {
+  highlightField(idx);
   var f = fieldData[idx];
   var html = '<div class="space-y-3 animate-fadeIn">';
   html += '<div class="flex items-center justify-between"><span class="text-sm font-bold" style="color:'+f.color+'">'+f.name+'</span><span class="text-xs px-2 py-0.5 rounded-full" style="background:'+f.color+'20;color:'+f.color+';border:1px solid '+f.color+'40">'+f.status+'</span></div>';
@@ -1997,6 +2039,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<div class="chat-overlay" id="chatOverlay" onclick="toggleChat()"></div>
 <button class="chat-fab" id="chatFab" onclick="toggleChat()">
   <svg id="chatFabIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
 </button>
@@ -2035,6 +2078,7 @@ function toggleChat(){
   chatOpen=!chatOpen;
   document.getElementById('chatPanel').classList.toggle('open',chatOpen);
   document.getElementById('chatFab').classList.toggle('open',chatOpen);
+  document.getElementById('chatOverlay').classList.toggle('open',chatOpen);
   document.getElementById('chatFabIcon').innerHTML=chatOpen?'<line x1="18" y1="6" x2="6" y2="18" stroke="white" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke="white" stroke-width="2"/>':'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="2" fill="none"/>';
   if(chatOpen)document.getElementById('chatInput').focus();
   if(!chatOpen){chatFullscreen=false;document.getElementById('chatPanel').classList.remove('chat-fullscreen');updateFullscreenIcon();}
