@@ -541,19 +541,19 @@ main { flex: 1; display: flex; flex-direction: column; }
         <h3 class="text-sm font-bold mb-3 flex items-center gap-2">
           <span class="w-1 h-4 bg-farm-green rounded-full"></span>作业进度
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <div class="bg-farm-surface rounded-lg p-4">
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm font-medium">灌溉作业</span>
               <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
             </div>
-            <div class="flex items-center gap-4">
-              <svg width="64" height="64" viewBox="0 0 64 64" class="progress-ring">
+            <div class="flex items-center gap-3">
+              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#00B4D8" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="49"/>
               </svg>
               <div>
-                <div class="text-xl font-black text-farm-blue">70%</div>
+                <div class="text-lg font-black text-farm-blue">70%</div>
                 <div class="text-xs text-farm-muted">3/5田块</div>
               </div>
             </div>
@@ -563,13 +563,13 @@ main { flex: 1; display: flex; flex-direction: column; }
               <span class="text-sm font-medium">农机作业</span>
               <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
             </div>
-            <div class="flex items-center gap-4">
-              <svg width="64" height="64" viewBox="0 0 64 64" class="progress-ring">
+            <div class="flex items-center gap-3">
+              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#1DB954" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="32.67"/>
               </svg>
               <div>
-                <div class="text-xl font-black text-farm-green">80%</div>
+                <div class="text-lg font-black text-farm-green">80%</div>
                 <div class="text-xs text-farm-muted">4/5田块</div>
               </div>
             </div>
@@ -579,14 +579,62 @@ main { flex: 1; display: flex; flex-direction: column; }
               <span class="text-sm font-medium">植保飞防</span>
               <span class="text-xs text-farm-muted bg-farm-surface px-2 py-0.5 rounded-full border border-farm-border">待执行</span>
             </div>
-            <div class="flex items-center gap-4">
-              <svg width="64" height="64" viewBox="0 0 64 64" class="progress-ring">
+            <div class="flex items-center gap-3">
+              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
                 <circle cx="32" cy="32" r="26" fill="none" stroke="#7B93B0" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36"/>
               </svg>
               <div>
-                <div class="text-xl font-black text-farm-muted">0%</div>
+                <div class="text-lg font-black text-farm-muted">0%</div>
                 <div class="text-xs text-farm-muted">计划明日</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-farm-surface rounded-lg p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm font-medium">施肥作业</span>
+              <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#8B6914" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="81.68"/>
+              </svg>
+              <div>
+                <div class="text-lg font-black text-farm-brown">50%</div>
+                <div class="text-xs text-farm-muted">2/4田块</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-farm-surface rounded-lg p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm font-medium">巡检任务</span>
+              <span class="text-xs text-farm-green bg-farm-green/10 px-2 py-0.5 rounded-full">进行中</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#1DB954" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="16.34"/>
+              </svg>
+              <div>
+                <div class="text-lg font-black text-farm-green">90%</div>
+                <div class="text-xs text-farm-muted">9/10路线</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-farm-surface rounded-lg p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm font-medium">收割准备</span>
+              <span class="text-xs text-farm-orange bg-farm-orange/10 px-2 py-0.5 rounded-full">准备中</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <svg width="52" height="52" viewBox="0 0 64 64" class="progress-ring">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#1E3A5F" stroke-width="5"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#FF8C00" stroke-width="5" stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="114.35"/>
+              </svg>
+              <div>
+                <div class="text-lg font-black text-farm-orange">30%</div>
+                <div class="text-xs text-farm-muted">设备调试</div>
               </div>
             </div>
           </div>
