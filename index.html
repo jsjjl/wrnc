@@ -1992,7 +1992,7 @@ function initGrowthBenchmarkChart() {
           label: '高标准产量线',
           data: [420,480,520,560,590,610,635,650],
           borderColor: '#F59E0B',
-          backgroundColor: 'rgba(245,158,11,0.08)',
+          backgroundColor: 'rgba(245,158,11,0.06)',
           borderWidth: 2,
           borderDash: [6,4],
           tension: 0.4,
@@ -2003,16 +2003,42 @@ function initGrowthBenchmarkChart() {
           pointBorderWidth: 0
         },
         {
-          label: '预估产量线',
-          data: [415,475,518,555,585,605,630,645],
-          borderColor: '#1DB954',
-          backgroundColor: 'rgba(29,185,84,0.12)',
-          borderWidth: 2.5,
+          label: '扬麦25',
+          data: [415,472,512,548,578,598,622,638],
+          borderColor: '#3B82F6',
+          backgroundColor: 'rgba(59,130,246,0.08)',
+          borderWidth: 2,
           tension: 0.4,
-          fill: true,
+          fill: false,
+          pointRadius: 4,
+          pointBackgroundColor: '#3B82F6',
+          pointBorderColor: '#0d1f33',
+          pointBorderWidth: 2
+        },
+        {
+          label: '宁麦13',
+          data: [410,468,510,550,582,602,628,642],
+          borderColor: '#1DB954',
+          backgroundColor: 'rgba(29,185,84,0.08)',
+          borderWidth: 2,
+          tension: 0.4,
+          fill: false,
           pointRadius: 4,
           pointBackgroundColor: '#1DB954',
           pointBorderColor: '#0d2b1a',
+          pointBorderWidth: 2
+        },
+        {
+          label: '镇麦12',
+          data: [405,462,505,542,572,592,618,632],
+          borderColor: '#8B5CF6',
+          backgroundColor: 'rgba(139,92,246,0.08)',
+          borderWidth: 2,
+          tension: 0.4,
+          fill: false,
+          pointRadius: 4,
+          pointBackgroundColor: '#8B5CF6',
+          pointBorderColor: '#1a0f33',
           pointBorderWidth: 2
         }
       ]
