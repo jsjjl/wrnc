@@ -111,6 +111,10 @@ main { flex: 1; display: flex; flex-direction: column; }
   border: 1px solid rgba(30, 58, 95, 0.6);
 }
 
+.status-badge-orange { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.4); }
+.status-badge-blue { background: rgba(0,180,216,0.15); color: #00B4D8; border: 1px solid rgba(0,180,216,0.4); }
+.status-badge-green { background: rgba(29,185,84,0.15); color: #1DB954; border: 1px solid rgba(29,185,84,0.4); }
+
 .nav-item { transition: all 0.3s ease; position: relative; }
 .nav-item.active { color: #1DB954; }
 .nav-item.active::after { display: none; }
@@ -581,110 +585,124 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
     </div>
 
-    <div class="glass-card rounded-xl p-5">
-      <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
-        <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-        🔥 异常情况跟踪处理（按危急程度排序）
-      </h3>
-      <div class="space-y-3" id="anomalyTrackList">
-        <div class="bg-red-500/8 border border-red-500/20 rounded-lg p-4 cursor-pointer hover:bg-red-500/12 hover:border-red-500/30 transition-all" onclick="openAnomalyModal(0)">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
-              <span class="font-bold text-farm-text text-sm">W3号田</span>
-              <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded">重度</span>
-              <span class="text-xs text-farm-muted">宁麦13</span>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- 左侧：异常情况跟踪处理 -->
+      <div class="glass-card rounded-xl p-5">
+        <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+          🔥 异常情况跟踪处理
+        </h3>
+        <div class="space-y-3" id="anomalyTrackList">
+          <div class="bg-red-500/8 border border-red-500/20 rounded-lg p-4 cursor-pointer hover:bg-red-500/12 hover:border-red-500/30 transition-all" onclick="openAnomalyModal(0)">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+                <span class="font-bold text-farm-text text-sm">W3号田</span>
+                <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded">重度</span>
+                <span class="text-xs text-farm-muted">宁麦13</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs px-2 py-0.5 rounded-full bg-farm-orange/15 text-farm-orange">处方已生成</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-orange/15 text-farm-orange">处方已生成</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            <p class="text-xs text-farm-muted">麦蚜密度超标（50头/百株），蚜虫暴发初期，2天内可能蔓延至相邻田块</p>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:33%"></div></div>
+              <span class="text-xs text-farm-muted">2/6 步骤完成</span>
             </div>
           </div>
-          <p class="text-xs text-farm-muted">麦蚜密度超标（50头/百株），蚜虫暴发初期，2天内可能蔓延至相邻田块</p>
-          <div class="flex items-center gap-3 mt-2">
-            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:33%"></div></div>
-            <span class="text-xs text-farm-muted">2/6 步骤完成</span>
+
+          <div class="bg-red-500/8 border border-red-500/20 rounded-lg p-4 cursor-pointer hover:bg-red-500/12 hover:border-red-500/30 transition-all" onclick="openAnomalyModal(1)">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+                <span class="font-bold text-farm-text text-sm">M5号田</span>
+                <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded">重度</span>
+                <span class="text-xs text-farm-muted">扬麦25</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs px-2 py-0.5 rounded-full bg-farm-blue/15 text-farm-blue">工单已下发</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </div>
+            <p class="text-xs text-farm-muted">严重缺水，墒情仪显示湿度42%（标准70%+），灌浆期缺水影响千粒重</p>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:50%"></div></div>
+              <span class="text-xs text-farm-muted">3/6 步骤完成</span>
+            </div>
+          </div>
+
+          <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(2)">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full animate-pulse"></span>
+                <span class="font-bold text-farm-text text-sm">W4号田</span>
+                <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
+                <span class="text-xs text-farm-muted">宁麦13</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs px-2 py-0.5 rounded-full bg-farm-green/15 text-farm-green">作业验收中</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </div>
+            <p class="text-xs text-farm-muted">土壤偏旱，墒情仪显示20cm深度湿度58%，轻度缺水影响灌浆速率</p>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:83%"></div></div>
+              <span class="text-xs text-farm-muted">5/6 步骤完成</span>
+            </div>
+          </div>
+
+          <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(3)">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
+                <span class="font-bold text-farm-text text-sm">M3号田</span>
+                <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
+                <span class="text-xs text-farm-muted">宁麦13</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs px-2 py-0.5 rounded-full bg-farm-orange/15 text-farm-orange">异常发现</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </div>
+            <p class="text-xs text-farm-muted">蚜虫蔓延风险，与W3号田相邻，可能被蚜虫感染</p>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:17%"></div></div>
+              <span class="text-xs text-farm-muted">1/6 步骤完成</span>
+            </div>
+          </div>
+
+          <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(4)">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
+                <span class="font-bold text-farm-text text-sm">M6号田</span>
+                <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
+                <span class="text-xs text-farm-muted">宁麦13</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs px-2 py-0.5 rounded-full bg-farm-green/15 text-farm-green">持续跟踪中</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </div>
+            <p class="text-xs text-farm-muted">局部倒伏风险，长势仪检测到茎秆倾斜，大风可能导致倒伏</p>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:100%"></div></div>
+              <span class="text-xs text-farm-green">6/6 已完成</span>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="bg-red-500/8 border border-red-500/20 rounded-lg p-4 cursor-pointer hover:bg-red-500/12 hover:border-red-500/30 transition-all" onclick="openAnomalyModal(1)">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
-              <span class="font-bold text-farm-text text-sm">M5号田</span>
-              <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded">重度</span>
-              <span class="text-xs text-farm-muted">扬麦25</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-blue/15 text-farm-blue">工单已下发</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-          </div>
-          <p class="text-xs text-farm-muted">严重缺水，墒情仪显示湿度42%（标准70%+），灌浆期缺水影响千粒重</p>
-          <div class="flex items-center gap-3 mt-2">
-            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:50%"></div></div>
-            <span class="text-xs text-farm-muted">3/6 步骤完成</span>
-          </div>
-        </div>
-
-        <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(2)">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full animate-pulse"></span>
-              <span class="font-bold text-farm-text text-sm">W4号田</span>
-              <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
-              <span class="text-xs text-farm-muted">宁麦13</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-green/15 text-farm-green">作业验收中</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-          </div>
-          <p class="text-xs text-farm-muted">土壤偏旱，墒情仪显示20cm深度湿度58%，轻度缺水影响灌浆速率</p>
-          <div class="flex items-center gap-3 mt-2">
-            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:83%"></div></div>
-            <span class="text-xs text-farm-muted">5/6 步骤完成</span>
-          </div>
-        </div>
-
-        <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(3)">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
-              <span class="font-bold text-farm-text text-sm">M3号田</span>
-              <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
-              <span class="text-xs text-farm-muted">宁麦13</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-orange/15 text-farm-orange">异常发现</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-          </div>
-          <p class="text-xs text-farm-muted">蚜虫蔓延风险，与W3号田相邻，可能被蚜虫感染</p>
-          <div class="flex items-center gap-3 mt-2">
-            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:17%"></div></div>
-            <span class="text-xs text-farm-muted">1/6 步骤完成</span>
-          </div>
-        </div>
-
-        <div class="bg-yellow-500/8 border border-yellow-500/20 rounded-lg p-4 cursor-pointer hover:bg-yellow-500/12 hover:border-yellow-500/30 transition-all" onclick="openAnomalyModal(4)">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
-              <span class="font-bold text-farm-text text-sm">M6号田</span>
-              <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded">轻度</span>
-              <span class="text-xs text-farm-muted">宁麦13</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs px-2 py-0.5 rounded-full bg-farm-green/15 text-farm-green">持续跟踪中</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-          </div>
-          <p class="text-xs text-farm-muted">局部倒伏风险，长势仪检测到茎秆倾斜，大风可能导致倒伏</p>
-          <div class="flex items-center gap-3 mt-2">
-            <div class="flex-1 h-1 bg-farm-surface rounded-full overflow-hidden"><div class="h-full bg-yellow-500 rounded-full" style="width:100%"></div></div>
-            <span class="text-xs text-farm-green">6/6 已完成</span>
-          </div>
+      <!-- 右侧：农场日常 -->
+      <div class="glass-card rounded-xl p-5">
+        <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 bg-farm-green rounded-full animate-pulse"></span>
+          🌾 农场日常
+        </h3>
+        <div class="space-y-3" id="farmDailyList">
+          <!-- 由 renderFarmDailyTasks() 动态渲染 -->
         </div>
       </div>
     </div>
@@ -2569,6 +2587,19 @@ var anomalyData = [
   }
 ];
 
+var farmDailyTasks = [
+  { id:'FT001', field:'W1号田', type:'农田灌溉', stage:'返青分蘖期', status:'作业中', progress:65, assignee:'张师傅', startTime:'2026-05-07 06:00', deadline:'2026-05-07 18:00', description:'返青期浅水灌溉，保持水层3-5厘米，促进分蘖早生快发' },
+  { id:'FT002', field:'W2号田', type:'农田施肥', stage:'拔节孕穗期', status:'任务下发', progress:0, assignee:'李技术员', startTime:'2026-05-07 14:00', deadline:'2026-05-07 17:00', description:'追施拔节肥，每亩尿素8公斤+氯化钾5公斤，促进大穗形成' },
+  { id:'FT003', field:'M1号田', type:'病虫害防治', stage:'抽穗扬花期', status:'结束确认', progress:100, assignee:'王队长', startTime:'2026-05-07 05:30', deadline:'2026-05-07 10:00', description:'抽穗期防治稻瘟病和稻飞虱，喷施三环唑+吡蚜酮混合药剂' },
+  { id:'FT004', field:'M2号田', type:'农田巡查', stage:'灌浆成熟期', status:'作业中', progress:40, assignee:'赵管理员', startTime:'2026-05-07 08:00', deadline:'2026-05-07 16:00', description:'巡查灌浆期水稻长势，观察籽粒饱满度和茎秆健康状况，排查倒伏风险' },
+  { id:'FT005', field:'W3号田', type:'除草作业', stage:'移栽期', status:'任务下发', progress:0, assignee:'刘师傅', startTime:'2026-05-07 15:00', deadline:'2026-05-07 19:00', description:'移栽后7天进行化学除草，喷施苄嘧磺隆+丁草胺封闭处理' },
+  { id:'FT006', field:'M3号田', type:'农田灌溉', stage:'拔节孕穗期', status:'作业中', progress:80, assignee:'张师傅', startTime:'2026-05-07 07:00', deadline:'2026-05-07 12:00', description:'孕穗期保持深水层5-7厘米，防止颖花退化，确保穗大粒多' },
+  { id:'FT007', field:'W4号田', type:'收割作业', stage:'收获期', status:'结束确认', progress:100, assignee:'陈队长', startTime:'2026-05-07 06:00', deadline:'2026-05-07 14:00', description:'全喂入联合收割机收获，留茬高度控制在15厘米以下，秸秆粉碎还田' },
+  { id:'FT008', field:'M5号田', type:'农田施肥', stage:'种植准备期', status:'任务下发', progress:0, assignee:'李技术员', startTime:'2026-05-08 07:00', deadline:'2026-05-08 12:00', description:'基肥施用，每亩腐熟有机肥1000公斤+复合肥25公斤，旋耕入土' },
+  { id:'FT009', field:'M6号田', type:'农田巡查', stage:'收后管理期', status:'作业中', progress:30, assignee:'赵管理员', startTime:'2026-05-07 09:00', deadline:'2026-05-07 17:00', description:'收获后田块巡查，检查秸秆还田质量，规划下季绿肥种植区域' },
+  { id:'FT010', field:'W1号田', type:'病虫害防治', stage:'育秧期', status:'任务下发', progress:0, assignee:'王队长', startTime:'2026-05-08 06:00', deadline:'2026-05-08 09:00', description:'秧田防治立枯病和恶苗病，喷施甲霜灵+咪鲜胺，加强通风炼苗' }
+];
+
 function openAnomalyModal(idx) {
   var a = anomalyData[idx];
   if (!a) return;
@@ -2703,6 +2734,70 @@ function openAnomalyModal(idx) {
 
 function closeAnomalyModal() {
   document.getElementById('anomalyOverlay').classList.remove('active');
+}
+
+function renderFarmDailyTasks() {
+  var container = document.getElementById('farmDailyList');
+  if (!container) return;
+  var typeIcons = {
+    '农田巡查':'🔍',
+    '农田灌溉':'💧',
+    '农田施肥':'🧪',
+    '病虫害防治':'🛡️',
+    '除草作业':'🌿',
+    '收割作业':'🌾'
+  };
+  var typeColors = {
+    '农田巡查':'#00B4D8',
+    '农田灌溉':'#3B82F6',
+    '农田施肥':'#8B5CF6',
+    '病虫害防治':'#EF4444',
+    '除草作业':'#10B981',
+    '收割作业':'#F59E0B'
+  };
+  var statusColors = {
+    '任务下发':{bg:'rgba(245,158,11,0.15)',color:'#F59E0B',label:'任务下发'},
+    '作业中':{bg:'rgba(0,180,216,0.15)',color:'#00B4D8',label:'作业中'},
+    '结束确认':{bg:'rgba(29,185,84,0.15)',color:'#1DB954',label:'结束确认'}
+  };
+  var html = '';
+  farmDailyTasks.forEach(function(t) {
+    var st = statusColors[t.status] || statusColors['任务下发'];
+    var icon = typeIcons[t.type] || '📋';
+    var tc = typeColors[t.type] || '#6B7280';
+    html += '<div class="glass-card rounded-xl p-4 mb-3">';
+    html += '<div class="flex items-center justify-between mb-2">';
+    html += '<div class="flex items-center gap-2">';
+    html += '<div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background:' + tc + '20;border:1.5px solid ' + tc + '60">' + icon + '</div>';
+    html += '<div><h4 class="text-sm font-bold text-farm-text">' + t.field + ' · ' + t.type + '</h4><p class="text-xs text-farm-muted">' + t.stage + '</p></div>';
+    html += '</div>';
+    html += '<span class="text-xs font-bold px-2.5 py-1 rounded-full" style="background:' + st.bg + ';color:' + st.color + ';border:1px solid ' + st.color + '40">' + st.label + '</span>';
+    html += '</div>';
+    html += '<p class="text-xs text-farm-text mb-3 leading-relaxed">' + t.description + '</p>';
+    html += '<div class="flex items-center gap-3 mb-2">';
+    html += '<div class="flex-1">';
+    html += '<div class="w-full h-1.5 bg-farm-surface rounded-full overflow-hidden">';
+    html += '<div class="h-full rounded-full" style="width:' + t.progress + '%;background:linear-gradient(90deg,' + tc + ',' + tc + '80)"></div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<span class="text-xs font-mono font-bold" style="color:' + tc + '">' + t.progress + '%</span>';
+    html += '</div>';
+    html += '<div class="flex items-center justify-between text-xs">';
+    html += '<div class="flex items-center gap-3">';
+    html += '<span class="text-farm-muted">负责人：<span class="text-farm-text font-medium">' + t.assignee + '</span></span>';
+    html += '<span class="text-farm-muted">截止：<span class="text-farm-text font-mono">' + t.deadline + '</span></span>';
+    html += '</div>';
+    if (t.status === '任务下发') {
+      html += '<button class="text-xs px-3 py-1 rounded-full font-bold" style="background:' + tc + '20;color:' + tc + ';border:1px solid ' + tc + '50">开始作业</button>';
+    } else if (t.status === '作业中') {
+      html += '<button class="text-xs px-3 py-1 rounded-full font-bold" style="background:' + tc + '20;color:' + tc + ';border:1px solid ' + tc + '50">更新进度</button>';
+    } else {
+      html += '<span class="text-xs font-bold" style="color:#1DB954">✓ 已完成</span>';
+    }
+    html += '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
 }
 
 function openMapInfoModal(type, id) {
@@ -3118,6 +3213,7 @@ document.addEventListener('DOMContentLoaded', function() {
   handleHashChange();
   renderVarietyTable();
   renderPlanTab('prep');
+  renderFarmDailyTasks();
 });
 </script>
 
