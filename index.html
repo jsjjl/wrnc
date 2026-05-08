@@ -360,6 +360,9 @@ main { flex: 1; display: flex; flex-direction: column; }
 <div class="dispatch-overlay" id="mapInfoOverlay" onclick="if(event.target===this)closeMapInfoModal()">
   <div class="dispatch-modal" id="mapInfoModalContent" style="max-width:480px;max-height:90vh"></div>
 </div>
+<div class="dispatch-overlay" id="farmDailyOverlay" onclick="if(event.target===this)closeFarmDailyModal()">
+  <div class="dispatch-modal" id="farmDailyModalContent" style="max-width:520px;max-height:90vh"></div>
+</div>
 
 <aside class="desktop-sidebar fixed left-0 top-0 h-full w-56 bg-farm-card border-r border-farm-border z-40 flex flex-col" style="display:flex">
   <div class="p-4 border-b border-farm-border">
@@ -585,14 +588,14 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" style="align-items:stretch">
       <!-- 左侧：异常情况跟踪处理 -->
-      <div class="glass-card rounded-xl p-5">
-        <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+      <div class="glass-card rounded-xl p-5 flex flex-col" style="max-height:520px">
+        <h3 class="text-sm font-bold mb-4 flex items-center gap-2 flex-shrink-0">
           <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
           🔥 异常情况跟踪处理
         </h3>
-        <div class="space-y-3" id="anomalyTrackList">
+        <div class="space-y-3 overflow-y-auto flex-1 pr-1" style="max-height:460px" id="anomalyTrackList">
           <div class="bg-red-500/8 border border-red-500/20 rounded-lg p-4 cursor-pointer hover:bg-red-500/12 hover:border-red-500/30 transition-all" onclick="openAnomalyModal(0)">
             <div class="flex items-center justify-between mb-2">
               <div class="flex items-center gap-2">
@@ -696,12 +699,12 @@ main { flex: 1; display: flex; flex-direction: column; }
       </div>
 
       <!-- 右侧：农场日常 -->
-      <div class="glass-card rounded-xl p-5">
-        <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+      <div class="glass-card rounded-xl p-5 flex flex-col" style="max-height:520px">
+        <h3 class="text-sm font-bold mb-4 flex items-center gap-2 flex-shrink-0">
           <span class="w-2 h-2 bg-farm-green rounded-full animate-pulse"></span>
           🌾 农场日常
         </h3>
-        <div class="space-y-3" id="farmDailyList">
+        <div class="space-y-3 overflow-y-auto flex-1 pr-1" style="max-height:460px" id="farmDailyList">
           <!-- 由 renderFarmDailyTasks() 动态渲染 -->
         </div>
       </div>
@@ -2765,7 +2768,7 @@ function renderFarmDailyTasks() {
     var st = statusColors[t.status] || statusColors['任务下发'];
     var icon = typeIcons[t.type] || '📋';
     var tc = typeColors[t.type] || '#6B7280';
-    html += '<div class="glass-card rounded-xl p-4 mb-3">';
+    html += '<div class="glass-card rounded-xl p-4 mb-3 cursor-pointer hover:bg-white/5 transition-all" onclick="openFarmDailyModal(\'' + t.id + '\')">';
     html += '<div class="flex items-center justify-between mb-2">';
     html += '<div class="flex items-center gap-2">';
     html += '<div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background:' + tc + '20;border:1.5px solid ' + tc + '60">' + icon + '</div>';
@@ -2787,13 +2790,7 @@ function renderFarmDailyTasks() {
     html += '<span class="text-farm-muted">负责人：<span class="text-farm-text font-medium">' + t.assignee + '</span></span>';
     html += '<span class="text-farm-muted">截止：<span class="text-farm-text font-mono">' + t.deadline + '</span></span>';
     html += '</div>';
-    if (t.status === '任务下发') {
-      html += '<button class="text-xs px-3 py-1 rounded-full font-bold" style="background:' + tc + '20;color:' + tc + ';border:1px solid ' + tc + '50">开始作业</button>';
-    } else if (t.status === '作业中') {
-      html += '<button class="text-xs px-3 py-1 rounded-full font-bold" style="background:' + tc + '20;color:' + tc + ';border:1px solid ' + tc + '50">更新进度</button>';
-    } else {
-      html += '<span class="text-xs font-bold" style="color:#1DB954">✓ 已完成</span>';
-    }
+    html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B93B0" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
     html += '</div>';
     html += '</div>';
   });
@@ -2941,6 +2938,105 @@ function openMapInfoModal(type, id) {
 
 function closeMapInfoModal() {
   document.getElementById('mapInfoOverlay').classList.remove('active');
+}
+
+function openFarmDailyModal(taskId) {
+  var task = farmDailyTasks.find(function(t) { return t.id === taskId; });
+  if (!task) return;
+  var modal = document.getElementById('farmDailyModalContent');
+  var typeColors = {
+    '农田巡查':'#00B4D8','农田灌溉':'#3B82F6','农田施肥':'#8B5CF6',
+    '病虫害防治':'#EF4444','除草作业':'#10B981','收割作业':'#F59E0B'
+  };
+  var typeIcons = {
+    '农田巡查':'🔍','农田灌溉':'💧','农田施肥':'🧪',
+    '病虫害防治':'🛡️','除草作业':'🌿','收割作业':'🌾'
+  };
+  var tc = typeColors[task.type] || '#6B7280';
+  var icon = typeIcons[task.type] || '📋';
+  var st = task.status === '任务下发' ? {bg:'rgba(245,158,11,0.12)',color:'#F59E0B',label:'任务下发'} :
+           task.status === '作业中' ? {bg:'rgba(0,180,216,0.12)',color:'#00B4D8',label:'作业中'} :
+           {bg:'rgba(29,185,84,0.12)',color:'#1DB954',label:'结束确认'};
+
+  var html = '';
+  html += '<div style="position:relative;padding:2px;border-radius:16px;background:linear-gradient(135deg,' + tc + '40,' + tc + '10,' + tc + '05)">';
+  html += '<div style="background:linear-gradient(160deg,#0d1f1a 0%,#091714 50%,#0a1915 100%);border-radius:14px;padding:20px">';
+
+  html += '<div class="flex items-center justify-between mb-5">';
+  html += '<div class="flex items-center gap-3">';
+  html += '<div style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:' + tc + '15;border:1.8px solid ' + tc + ';box-shadow:0 0 16px ' + tc + '30"><span style="font-size:20px">' + icon + '</span></div>';
+  html += '<div>';
+  html += '<h3 style="font-size:18px;font-weight:800;color:#ffffff;letter-spacing:0.5px">' + task.field + ' · ' + task.type + '</h3>';
+  html += '<p style="font-size:12px;color:#6b8599;margin-top:3px;font-weight:500">' + task.stage + ' · ID: ' + task.id + '</p>';
+  html += '</div></div>';
+  html += '<span style="padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;background:' + st.bg + ';color:' + st.color + ';border:1px solid ' + st.color + '40;letter-spacing:1px">' + st.label + '</span>';
+  html += '</div>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">';
+  var items = [
+    {l:'任务类型',v:task.type,icon:icon},
+    {l:'生长阶段',v:task.stage,icon:'🌱'},
+    {l:'负责人',v:task.assignee,icon:'👤'},
+    {l:'当前状态',v:st.label,c:st.color,icon:'📋'}
+  ];
+  items.forEach(function(item) {
+    html += '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px">';
+    html += '<p style="font-size:10px;color:#5a7089;margin-bottom:4px;font-weight:600;letter-spacing:0.5px">' + item.icon + ' ' + item.l + '</p>';
+    html += '<p style="font-size:15px;font-weight:800;color:' + (item.c || '#fff') + ';letter-spacing:0.3px">' + item.v + '</p></div>';
+  });
+  html += '</div>';
+
+  html += '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:14px 16px;margin-bottom:18px">';
+  html += '<p style="font-size:11px;font-weight:700;color:#889db5;margin-bottom:10px;letter-spacing:0.5px">📝 任务描述</p>';
+  html += '<p style="font-size:13px;color:#c8d4e0;line-height:1.7;font-weight:500">' + task.description + '</p>';
+  html += '</div>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">';
+  html += '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px">';
+  html += '<p style="font-size:10px;color:#5a7089;margin-bottom:4px;font-weight:600;letter-spacing:0.5px">⏰ 开始时间</p>';
+  html += '<p style="font-size:13px;font-weight:700;color:#fff">' + task.startTime + '</p></div>';
+  html += '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px">';
+  html += '<p style="font-size:10px;color:#5a7089;margin-bottom:4px;font-weight:600;letter-spacing:0.5px">⏳ 截止时间</p>';
+  html += '<p style="font-size:13px;font-weight:700;color:#fff">' + task.deadline + '</p></div>';
+  html += '</div>';
+
+  html += '<div style="margin-bottom:10px">';
+  html += '<div class="flex items-center justify-between mb-2">';
+  html += '<span style="font-size:11px;font-weight:700;color:#889db5;letter-spacing:0.5px">📊 任务进度</span>';
+  html += '<span style="font-size:14px;font-weight:900;color:' + tc + '">' + task.progress + '%</span>';
+  html += '</div>';
+  html += '<div style="width:100%;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden">';
+  html += '<div style="height:100%;border-radius:4px;background:linear-gradient(90deg,' + tc + ',' + tc + '60);width:' + task.progress + '%;box-shadow:0 0 8px ' + tc + '40"></div>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div style="display:flex;align-items:center;gap:8px;margin-top:14px">';
+  var steps = ['任务下发','作业中','结束确认'];
+  var stepIdx = task.status === '任务下发' ? 0 : task.status === '作业中' ? 1 : 2;
+  steps.forEach(function(s, i) {
+    var done = i <= stepIdx;
+    html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">';
+    html += '<div style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;' + (done ? 'background:' + tc + ';color:#fff;box-shadow:0 0 8px ' + tc + '50' : 'background:rgba(255,255,255,0.06);color:#5a7089;border:1px solid rgba(255,255,255,0.1)') + '">' + (done ? '✓' : (i+1)) + '</div>';
+    html += '<span style="font-size:10px;font-weight:600;color:' + (done ? tc : '#5a7089') + '">' + s + '</span>';
+    html += '</div>';
+    if (i < steps.length - 1) {
+      html += '<div style="flex:1;height:2px;background:' + (i < stepIdx ? tc : 'rgba(255,255,255,0.06)') + ';border-radius:1px;margin-top:-14px"></div>';
+    }
+  });
+  html += '</div>';
+
+  html += '</div></div>';
+
+  html += '<div style="display:flex;justify-content:end;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07)">';
+  html += '<button onclick="closeFarmDailyModal()" style="padding:9px 24px;border-radius:10px;font-size:12px;font-weight:700;background:rgba(255,255,255,0.06);color:#889db5;border:1px solid rgba(255,255,255,0.1);cursor:pointer;transition:all 0.2s" onmouseover="this.style.background=\'rgba(255,255,255,0.12)\';this.style.color=\'#ffffff\'" onmouseout="this.style.background=\'rgba(255,255,255,0.06)\';this.style.color=\'#889db5\'">✕ 关闭</button>';
+  html += '</div>';
+
+  modal.innerHTML = html;
+  document.getElementById('farmDailyOverlay').classList.add('active');
+}
+
+function closeFarmDailyModal() {
+  document.getElementById('farmDailyOverlay').classList.remove('active');
 }
 
 var sectionTitles = {
