@@ -528,18 +528,38 @@ main { flex: 1; display: flex; flex-direction: column; }
           </div>
           <div class="flex items-center gap-2">
             <span class="text-xs text-farm-green font-bold" id="patrolPercent">0%</span>
-            <span class="text-xs text-farm-muted" id="patrolCount">已巡检 0/8 项</span>
+            <span class="text-xs text-farm-muted" id="patrolCount">已巡检 0/11 项</span>
           </div>
         </div>
         <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
           <div class="h-full rounded-full transition-all duration-700 ease-out" id="patrolProgressBar" style="width:0%;background:linear-gradient(90deg,#1DB954,#00B4D8)"></div>
         </div>
-        <div class="flex justify-between mt-1.5">
-          <span class="text-xs text-farm-muted">📹 摄像头 <span class="text-farm-green" id="patrolCameraDone">0</span>/3</span>
-          <span class="text-xs text-farm-muted">💡 虫情 <span class="text-farm-green" id="patrolPestDone">0</span>/2</span>
-          <span class="text-xs text-farm-muted">💧 墒情 <span class="text-farm-green" id="patrolMoistureDone">0</span>/1</span>
-          <span class="text-xs text-farm-muted">🌤 气象 <span class="text-farm-green" id="patrolWeatherDone">0</span>/1</span>
-          <span class="text-xs text-farm-muted">📹 鹰眼 <span class="text-farm-green" id="patrolEagleDone">0</span>/1</span>
+        <div class="grid grid-cols-5 gap-2 mt-2" id="patrolCategoryGrid">
+          <div class="text-center p-2 rounded-lg bg-white/3 border border-white/5">
+            <div class="text-base mb-0.5">🌾</div>
+            <div class="text-farm-muted text-[10px]">农作物</div>
+            <div class="font-bold text-farm-green text-xs mt-0.5"><span id="patrolCropDone">0</span><span class="text-farm-muted font-normal">/3</span></div>
+          </div>
+          <div class="text-center p-2 rounded-lg bg-white/3 border border-white/5">
+            <div class="text-base mb-0.5">🌡️</div>
+            <div class="text-farm-muted text-[10px]">环境</div>
+            <div class="font-bold text-farm-green text-xs mt-0.5"><span id="patrolEnvDone">0</span><span class="text-farm-muted font-normal">/2</span></div>
+          </div>
+          <div class="text-center p-2 rounded-lg bg-white/3 border border-white/5">
+            <div class="text-base mb-0.5">💧</div>
+            <div class="text-farm-muted text-[10px]">灌溉水利</div>
+            <div class="font-bold text-farm-green text-xs mt-0.5"><span id="patrolWaterDone">0</span><span class="text-farm-muted font-normal">/2</span></div>
+          </div>
+          <div class="text-center p-2 rounded-lg bg-white/3 border border-white/5">
+            <div class="text-base mb-0.5">📡</div>
+            <div class="text-farm-muted text-[10px]">智能设备</div>
+            <div class="font-bold text-farm-green text-xs mt-0.5"><span id="patrolDeviceDone">0</span><span class="text-farm-muted font-normal">/2</span></div>
+          </div>
+          <div class="text-center p-2 rounded-lg bg-white/3 border border-white/5">
+            <div class="text-base mb-0.5">🛡️</div>
+            <div class="text-farm-muted text-[10px]">安全</div>
+            <div class="font-bold text-farm-green text-xs mt-0.5"><span id="patrolSafeDone">0</span><span class="text-farm-muted font-normal">/2</span></div>
+          </div>
         </div>
       </div>
 
@@ -1754,54 +1774,72 @@ function rotateHomeCamera(deviceId, angle) {
 }
 
 var patrolData = [
-  { type:'camera', deviceId:'ball-01', name:'球机-01号', field:'W2号田', variety:'扬麦25',
+  { category:'crop', type:'作物生长巡检', name:'AI长势巡检', field:'W1-W6号田', variety:'扬麦25/宁麦13',
     messages:[
-      '球机-01号机开始巡检，当前为广角拍摄巡田模式',
-      '摄像头自动转动，扫描W2号田东南方向',
-      'W2号田扬麦25长势正常，叶色浓绿，未发现异常'
-    ], angles:[30, 90, 150], imgPrompt:'wheat-field-aerial' },
-  { type:'pest', deviceId:'pest-02', name:'虫情测报灯-02', field:'W3号田', variety:'宁麦13',
+      'AI长势巡检启动，通过多光谱无人机采集NDVI指数',
+      'W1-W3号田NDVI均值0.76，长势良好；W4号田NDVI 0.58，发现局部黄化',
+      'W5-W6号田灌浆期穗部饱满，预计亩产可达645kg'
+    ], deviceId:'eagle-01', angles:[0, 45, 90], imgPrompt:'drone-multispectral-rice-field' },
+  { category:'crop', type:'病虫害巡检', name:'虫情AI识别巡检', field:'W3号田', variety:'宁麦13',
     messages:[
-      '虫情测报灯-02正在监测虫情情况，当前虫情数量为5，昨天为3，较昨天多了2',
-      '现触发虫情监测初步预警，将与关联设备巡检结果进行交叉验证',
-      '交叉验证：球机-02确认W3号田叶片有蚜虫活动迹象，建议关注'
-    ], imgPrompt:'pest-monitoring-insect' },
-  { type:'camera', deviceId:'ball-03', name:'球机-03号', field:'M1号田', variety:'镇麦12',
+      '虫情测报灯+AI视觉联合巡检启动',
+      'W3号田虫情灯捕获蚜虫50头/百株，AI识别确认稻纵卷叶螟活动',
+      '风险等级：重度，已生成飞防处方，建议24小时内完成作业'
+    ], deviceId:'pest-02', imgPrompt:'pest-monitoring-rice-aphid' },
+  { category:'crop', type:'作物营养巡检', name:'土壤养分巡检', field:'M1-M6号田', variety:'镇麦12/宁麦13',
     messages:[
-      '球机-03号机开始巡检，当前为预置点巡航模式',
-      '摄像头转向M1号田中央区域，检查灌浆期长势',
-      'M1号田镇麦12长势良好，穗部饱满，无病虫害迹象'
-    ], angles:[200, 260, 320], imgPrompt:'wheat-grain-filling' },
-  { type:'weather', deviceId:'weather-01', name:'气象站-01', field:'全域', variety:'-',
+      '管式墒情仪+土壤监测仪联合巡检启动',
+      'M1-M3号田氮磷钾含量正常，有机质3.2%；M5号田钾含量偏低',
+      'M5号田建议补充钾肥15kg/亩，已推送施肥处方至作业系统'
+    ], deviceId:'moisture-02', imgPrompt:'soil-sensor-rice-field' },
+  { category:'env', type:'气象环境巡检', name:'气象环境综合巡检', field:'全域', variety:'-',
     messages:[
-      '气象站-01实时数据采集：温度26.3°C，湿度68%，风速3.2m/s，光照42000Lux',
-      '过去1小时温度上升0.8°C，湿度下降2%，符合午后气象变化规律',
-      '未来3小时预计温度升至28°C，建议关注蒸腾作用对墒情的影响'
-    ], imgPrompt:'weather-station-farm' },
-  { type:'camera', deviceId:'eagle-01', name:'鹰眼-01', field:'W1号田', variety:'扬麦25',
+      '气象站-01实时数据采集：温度26.3°C，湿度68%，风速3.2m/s',
+      '未来3小时温度升至28°C，蒸腾作用增强，建议关注墒情变化',
+      '紫外线指数中等，无极端天气预警，适宜田间作业'
+    ], deviceId:'weather-01', imgPrompt:'weather-station-rice-farm' },
+  { category:'env', type:'土壤环境巡检', name:'土壤墒情巡检', field:'M5号田', variety:'扬麦25',
     messages:[
-      '鹰眼-01号全景巡检启动，270°广角扫描W区',
-      '发现W3号田东北角有约2亩面积颜色偏黄，已标记异常区域',
-      'W1、W2号田长势正常，W4号田墒情仪数据显示偏旱，已同步标记'
-    ], angles:[0, 45, 90], imgPrompt:'eagle-eye-farm-panorama' },
-  { type:'pest', deviceId:'pest-01', name:'虫情测报灯-01', field:'W5号田', variety:'扬麦25',
+      '墒情仪全深度扫描：10cm湿度32%，20cm湿度42%，30cm湿度58%',
+      'M5号田20cm深度湿度严重低于阈值70%，已触发红色预警',
+      '建议立即启动滴灌系统，持续补水4小时，目标湿度恢复至75%'
+    ], deviceId:'moisture-02', imgPrompt:'soil-moisture-dry-rice' },
+  { category:'water', type:'灌溉系统巡检', name:'智能灌溉巡检', field:'W2/W4号田', variety:'扬麦25/宁麦13',
     messages:[
-      '虫情测报灯-01正在监测虫情情况，当前虫情数量为2，昨天为2，与昨日持平',
-      '虫情密度处于正常范围，无需预警',
-      '诱捕种类：稻纵卷叶螟1头、二化螟1头，均低于防治指标'
-    ], imgPrompt:'pest-light-normal' },
-  { type:'moisture', deviceId:'moisture-02', name:'墒情仪-02', field:'M5号田', variety:'扬麦25',
+      '灌溉系统巡检：水泵运行正常，电磁阀开关响应正常',
+      'W2号田灌溉覆盖均匀，流量稳定；W4号田管道压力偏低',
+      'W4号田建议检查末端喷头，可能存在轻微堵塞'
+    ], deviceId:'ball-01', angles:[30, 90, 150], imgPrompt:'smart-irrigation-rice-field' },
+  { category:'water', type:'水利设施巡检', name:'沟渠水位巡检', field:'全域排灌系统', variety:'-',
     messages:[
-      '墒情仪-02数据回传：20cm深度湿度42%，严重低于阈值70%',
-      'M5号田处于严重缺水状态，已触发红色预警',
-      '建议立即启动应急灌溉，持续补水4小时'
-    ], imgPrompt:'soil-moisture-sensor' },
-  { type:'camera', deviceId:'ball-02', name:'球机-02', field:'W3号田', variety:'宁麦13',
+      '无人机航拍巡检：主排水沟渠畅通，无堵塞或淤积',
+      'W区闸门开度正常，M区水位略高，建议适当开启排水闸',
+      '水源水质检测正常，无污染指标，满足灌溉标准'
+    ], deviceId:'eagle-01', angles:[180, 225, 270], imgPrompt:'drone-canal-water-rice' },
+  { category:'device', type:'IoT设备巡检', name:'IoT设备状态巡检', field:'全域', variety:'-',
     messages:[
-      '球机-02号机开始巡检，当前为定点监控模式，聚焦W3号田',
-      '摄像头放大拍摄W3号田叶片细节，确认蚜虫活动',
-      '蚜虫密度约50头/百株，已超过防治指标，建议立即飞防作业'
-    ], angles:[120, 160, 200], imgPrompt:'aphid-wheat-leaf' }
+      'IoT设备在线率巡检：14台设备全部在线，通信正常',
+      '鹰眼-01电池电量78%，球机-03存储容量剩余65%，均在正常范围',
+      '固件版本检查：全部设备运行最新版本，无需升级'
+    ], deviceId:'eagle-01', angles:[0, 90, 180], imgPrompt:'iot-devices-smart-farm' },
+  { category:'device', type:'视频监控巡检', name:'视频AI巡检', field:'W3/M1号田', variety:'宁麦13/镇麦12',
+    messages:[
+      '视频AI巡检：球机-02/03画面清晰，云台控制响应正常',
+      'AI识别确认W3号田蚜虫活动区域，已自动标记热力图',
+      '夜视模式测试正常，红外补光覆盖范围满足需求'
+    ], deviceId:'ball-02', angles:[120, 160, 200], imgPrompt:'ai-camera-rice-monitoring' },
+  { category:'safe', type:'人员安全巡检', name:'人员安全AI巡检', field:'全域', variety:'-',
+    messages:[
+      'AI人员安全巡检：全域无未授权人员进入',
+      '鹰眼-01智能跟踪运行正常，未检测到异常入侵行为',
+      '夜间红外巡检模式已自动切换，安全防护等级正常'
+    ], deviceId:'eagle-01', angles:[45, 135, 225], imgPrompt:'farm-security-ai-monitoring' },
+  { category:'safe', type:'设备安全巡检', name:'设备安全巡检', field:'设备机房/田间', variety:'-',
+    messages:[
+      '设备安全巡检：电力系统运行稳定，无漏电或过热风险',
+      '网络安全检测正常，无异常访问或攻击行为',
+      '田间设备物理状态完好，无损坏或移位情况'
+    ], deviceId:'weather-01', imgPrompt:'farm-equipment-safety-check' }
 ];
 
 function getNowStr() {
@@ -1815,11 +1853,14 @@ function addPatrolItem(patrol) {
 
   if (feed.querySelector('.text-center')) feed.innerHTML = '';
 
-  var typeIcon = '', typeColor = '', typeBg = '';
-  if (patrol.type === 'camera') { typeIcon = '📹'; typeColor = '#00B4D8'; typeBg = 'rgba(0,180,216,0.08)'; }
-  else if (patrol.type === 'pest') { typeIcon = '💡'; typeColor = '#EAB308'; typeBg = 'rgba(234,179,8,0.08)'; }
-  else if (patrol.type === 'weather') { typeIcon = '🌤'; typeColor = '#3B82F6'; typeBg = 'rgba(59,130,246,0.08)'; }
-  else if (patrol.type === 'moisture') { typeIcon = '💧'; typeColor = '#00B4D8'; typeBg = 'rgba(0,180,216,0.08)'; }
+  var catColors = {
+    crop:   { icon:'🌾', color:'#22c953', bg:'rgba(34,201,83,0.08)', label:'农作物' },
+    env:    { icon:'🌡️', color:'#00B4D8', bg:'rgba(0,180,216,0.08)', label:'环境' },
+    water:  { icon:'💧', color:'#3B82F6', bg:'rgba(59,130,246,0.08)', label:'灌溉水利' },
+    device: { icon:'📡', color:'#8B5CF6', bg:'rgba(139,92,246,0.08)', label:'智能设备' },
+    safe:   { icon:'🛡️', color:'#F59E0B', bg:'rgba(245,158,11,0.08)', label:'安全' }
+  };
+  var c = catColors[patrol.category] || catColors.crop;
 
   var msgHtml = '';
   patrol.messages.forEach(function(m, i) {
@@ -1828,21 +1869,24 @@ function addPatrolItem(patrol) {
   });
 
   var imgHtml = '';
-  if (patrol.type === 'pest' || patrol.type === 'camera') {
-    var imgSize = patrol.type === 'pest' ? 'portrait_4_3' : 'landscape_16_9';
+  if (patrol.imgPrompt) {
     var prompt = encodeURIComponent(patrol.imgPrompt + ', agricultural monitoring, realistic, high detail');
-    imgHtml += '<div class="mt-2 rounded-lg overflow-hidden" style="max-height:120px"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=' + prompt + '&image_size=' + imgSize + '" class="w-full h-full object-cover" style="max-height:120px" alt="巡检图片" onerror="this.style.display=\'none\'"/></div>';
+    imgHtml += '<div class="mt-2 rounded-lg overflow-hidden" style="max-height:120px"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=' + prompt + '&image_size=landscape_16_9" class="w-full h-full object-cover" style="max-height:120px" alt="巡检图片" onerror="this.style.display=\'none\'"/></div>';
   }
 
   var itemHtml =
-    '<div class="patrol-item rounded-lg p-3 border border-farm-border/50" style="background:' + typeBg + '" data-device="' + patrol.deviceId + '">' +
+    '<div class="patrol-item rounded-lg p-3 border border-farm-border/50" style="background:' + c.bg + '" data-device="' + (patrol.deviceId||'') + '">' +
       '<div class="flex items-center justify-between mb-1.5">' +
         '<div class="flex items-center gap-1.5">' +
-          '<span class="text-sm">' + typeIcon + '</span>' +
-          '<span class="text-xs font-bold" style="color:' + typeColor + '">' + patrol.name + '</span>' +
+          '<span class="text-xs px-1.5 py-0.5 rounded font-bold" style="background:' + c.color + '20;color:' + c.color + ';border:1px solid ' + c.color + '30">' + c.label + '</span>' +
+          '<span class="text-xs font-bold text-farm-text">' + patrol.name + '</span>' +
           '<span class="text-xs text-farm-muted">· ' + patrol.field + '</span>' +
         '</div>' +
         '<span class="text-xs text-farm-muted font-mono">' + getNowStr() + '</span>' +
+      '</div>' +
+      '<div class="flex items-center gap-1.5 mb-1.5">' +
+        '<span class="text-[10px] text-farm-muted bg-white/5 px-1.5 py-0.5 rounded">' + patrol.type + '</span>' +
+        '<span class="text-[10px] text-farm-muted">品种：' + patrol.variety + '</span>' +
       '</div>' +
       '<div class="space-y-1">' + msgHtml + '</div>' +
       imgHtml +
@@ -1856,38 +1900,45 @@ function addPatrolItem(patrol) {
 
   patrolIndex++;
   var countEl = document.getElementById('patrolCount');
-  if (countEl) countEl.textContent = '已巡检 ' + patrolIndex + ' 项';
+  if (countEl) countEl.textContent = '已巡检 ' + Math.min(patrolIndex, patrolData.length) + '/' + patrolData.length + ' 项';
 
   var bar = document.getElementById('patrolProgressBar');
   var pctEl = document.getElementById('patrolPercent');
   var startEl = document.getElementById('patrolStartTime');
-  if (bar) { var pct = Math.min(100, Math.round(patrolIndex / 8 * 100)); bar.style.width = pct + '%'; }
-  if (pctEl) pctEl.textContent = Math.min(100, Math.round(patrolIndex / 8 * 100)) + '%';
+  var total = patrolData.length;
+  var pct = Math.min(100, Math.round(patrolIndex / total * 100));
+  if (bar) bar.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = pct + '%';
   if (startEl && patrolIndex === 1) startEl.textContent = '开始时间：' + getNowStr();
-  var typeCounts = { camera:0, pest:0, moisture:0, weather:0, eagle:0 };
-  patrolData.forEach(function(p) { if (p.type === 'camera' && !p.deviceId.startsWith('eagle')) typeCounts.camera++; else if (p.type === 'pest') typeCounts.pest++; else if (p.type === 'moisture') typeCounts.moisture++; else if (p.type === 'weather') typeCounts.weather++; else if (p.deviceId && p.deviceId.startsWith('eagle')) typeCounts.eagle++; });
-  var done = { camera:0, pest:0, moisture:0, weather:0, eagle:0 };
-  for (var i = 0; i < Math.min(patrolIndex, patrolData.length); i++) { var p = patrolData[i]; if (p.type === 'camera' && !p.deviceId.startsWith('eagle')) done.camera++; else if (p.type === 'pest') done.pest++; else if (p.type === 'moisture') done.moisture++; else if (p.type === 'weather') done.weather++; else if (p.deviceId && p.deviceId.startsWith('eagle')) done.eagle++; }
-  var el;
-  el = document.getElementById('patrolCameraDone'); if (el) el.textContent = done.camera;
-  el = document.getElementById('patrolPestDone'); if (el) el.textContent = done.pest;
-  el = document.getElementById('patrolMoistureDone'); if (el) el.textContent = done.moisture;
-  el = document.getElementById('patrolWeatherDone'); if (el) el.textContent = done.weather;
-  el = document.getElementById('patrolEagleDone'); if (el) el.textContent = done.eagle;
 
-  highlightHomeDevice(patrol.deviceId);
-  if (patrol.angles && patrol.angles.length > 0) {
-    var angleIdx = 0;
-    var angleTimer = setInterval(function() {
-      if (angleIdx >= patrol.angles.length) { clearInterval(angleTimer); return; }
-      rotateHomeCamera(patrol.deviceId, patrol.angles[angleIdx]);
-      angleIdx++;
-    }, 2500);
+  var catTotals = { crop:0, env:0, water:0, device:0, safe:0 };
+  patrolData.forEach(function(p) { if (catTotals[p.category] !== undefined) catTotals[p.category]++; });
+  var catDone = { crop:0, env:0, water:0, device:0, safe:0 };
+  for (var i = 0; i < Math.min(patrolIndex, total); i++) {
+    var p = patrolData[i % total];
+    if (catDone[p.category] !== undefined) catDone[p.category]++;
   }
+  var el;
+  el = document.getElementById('patrolCropDone');    if (el) el.textContent = catDone.crop;
+  el = document.getElementById('patrolEnvDone');     if (el) el.textContent = catDone.env;
+  el = document.getElementById('patrolWaterDone');   if (el) el.textContent = catDone.water;
+  el = document.getElementById('patrolDeviceDone');  if (el) el.textContent = catDone.device;
+  el = document.getElementById('patrolSafeDone');    if (el) el.textContent = catDone.safe;
 
-  setTimeout(function() {
-    unhighlightHomeDevice(patrol.deviceId);
-  }, 8000);
+  if (patrol.deviceId) {
+    highlightHomeDevice(patrol.deviceId);
+    if (patrol.angles && patrol.angles.length > 0) {
+      var angleIdx = 0;
+      var angleTimer = setInterval(function() {
+        if (angleIdx >= patrol.angles.length) { clearInterval(angleTimer); return; }
+        rotateHomeCamera(patrol.deviceId, patrol.angles[angleIdx]);
+        angleIdx++;
+      }, 2500);
+    }
+    setTimeout(function() {
+      unhighlightHomeDevice(patrol.deviceId);
+    }, 8000);
+  }
 }
 
 function startPatrol() {
