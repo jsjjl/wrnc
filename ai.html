@@ -95,6 +95,22 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
 
 /* 底部安全区 */
 @supports(padding-bottom:env(safe-area-inset-bottom)){.chat-input-area{padding-bottom:calc(24px + env(safe-area-inset-bottom))}}
+
+/* 演示模式按钮 */
+.demo-btn{position:fixed;bottom:24px;right:24px;z-index:30;padding:10px 18px;border-radius:24px;background:linear-gradient(135deg,#1DB954,#00B4D8);border:none;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 20px rgba(0,0,0,0.4);letter-spacing:1px;transition:all 0.3s}
+.demo-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.5)}
+.demo-btn:active{transform:scale(0.95)}
+.demo-btn.running{background:linear-gradient(135deg,#ef4444,#f97316);animation:btnPulse 1s infinite}
+@keyframes btnPulse{0%,100%{box-shadow:0 4px 20px rgba(239,68,68,0.4)}50%{box-shadow:0 4px 30px rgba(239,68,68,0.7)}}
+
+/* 问答索引 */
+.qa-index{position:fixed;bottom:80px;right:24px;z-index:30;background:rgba(5,10,8,0.95);border:1px solid rgba(0,255,160,0.15);border-radius:12px;padding:12px;display:none;max-height:300px;overflow-y:auto;min-width:200px}
+.qa-index.show{display:block}
+.qa-index-title{font-size:11px;color:rgba(0,255,160,0.6);margin-bottom:8px;letter-spacing:1px}
+.qa-item{padding:6px 10px;border-radius:6px;font-size:11px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.qa-item:hover{background:rgba(0,255,160,0.08);color:#fff}
+.qa-item.active{background:rgba(0,255,160,0.12);color:#00FFA0}
+.qa-item .num{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:rgba(0,255,160,0.1);border:1px solid rgba(0,255,160,0.2);display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(0,255,160,0.5)}
 </style>
 </head>
 <body>
@@ -122,7 +138,7 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
       <div class="label">土壤墒情</div>
       <div class="desc">实时监测三层土壤数据</div>
     </div>
-    <div class="quick-card" onclick="quickAsk('虫情数据')">
+    <div class="quick-card" onclick="quickAsk('虫情监测')">
       <span class="icon">🐛</span>
       <div class="label">虫情监测</div>
       <div class="desc">AI识别虫害趋势预警</div>
@@ -149,6 +165,12 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
     </div>
   </div>
 </div>
+
+<!-- 演示按钮 -->
+<button class="demo-btn" id="demoBtn" onclick="toggleDemo()">▶ 问答演示</button>
+
+<!-- 问答索引面板 -->
+<div class="qa-index" id="qaIndex"></div>
 
 <!-- 聊天界面 -->
 <div class="chat-screen" id="chatScreen">
@@ -225,6 +247,148 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
   draw();
 })();
 
+// ========== 问答数据 ==========
+var allQA=[
+  {
+    q:'土壤墒情',
+    icon:'💧',
+    a:'📊 <b>当前土壤墒情</b><br><br>🗺️ 6个墒情站数据均处于最佳区间<br><br><b>10cm</b>：温度22.5°C 湿度32% PH6.8<br><b>20cm</b>：温度21.8°C 湿度38% PH6.9<br><b>30cm</b>：温度20.3°C 湿度45% PH7.0<br><br>⚠️ <b>3号田块10cm湿度18%</b>低于阈值25%，AI已触发自动灌溉程序'
+  },
+  {
+    q:'虫情监测',
+    icon:'🐛',
+    a:'🐛 <b>虫情监测（智能测报灯+性诱设备）</b><br><br>⚠️ 稻纵卷叶螟：<b>580头/亩</b> 超标93%<br>　　防治指标300头/亩，建议3日内用药<br>✅ 二化螟：120头/亩 正常<br>✅ 白背飞虱：210头/百丛 正常<br>✅ 大螟：45头/亩 正常<br><br>💊 AI处方：5%甲维盐20g/亩<br>🚀 无人机明日06:00执行飞防任务'
+  },
+  {
+    q:'今日预警',
+    icon:'🚨',
+    a:'🚨 <b>今日预警（共5条）</b><br><br>🔴 <b>3号田干旱</b> — 湿度18%低于阈值25%<br>🔴 <b>稻纵卷叶螟超标</b> — 580头/亩超标93%<br>🟠 <b>明日高温38°C</b> — 连续3日≥35°C<br>🟠 <b>5号球机离线</b> — 网络连接异常<br>🟡 <b>台风"海葵"动态</b> — 路径偏东持续关注<br><br>👉 建议优先处理：干旱灌溉 > 虫害防治'
+  },
+  {
+    q:'作物长势',
+    icon:'🌾',
+    a:'🌾 <b>长势分析（多光谱+AI感知）</b><br><br>当前生育期：<b>抽穗期</b><br><br>✅ LAI指数：3.8（最佳区间3.5-4.5）<br>⚠️ 叶层氮含量：2.1%（正常2.2-2.8%）<br>⚠️ SPAD叶绿素：38.5（正常40+）<br>✅ 亩穗数预估：<b>18.5万穗</b><br>✅ 穗粒数：132.6粒<br>✅ 结实率：89.5%<br><br>📌 AI建议：明日08:00无人机叶面喷施尿素5kg/亩+磷酸二氢钾'
+  },
+  {
+    q:'产量预测',
+    icon:'📈',
+    a:'📈 <b>产量预测</b><br><br>🌾 预估亩产：<b>485 kg/亩</b><br>🏭 全域总产：<b>14.56万kg</b>（300亩）<br>📊 较2025年增产：+2.0%<br>🎯 达标概率：约85%<br><br><b>产量三要素</b><br>亩穗数 18.5万 × 穗粒数 132.6<br>× 千粒重 26.8g × 结实率 89.5%<br><br>⚠️ 镇麦12千粒重偏低（40.2g），需关注灌浆期天气'
+  },
+  {
+    q:'设备状态',
+    icon:'📡',
+    a:'📡 <b>设备状态（IoT物联网监控）</b><br><br>🟢 在线：<b>42台</b>（96.5%）<br>🟠 离线：<b>3台</b><br>🔴 故障：<b>2台</b><br><br>⚠️ <b>5号球机</b> — 网络断线，需检查<br>⚠️ <b>3号性诱设备</b> — 电池电量低<br>⚠️ <b>1号土壤监测仪</b> — 传感器漂移<br><br>🚜 今日巡检完成：无人车12次、球机85个预置点<br>✅ 全场300亩未发现病虫害异常'
+  },
+  {
+    q:'灌溉情况',
+    icon:'💧',
+    a:'💧 <b>灌溉进度（智能灌排）</b><br><br>🟢 1号田：85% 完成<br>🟢 2号田：60% 进行中<br>🔴 3号田：18% <b>干旱优先</b><br>✅ 4号田：100% 已完成<br>✅ 5号田：100% 已完成<br>🟢 6号田：45% 进行中<br><br>💧 今日总用水：2,770m³ / 5,500m³<br>⚠️ 3号田已触发自动灌溉，优先级最高'
+  },
+  {
+    q:'台风动态',
+    icon:'🌀',
+    a:'🌀 <b>台风"海葵"应急响应</b><br><br>📍 当前路径：偏东方向移动<br>⏰ 预计影响：48-72小时内<br>🌧️ 预计降雨：80-120mm<br><br>✅ <b>排涝泵站</b> — 6座已全部测试完毕<br>✅ <b>抢收预案</b> — 已启动，优先收割镇麦12<br>✅ <b>人员撤离</b> — 方案已制定<br>✅ <b>库存检查</b> — 农资已加固<br><br>🚜 建议：提前48h启动收割，降低损失风险'
+  },
+  {
+    q:'收割计划',
+    icon:'🚜',
+    a:'🚜 <b>成熟度与收割计划</b><br><br>📊 成熟度评估：<b>88/100</b><br>💧 含水率：22.5%（目标≤25%）<br>🌾 穗部变黄率：92%<br><br>因台风提前收割计划：<br>⏰ 明晚05:30启动夜间收割<br>🚜 无人收割机：2台就位<br>⏱️ 预计用时：12小时完成<br><br>优先顺序：镇麦12（千粒重偏低）→ 扬麦25 → 宁麦13'
+  },
+  {
+    q:'高温应对',
+    icon:'🌡️',
+    a:'🌡️ <b>高温预警与应对</b><br><br>⚠️ 明日气温：<b>38°C</b><br>📅 连续3日气温≥35°C<br><br><b>AI降温方案</b><br><br>1️⃣ <b>灌深水</b> — 保持5-8cm水层<br>2️⃣ <b>喷灌降温</b> — 11:00-14:00期间喷灌3次<br>3️⃣ <b>叶面肥</b> — 喷施0.2%磷酸二氢钾<br><br>📊 预计挽回产量损失：60kg/亩<br>💊 可结合叶氮补充一并进行'
+  },
+  {
+    q:'巡检报告',
+    icon:'🔍',
+    a:'🔍 <b>今日巡检报告</b><br><br>🗺️ 全场300亩，5大巡检类别<br><br>🌾 农作物巡检：3/3 完成 ✅<br>　　AI长势巡检、苗情普查、病虫害普查<br><br>🌡️ 环境巡检：2/2 完成 ✅<br>　　气象监测、土壤环境<br><br>💧 灌溉水利：2/2 完成 ✅<br>　　灌溉系统、水利设施<br><br>📡 智能设备：2/2 完成 ✅<br>　　IoT设备、监控系统<br><br>🛡️ 安全巡检：2/2 完成 ✅<br>　　生产安全、设备安全<br><br>✅ 全场无异常发现，长势良好'
+  },
+  {
+    q:'苗情分析',
+    icon:'🌱',
+    a:'🌱 <b>苗情分析</b><br><br>当前生育期：<b>抽穗期</b><br>叶龄：9.2叶<br><br><b>分品种长势</b><br><br>🌾 <b>扬麦25</b>（灌浆期）<br>　LAI 5.2 · 完全贴合高标准产量线<br>　亩穗数、穗粒数、千粒重三项均达标<br><br>🌾 <b>宁麦13</b>（灌浆期）<br>　建议检查沟渠通畅度<br>　关注水分与养分管理<br><br>🌾 <b>镇麦12</b>（灌浆期）<br>　⚠️ 千粒重偏低40.2g<br>　若遇高温逼熟可能再降5%<br><br>📌 整体评价：三类品种长势良好，丰收在望'
+  }
+];
+
+// ========== 演示模式 ==========
+var demoRunning=false;
+var demoIndex=0;
+var demoTimer=null;
+
+function toggleDemo(){
+  if(demoRunning){
+    stopDemo();
+  } else {
+    startDemo();
+  }
+}
+
+function startDemo(){
+  demoRunning=true;
+  var btn=document.getElementById('demoBtn');
+  btn.textContent='⏹ 停止演示';
+  btn.classList.add('running');
+  
+  var index=document.getElementById('qaIndex');
+  var html='<div class="qa-index-title">问答场景列表</div>';
+  allQA.forEach(function(qa,i){
+    html+='<div class="qa-item" id="qaItem'+i+'" onclick="jumpToQA('+i+')"><span class="num">'+(i+1)+'</span>'+qa.q+'</div>';
+  });
+  index.innerHTML=html;
+  index.classList.add('show');
+  
+  demoIndex=0;
+  openChat();
+  setTimeout(function(){runDemoStep()},800);
+}
+
+function stopDemo(){
+  demoRunning=false;
+  clearTimeout(demoTimer);
+  var btn=document.getElementById('demoBtn');
+  btn.textContent='▶ 问答演示';
+  btn.classList.remove('running');
+  document.getElementById('qaIndex').classList.remove('show');
+}
+
+function runDemoStep(){
+  if(!demoRunning)return;
+  
+  var qa=allQA[demoIndex];
+  
+  document.querySelectorAll('.qa-item').forEach(function(el){el.classList.remove('active')});
+  var item=document.getElementById('qaItem'+demoIndex);
+  if(item)item.classList.add('active');
+  
+  var msgs=document.getElementById('chatMessages');
+  msgs.innerHTML='';
+  
+  setTimeout(function(){
+    addMsg(qa.q,'user');
+    showTyping();
+    setTimeout(function(){
+      hideTyping();
+      addMsg(qa.a,'bot');
+      demoIndex++;
+      if(demoIndex>=allQA.length){
+        setTimeout(function(){
+          addMsg('✅ 问答演示完成！共展示 <b>12个场景</b><br><br>您可以继续提问，或点击"<b>停止演示</b>"退出。','bot');
+        },1500);
+      } else {
+        demoTimer=setTimeout(runDemoStep,4000);
+      }
+    },1500);
+  },600);
+}
+
+function jumpToQA(idx){
+  if(!demoRunning)return;
+  clearTimeout(demoTimer);
+  demoIndex=idx;
+  runDemoStep();
+}
+
 // ========== 聊天逻辑 ==========
 function openChat(){
   document.getElementById('mainScreen').classList.add('hidden');
@@ -267,26 +431,19 @@ function hideTyping(){
   if(el)el.remove();
 }
 
-var responses={
-  '土壤墒情':'📊 <b>当前土壤墒情</b><br><br><b>10cm</b>：温度22.5°C 湿度32% PH6.8<br><b>20cm</b>：温度21.8°C 湿度38% PH6.9<br><b>30cm</b>：温度20.3°C 湿度45% PH7.0<br><br>⚠️ 3号田10cm湿度18%低于阈值25%，AI已启动灌溉',
-  '虫情':'🐛 <b>虫情监测</b><br><br>稻纵卷叶螟：<b>580头/亩</b> ⚠️超标93%<br>二化螟：120头/亩 ✅正常<br>白背飞虱：210头/百丛 ✅正常<br><br>💊 AI处方：5%甲维盐20g/亩，无人机明日06:00飞防',
-  '预警':'🚨 <b>今日预警（5条）</b><br><br>🔴 3号田干旱 - 湿度18%<br>🔴 台风"梅花"48h内影响<br>🟠 稻纵卷叶螟超标580头/亩<br>🟠 明日高温38°C<br>🟡 5号球机离线<br><br>👉 建议优先处理干旱和台风',
-  '长势':'🌾 <b>长势分析</b><br><br>LAI：3.8 ✅<br>叶层氮：2.1% ⚠️偏低<br>SPAD：38.5 ⚠️<br>亩穗数：18.5万 ✅<br><br>📌 建议：明日08:00无人机喷施尿素5kg/亩',
-  '产量':'📈 <b>产量预测</b><br><br>预估亩产：<b>658 kg/亩</b><br>总产预估：842吨（1,280亩）<br>较2025年增产：+2.0%<br><br>亩穗数18.5万｜穗粒数132.6｜千粒重26.8g｜结实率89.5%',
-  '设备':'📡 <b>设备状态</b><br><br>在线：42台 ✅（96.5%）<br>故障：2台 ❌<br>离线：3台 ⭕<br><br>⚠️ 5号球机网络断线<br>⚠️ 3号性诱设备电池低',
-  '灌溉':'💧 <b>灌溉进度</b><br><br>1号田：85% 🟢<br>2号田：60% 🟢<br>3号田：18% 🟠（干旱优先）<br>4号田：100% ✅<br><br>今日总用水：2,770m³ / 5,500m³',
-  '台风':'🌀 <b>台风"梅花"应急</b><br><br>12级台风，48h内到达<br>预计降雨80-120mm<br><br>✅ 6座排涝泵站已测试<br>✅ 抢收预案已启动<br>✅ 人员撤离方案已备',
-  '收割':'🌾 <b>成熟度与收割</b><br><br>成熟度：88/100 ✅<br>含水率：22.5% ✅<br>穗部变黄率：92%<br><br>因台风提前收割：明日05:30启动<br>无人收割机2台，预计12小时完成',
-  '高温':'🌡️ <b>高温预警</b><br><br>明日38°C，连续3日≥35°C<br><br>AI降温方案：<br>1️⃣ 灌深水5-8cm<br>2️⃣ 11:00-14:00喷灌3次<br>3️⃣ 喷施0.2%磷酸二氢钾<br><br>预计挽回产量损失60kg/亩'
-};
-
 function processReply(q){
   showTyping();
   setTimeout(function(){
     hideTyping();
-    var reply='抱歉，我暂时无法回答。您可以问我：<b>土壤墒情、虫情、预警、长势、产量、设备、灌溉、台风、收割、高温</b>等问题。';
-    for(var key in responses){
-      if(q.includes(key)||key.includes(q)){reply=responses[key];break;}
+    var reply=null;
+    for(var i=0;i<allQA.length;i++){
+      if(q.includes(allQA[i].q)||allQA[i].q.includes(q)||q.includes('情况')||q.includes('报告')||q.includes('查询')){
+        reply=allQA[i].a;
+        break;
+      }
+    }
+    if(!reply){
+      reply='抱歉，我暂时无法回答这个问题。<br><br>您可以问我：<br><b>土壤墒情、虫情监测、今日预警、作物长势、产量预测、设备状态、灌溉情况、台风动态、收割计划、高温应对、巡检报告、苗情分析</b><br><br>或点击右下角"<b>问答演示</b>"查看所有场景。';
     }
     addMsg(reply,'bot');
   },1200+Math.random()*800);
@@ -306,7 +463,7 @@ inputWrap.addEventListener('touchstart',function(e){
     setTimeout(function(){
       voiceWave.classList.remove('active');
       inputEl.style.display='';
-      quickAsk('语音输入：当前农场状况如何');
+      quickAsk('当前农场整体状况如何');
     },2500);
   },600);
 });
