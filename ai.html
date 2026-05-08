@@ -374,7 +374,7 @@ function startDemo(){
   var index=document.getElementById('qaIndex');
   var html='<div class="qa-index-title">SCENARIOS</div>';
   allQA.forEach(function(qa,i){
-    html+='<div class="qa-item" id="qaItem'+i+'" onclick="jumpToQA('+i+')"><span class="num">'+(i+1)+'</span>'+qa.q+'</div>';
+    html+='<div class="qa-item" id="qaItem'+i+'"><span class="num">'+(i+1)+'</span>'+qa.q+'</div>';
   });
   index.innerHTML=html;
   index.classList.add('show');
@@ -398,8 +398,6 @@ function runDemoStep(){
   document.querySelectorAll('.qa-item').forEach(function(el){el.classList.remove('active')});
   var item=document.getElementById('qaItem'+demoIndex);
   if(item)item.classList.add('active');
-  var msgs=document.getElementById('chatMessages');
-  msgs.innerHTML='';
   setTimeout(function(){
     addMsg(qa.q,'user');
     showTyping();
@@ -416,13 +414,6 @@ function runDemoStep(){
       }
     },1500);
   },600);
-}
-
-function jumpToQA(idx){
-  if(!demoRunning)return;
-  clearTimeout(demoTimer);
-  demoIndex=idx;
-  runDemoStep();
 }
 
 // ========== 聊天逻辑 ==========
