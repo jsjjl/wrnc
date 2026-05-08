@@ -256,6 +256,10 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
   <button class="mode-btn" onclick="switchMode('bci')" data-mode="bci">🧠 意念</button>
   <button class="mode-btn" onclick="switchMode('gesture')" data-mode="gesture">👋 手势</button>
   <button class="mode-btn" onclick="switchMode('bio')" data-mode="bio">❤️ 感知</button>
+  <button class="mode-btn" onclick="switchMode('eye')" data-mode="eye">👁️ 凝视</button>
+  <button class="mode-btn" onclick="switchMode('voice')" data-mode="voice">🎙️ 声纹</button>
+  <button class="mode-btn" onclick="switchMode('haptic')" data-mode="haptic">📳 触觉</button>
+  <button class="mode-btn" onclick="switchMode('ambient')" data-mode="ambient">🌍 情境</button>
 </div>
 
 <!-- 主界面 -->
@@ -370,6 +374,132 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
   <div class="bio-status">
     <h2>生物感知模式</h2>
     <p>AI根据您的生理状态自动调节农场环境</p>
+  </div>
+</div>
+
+<!-- 眼动凝视模式 -->
+<div class="eye-screen" id="eyeScreen">
+  <div class="eye-tracker">
+    <div class="eye-camera"></div>
+    <div class="eye-reticle"></div>
+    <div class="eye-pupil">👁️</div>
+    <div class="eye-gaze" id="eyeGaze"></div>
+  </div>
+  <div class="eye-grid">
+    <div class="eye-cell" data-action="墒情">💧<span>墒情</span></div>
+    <div class="eye-cell" data-action="虫情">🐛<span>虫情</span></div>
+    <div class="eye-cell" data-action="预警">🚨<span>预警</span></div>
+    <div class="eye-cell" data-action="长势">🌾<span>长势</span></div>
+    <div class="eye-cell" data-action="产量">📈<span>产量</span></div>
+    <div class="eye-cell" data-action="设备">📡<span>设备</span></div>
+  </div>
+  <div class="eye-status">
+    <h2>眼动凝视模式</h2>
+    <p>凝视目标2秒即可选中 · 眨眼确认执行</p>
+    <div class="eye-progress"><div class="eye-progress-bar" id="eyeProgress"></div></div>
+  </div>
+</div>
+
+<!-- 声纹识别模式 -->
+<div class="voice-screen" id="voiceScreen">
+  <div class="voice-avatar">
+    <div class="voice-wave-ring"></div>
+    <div class="voice-wave-ring"></div>
+    <div class="voice-wave-ring"></div>
+    <div class="voice-face">🎙️</div>
+  </div>
+  <div class="voice-users">
+    <div class="voice-user active" data-user="张工">
+      <div class="voice-user-avatar">👨‍🌾</div>
+      <div class="voice-user-name">张工</div>
+      <div class="voice-user-role">农场主管</div>
+      <div class="voice-user-match">匹配度 99%</div>
+    </div>
+    <div class="voice-user" data-user="李博士">
+      <div class="voice-user-avatar">👩‍🔬</div>
+      <div class="voice-user-name">李博士</div>
+      <div class="voice-user-role">农艺专家</div>
+      <div class="voice-user-match">匹配度 97%</div>
+    </div>
+    <div class="voice-user" data-user="王技师">
+      <div class="voice-user-avatar">🔧</div>
+      <div class="voice-user-name">王技师</div>
+      <div class="voice-user-role">设备维护</div>
+      <div class="voice-user-match">匹配度 95%</div>
+    </div>
+  </div>
+  <div class="voice-status">
+    <h2>声纹识别模式</h2>
+    <p>说出指令即可 · AI自动识别身份并加载权限</p>
+  </div>
+</div>
+
+<!-- 触觉反馈模式 -->
+<div class="haptic-screen" id="hapticScreen">
+  <div class="haptic-device">
+    <div class="haptic-vibrator"></div>
+    <div class="haptic-icon">📳</div>
+  </div>
+  <div class="haptic-sensors">
+    <div class="haptic-sensor" onclick="hapticTrigger('土壤')">
+      <div class="haptic-sensor-icon">🌍</div>
+      <div class="haptic-sensor-name">土壤触感</div>
+      <div class="haptic-sensor-desc">湿度/质地/温度</div>
+    </div>
+    <div class="haptic-sensor" onclick="hapticTrigger('设备')">
+      <div class="haptic-sensor-icon">⚙️</div>
+      <div class="haptic-sensor-name">设备运转</div>
+      <div class="haptic-sensor-desc">振动/转速/负荷</div>
+    </div>
+    <div class="haptic-sensor" onclick="hapticTrigger('气象')">
+      <div class="haptic-sensor-icon">🌪️</div>
+      <div class="haptic-sensor-name">气象变化</div>
+      <div class="haptic-sensor-desc">风力/降雨/气压</div>
+    </div>
+    <div class="haptic-sensor" onclick="hapticTrigger('作物')">
+      <div class="haptic-sensor-icon">🌾</div>
+      <div class="haptic-sensor-name">作物生长</div>
+      <div class="haptic-sensor-desc">硬度/弹性/水分</div>
+    </div>
+  </div>
+  <div class="haptic-status">
+    <h2>触觉反馈模式</h2>
+    <p>点击感受农场实时触感 · 手机振动模拟真实体验</p>
+  </div>
+</div>
+
+<!-- 环境情境模式 -->
+<div class="ambient-screen" id="ambientScreen">
+  <div class="ambient-scene" id="ambientScene">
+    <div class="ambient-time">🌅</div>
+    <div class="ambient-weather">☀️</div>
+    <div class="ambient-location">📍</div>
+  </div>
+  <div class="ambient-data">
+    <div class="ambient-item">
+      <div class="ambient-item-label">时间</div>
+      <div class="ambient-item-value" id="ambientTime">06:30</div>
+      <div class="ambient-item-desc">清晨 · 灌溉最佳时段</div>
+    </div>
+    <div class="ambient-item">
+      <div class="ambient-item-label">天气</div>
+      <div class="ambient-item-value" id="ambientWeather">晴 28°C</div>
+      <div class="ambient-item-desc">适宜 · 建议喷药防治</div>
+    </div>
+    <div class="ambient-item">
+      <div class="ambient-item-label">位置</div>
+      <div class="ambient-item-value" id="ambientLocation">W3号田</div>
+      <div class="ambient-item-desc">当前 · 土壤墒情正常</div>
+    </div>
+    <div class="ambient-item">
+      <div class="ambient-item-label">季节</div>
+      <div class="ambient-item-value" id="ambientSeason">灌浆期</div>
+      <div class="ambient-item-desc">关键 · 需关注千粒重</div>
+    </div>
+  </div>
+  <div class="ambient-status">
+    <h2>环境情境模式</h2>
+    <p>AI根据时间/天气/位置自动推荐最优操作</p>
   </div>
 </div>
 
@@ -601,6 +731,10 @@ function switchMode(mode){
   document.getElementById('bciScreen').classList.remove('active');
   document.getElementById('gestureScreen').classList.remove('active');
   document.getElementById('bioScreen').classList.remove('active');
+  document.getElementById('eyeScreen').classList.remove('active');
+  document.getElementById('voiceScreen').classList.remove('active');
+  document.getElementById('hapticScreen').classList.remove('active');
+  document.getElementById('ambientScreen').classList.remove('active');
   if(mode==='chat'){
     document.getElementById('mainScreen').classList.remove('hidden');
   }else if(mode==='bci'){
@@ -610,6 +744,16 @@ function switchMode(mode){
   }else if(mode==='bio'){
     document.getElementById('bioScreen').classList.add('active');
     startBioSimulation();
+  }else if(mode==='eye'){
+    document.getElementById('eyeScreen').classList.add('active');
+    startEyeSimulation();
+  }else if(mode==='voice'){
+    document.getElementById('voiceScreen').classList.add('active');
+  }else if(mode==='haptic'){
+    document.getElementById('hapticScreen').classList.add('active');
+  }else if(mode==='ambient'){
+    document.getElementById('ambientScreen').classList.add('active');
+    startAmbientSimulation();
   }
 }
 
@@ -634,6 +778,67 @@ function bciCommand(cmd){
     openChat();
     setTimeout(function(){addMsg('意念控制：'+cmd,'user');addMsg(replies[cmd]||'指令已执行','bot')},400);
   },1200);
+}
+
+var eyeInterval=null;
+function startEyeSimulation(){
+  if(eyeInterval)clearInterval(eyeInterval);
+  var cells=document.querySelectorAll('.eye-cell');
+  var idx=0;
+  cells.forEach(function(c){c.classList.remove('active')});
+  eyeInterval=setInterval(function(){
+    cells.forEach(function(c){c.classList.remove('active')});
+    cells[idx].classList.add('active');
+    var progress=document.getElementById('eyeProgress');
+    progress.style.width='0%';
+    setTimeout(function(){progress.style.width='50%'},500);
+    setTimeout(function(){progress.style.width='100%'},1000);
+    setTimeout(function(){
+      progress.style.width='0%';
+      var action=cells[idx].getAttribute('data-action');
+      var replies={'墒情':'土壤墒情','虫情':'虫情监测','预警':'今日预警','长势':'作物长势','产量':'产量预测','设备':'设备状态'};
+      openChat();
+      setTimeout(function(){addMsg('凝视选择：'+action,'user');processReply(replies[action])},400);
+    },1200);
+    idx=(idx+1)%cells.length;
+  },4000);
+}
+
+function hapticTrigger(type){
+  var sensors=document.querySelectorAll('.haptic-sensor');
+  sensors.forEach(function(s){s.classList.remove('active')});
+  event.currentTarget.classList.add('active');
+  var patterns={'土壤':'💧 土壤触感反馈<br><br>湿度：32%（偏干）<br>质地：砂壤土<br>温度：22.5°C<br><br>📳 振动模式：短促轻震<br>模拟干燥土壤颗粒感','设备':'⚙️ 设备运转反馈<br><br>水泵转速：2800rpm<br>负荷：75%<br>温度：45°C<br><br>📳 振动模式：持续低频<br>模拟机械运转节奏','气象':'🌪️ 气象变化反馈<br><br>风速：12m/s（3级）<br>气压：1012hPa<br>湿度：65%<br><br>📳 振动模式：间歇脉冲<br>模拟微风拂面触感','作物':'🌾 作物生长反馈<br><br>茎秆硬度：中等<br>叶片弹性：良好<br>水分含量：72%<br><br>📳 振动模式：柔和波动<br>模拟植物生长律动'};
+  if(navigator.vibrate)navigator.vibrate([100,50,100,50,200]);
+  openChat();
+  setTimeout(function(){addMsg('触觉体验：'+type,'user');addMsg(patterns[type],'bot')},400);
+}
+
+var ambientInterval=null;
+function startAmbientSimulation(){
+  if(ambientInterval)clearInterval(ambientInterval);
+  var scenes=[
+    {time:'06:30',weather:'晴 28°C',location:'W3号田',season:'灌浆期',icon:'🌅',wicon:'☀️',tdesc:'清晨 · 灌溉最佳时段',wdesc:'适宜 · 建议喷药防治',ldesc:'当前 · 土壤墒情正常',sdesc:'关键 · 需关注千粒重'},
+    {time:'12:00',weather:'多云 35°C',location:'W5号田',season:'灌浆期',icon:'☀️',wicon:'⛅',tdesc:'正午 · 高温预警',wdesc:'炎热 · 建议灌深水降温',ldesc:'当前 · 叶面蒸腾强烈',sdesc:'关键 · 注意热害'},
+    {time:'18:00',weather:'阴 26°C',location:'W1号田',season:'灌浆期',icon:'🌇',wicon:'☁️',tdesc:'傍晚 · 巡检时段',wdesc:'凉爽 · 适宜无人机作业',ldesc:'当前 · 虫情活跃期',sdesc:'关键 · 性诱设备监测中'},
+    {time:'23:00',weather:'晴 22°C',location:'控制中心',season:'灌浆期',icon:'🌙',wicon:'🌟',tdesc:'夜间 · 系统自检',wdesc:'稳定 · 所有设备在线',ldesc:'当前 · 数据汇总分析',sdesc:'关键 · 明日作业计划生成'}
+  ];
+  var idx=0;
+  ambientInterval=setInterval(function(){
+    var s=scenes[idx];
+    document.getElementById('ambientTime').textContent=s.time;
+    document.getElementById('ambientWeather').textContent=s.weather;
+    document.getElementById('ambientLocation').textContent=s.location;
+    document.getElementById('ambientSeason').textContent=s.season;
+    document.querySelector('.ambient-time').textContent=s.icon;
+    document.querySelector('.ambient-weather').textContent=s.wicon;
+    var items=document.querySelectorAll('.ambient-item-desc');
+    items[0].textContent=s.tdesc;
+    items[1].textContent=s.wdesc;
+    items[2].textContent=s.ldesc;
+    items[3].textContent=s.sdesc;
+    idx=(idx+1)%scenes.length;
+  },5000);
 }
 
 var bioInterval=null;
