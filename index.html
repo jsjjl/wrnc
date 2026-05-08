@@ -762,36 +762,43 @@ main { flex: 1; display: flex; flex-direction: column; }
         <span class="w-1 h-4 bg-farm-green rounded-full"></span>
         📈 核心品种长势对标
       </h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <div class="flex justify-between text-xs mb-1">
-            <span class="text-farm-text font-medium">扬麦25</span>
-            <span class="text-farm-green">达标率 98%</span>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="lg:col-span-2">
+          <div style="height:200px">
+            <canvas id="growthBenchmarkChart"></canvas>
           </div>
-          <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
-            <div class="h-full bg-blue-500 rounded-full" style="width:98%"></div>
-          </div>
-          <p class="text-xs text-farm-muted mt-1">LAI 5.2 · 完全贴合高产标准曲线</p>
         </div>
-        <div>
-          <div class="flex justify-between text-xs mb-1">
-            <span class="text-farm-text font-medium">宁麦13</span>
-            <span class="text-farm-green">达标率 92%</span>
+        <div class="space-y-3">
+          <div class="bg-white/3 rounded-lg p-3 border border-white/5">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-farm-text">扬麦25</span>
+              <span class="text-xs font-bold text-farm-green">达标率 98%</span>
+            </div>
+            <div class="w-full h-1.5 bg-farm-surface rounded-full overflow-hidden">
+              <div class="h-full bg-blue-500 rounded-full" style="width:98%"></div>
+            </div>
+            <p class="text-[10px] text-farm-muted mt-1">LAI 5.2 · 完全贴合高标准产量线</p>
           </div>
-          <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
-            <div class="h-full bg-green-500 rounded-full" style="width:92%"></div>
+          <div class="bg-white/3 rounded-lg p-3 border border-white/5">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-farm-text">宁麦13</span>
+              <span class="text-xs font-bold text-farm-green">达标率 92%</span>
+            </div>
+            <div class="w-full h-1.5 bg-farm-surface rounded-full overflow-hidden">
+              <div class="h-full bg-green-500 rounded-full" style="width:92%"></div>
+            </div>
+            <p class="text-[10px] text-farm-muted mt-1">LNC充足 · 上一轮追肥吸收率极佳</p>
           </div>
-          <p class="text-xs text-farm-muted mt-1">LNC充足 · 上一轮追肥吸收率极佳</p>
-        </div>
-        <div>
-          <div class="flex justify-between text-xs mb-1">
-            <span class="text-farm-text font-medium">镇麦12</span>
-            <span class="text-farm-orange">达标率 90%</span>
+          <div class="bg-white/3 rounded-lg p-3 border border-white/5">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-farm-text">镇麦12</span>
+              <span class="text-xs font-bold text-farm-orange">达标率 90%</span>
+            </div>
+            <div class="w-full h-1.5 bg-farm-surface rounded-full overflow-hidden">
+              <div class="h-full bg-yellow-500 rounded-full" style="width:90%"></div>
+            </div>
+            <p class="text-[10px] text-farm-muted mt-1">LAI 4.8 · 略低于标准线，建议关注</p>
           </div>
-          <div class="w-full h-2 bg-farm-surface rounded-full overflow-hidden">
-            <div class="h-full bg-yellow-500 rounded-full" style="width:90%"></div>
-          </div>
-          <p class="text-xs text-farm-muted mt-1">LAI 4.8 · 略低于标准曲线，建议关注</p>
         </div>
       </div>
     </div>
@@ -1974,6 +1981,82 @@ function initHomeYieldChart() {
   });
 }
 
+function initGrowthBenchmarkChart() {
+  var ctx = document.getElementById('growthBenchmarkChart'); if (!ctx) return; destroyChart('growthBenchmarkChart');
+  chartInstances['growthBenchmarkChart'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['返青期','分蘖期','拔节期','孕穗期','抽穗期','扬花期','灌浆期','成熟期'],
+      datasets: [
+        {
+          label: '高标准产量线',
+          data: [420,480,520,560,590,610,635,650],
+          borderColor: '#F59E0B',
+          backgroundColor: 'rgba(245,158,11,0.08)',
+          borderWidth: 2,
+          borderDash: [6,4],
+          tension: 0.4,
+          fill: false,
+          pointRadius: 3,
+          pointBackgroundColor: '#F59E0B',
+          pointBorderColor: '#F59E0B',
+          pointBorderWidth: 0
+        },
+        {
+          label: '预估产量线',
+          data: [415,475,518,555,585,605,630,645],
+          borderColor: '#1DB954',
+          backgroundColor: 'rgba(29,185,84,0.12)',
+          borderWidth: 2.5,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#1DB954',
+          pointBorderColor: '#0d2b1a',
+          pointBorderWidth: 2
+        }
+      ]
+    },
+    options: {
+      ...chartDefaults,
+      plugins: {
+        ...chartDefaults.plugins,
+        legend: {
+          position: 'top',
+          align: 'end',
+          labels: {
+            color: '#7B93B0',
+            font: { size: 10, family: 'Noto Sans SC' },
+            boxWidth: 14,
+            usePointStyle: true,
+            pointStyle: 'line'
+          }
+        },
+        tooltip: {
+          ...chartDefaults.plugins.tooltip,
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + context.parsed.y + ' kg/亩';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#7B93B0', font: { size: 10, family: 'Noto Sans SC' } },
+          grid: { color: 'rgba(30,58,95,0.25)' }
+        },
+        y: {
+          ticks: { color: '#7B93B0', font: { size: 10 }, callback: function(v) { return v + 'kg'; } },
+          grid: { color: 'rgba(30,58,95,0.25)' },
+          min: 380,
+          max: 680
+        }
+      }
+    }
+  });
+}
+
 function initYieldChart() {
   var ctx = document.getElementById('yieldChart'); if (!ctx) return; destroyChart('yieldChart');
   chartInstances['yieldChart'] = new Chart(ctx, {
@@ -3113,7 +3196,7 @@ function switchSection(section) {
     }
   }
   setTimeout(function() {
-    if (section === 'home') { initWeatherChart(); initHomeYieldChart(); renderHomeFarmMap(); startPatrol(); updateMonitorTime(); }
+    if (section === 'home') { initWeatherChart(); initHomeYieldChart(); initGrowthBenchmarkChart(); renderHomeFarmMap(); startPatrol(); updateMonitorTime(); }
     if (section === 'monitor') switchMonitorTab('weather');
     if (section === 'device') renderDevices('all');
     if (section === 'operation') switchOperationTab('irrigation');
@@ -3353,6 +3436,7 @@ document.addEventListener('DOMContentLoaded', function() {
   setInterval(updateTime, 1000);
   initWeatherChart();
   initHomeYieldChart();
+  initGrowthBenchmarkChart();
   renderHomeFarmMap();
   startPatrol();
   updateMonitorTime();
