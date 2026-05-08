@@ -179,6 +179,66 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
 
 /* 时间戳 */
 .msg-time{font-size:9px;color:rgba(0,255,160,0.3);margin-top:6px;text-align:right;font-family:'Orbitron',monospace;letter-spacing:1px}
+
+/* ========== 交互模式选择器 ========== */
+.mode-selector{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:8px;padding:6px;background:rgba(2,4,8,0.8);border:1px solid rgba(0,255,160,0.15);border-radius:28px;backdrop-filter:blur(20px)}
+.mode-btn{padding:8px 18px;border-radius:22px;border:1px solid transparent;background:transparent;color:rgba(255,255,255,0.5);font-size:11px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Orbitron','Noto Sans SC',sans-serif;letter-spacing:1px}
+.mode-btn:hover{color:#fff}
+.mode-btn.active{background:linear-gradient(135deg,rgba(0,255,160,0.15),rgba(0,180,255,0.15));border-color:rgba(0,255,160,0.3);color:#00FFA0;box-shadow:0 0 20px rgba(0,255,160,0.1)}
+
+/* ========== 脑机接口模式 ========== */
+.bci-screen{position:fixed;inset:0;z-index:15;display:none;flex-direction:column;align-items:center;justify-content:center;background:#020408}
+.bci-screen.active{display:flex}
+.bci-wave{position:relative;width:300px;height:300px}
+.bci-wave-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(0,255,160,0.2);animation:bciWave 2s ease-out infinite}
+.bci-wave-ring:nth-child(2){animation-delay:0.5s}
+.bci-wave-ring:nth-child(3){animation-delay:1s}
+@keyframes bciWave{0%{transform:scale(0.5);opacity:1}100%{transform:scale(1.5);opacity:0}}
+.bci-brain{position:absolute;inset:60px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,160,0.2),transparent 70%);display:flex;align-items:center;justify-content:center;font-size:64px;animation:brainPulse 2s ease-in-out infinite}
+@keyframes brainPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.bci-status{text-align:center;margin-top:40px}
+.bci-status h2{font-size:20px;font-weight:800;letter-spacing:4px;text-shadow:0 0 20px rgba(0,255,160,0.3)}
+.bci-status p{font-size:12px;color:rgba(0,255,160,0.5);margin-top:12px;letter-spacing:2px}
+.bci-progress{width:200px;height:4px;background:rgba(0,255,160,0.1);border-radius:2px;margin:20px auto 0;overflow:hidden}
+.bci-progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#00FFA0,#00B4D8);border-radius:2px;transition:width 0.3s;box-shadow:0 0 10px rgba(0,255,160,0.3)}
+.bci-commands{margin-top:30px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.bci-cmd{padding:10px 24px;border-radius:20px;background:rgba(0,255,160,0.05);border:1px solid rgba(0,255,160,0.1);color:rgba(255,255,255,0.6);font-size:12px;transition:all 0.3s;cursor:pointer}
+.bci-cmd:hover{background:rgba(0,255,160,0.1);border-color:rgba(0,255,160,0.2);color:#fff}
+.bci-cmd.active{background:rgba(0,255,160,0.15);border-color:rgba(0,255,160,0.3);color:#00FFA0;box-shadow:0 0 20px rgba(0,255,160,0.1)}
+
+/* ========== 全息手势模式 ========== */
+.gesture-screen{position:fixed;inset:0;z-index:15;display:none;flex-direction:column;align-items:center;justify-content:center;background:#020408}
+.gesture-screen.active{display:flex}
+.gesture-area{position:relative;width:320px;height:320px;border-radius:50%;border:2px dashed rgba(0,255,160,0.15);display:flex;align-items:center;justify-content:center}
+.gesture-hand{position:absolute;font-size:80px;animation:handFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(0,255,160,0.3))}
+@keyframes handFloat{0%,100%{transform:translateY(0) rotate(0deg)}25%{transform:translateY(-15px) rotate(5deg)}75%{transform:translateY(10px) rotate(-5deg)}}
+.gesture-trail{position:absolute;width:100%;height:100%;border-radius:50%;border:1px solid rgba(0,255,160,0.1);animation:trailSpin 8s linear infinite}
+@keyframes trailSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.gesture-hints{position:absolute;inset:-40px}
+.gesture-hint{position:absolute;padding:8px 14px;border-radius:12px;background:rgba(0,255,160,0.08);border:1px solid rgba(0,255,160,0.15);color:rgba(0,255,160,0.7);font-size:11px;white-space:nowrap;animation:hintPulse 2s ease-in-out infinite}
+.gesture-hint:nth-child(1){top:0;left:50%;transform:translateX(-50%);animation-delay:0s}
+.gesture-hint:nth-child(2){bottom:20%;right:0;animation-delay:0.5s}
+.gesture-hint:nth-child(3){bottom:20%;left:0;animation-delay:1s}
+@keyframes hintPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.gesture-status{text-align:center;margin-top:40px}
+.gesture-status h2{font-size:20px;font-weight:800;letter-spacing:4px;text-shadow:0 0 20px rgba(0,255,160,0.3)}
+.gesture-status p{font-size:12px;color:rgba(0,255,160,0.5);margin-top:12px;letter-spacing:2px}
+
+/* ========== 生物感知模式 ========== */
+.bio-screen{position:fixed;inset:0;z-index:15;display:none;flex-direction:column;align-items:center;justify-content:center;background:#020408}
+.bio-screen.active{display:flex}
+.bio-avatar{position:relative;width:200px;height:200px;border-radius:50%;border:2px solid rgba(0,255,160,0.2);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bio-avatar::before{content:'';position:absolute;inset:-50%;background:conic-gradient(from 0deg,transparent,rgba(0,255,160,0.1),transparent,rgba(0,180,255,0.1),transparent);animation:avatarSpin 4s linear infinite}
+@keyframes avatarSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.bio-face{position:relative;z-index:2;font-size:72px}
+.bio-vitals{display:flex;gap:20px;margin-top:40px}
+.bio-vital{text-align:center;padding:16px 20px;border-radius:16px;background:rgba(0,255,160,0.04);border:1px solid rgba(0,255,160,0.1);min-width:80px}
+.bio-vital-label{font-size:10px;color:rgba(0,255,160,0.5);letter-spacing:1px;margin-bottom:6px}
+.bio-vital-value{font-size:20px;font-weight:800;color:#00FFA0;font-family:'Orbitron',monospace}
+.bio-vital-unit{font-size:9px;color:rgba(0,255,160,0.3);margin-top:2px}
+.bio-status{text-align:center;margin-top:30px}
+.bio-status h2{font-size:20px;font-weight:800;letter-spacing:4px;text-shadow:0 0 20px rgba(0,255,160,0.3)}
+.bio-status p{font-size:12px;color:rgba(0,255,160,0.5);margin-top:12px;letter-spacing:2px}
 </style>
 </head>
 <body>
@@ -189,6 +249,14 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
 <div class="data-rain" id="dataRain"></div>
 <div class="scan-line"></div>
 <div class="edge-glow"></div>
+
+<!-- 交互模式选择器 -->
+<div class="mode-selector" id="modeSelector">
+  <button class="mode-btn active" onclick="switchMode('chat')" data-mode="chat">💬 对话</button>
+  <button class="mode-btn" onclick="switchMode('bci')" data-mode="bci">🧠 意念</button>
+  <button class="mode-btn" onclick="switchMode('gesture')" data-mode="gesture">👋 手势</button>
+  <button class="mode-btn" onclick="switchMode('bio')" data-mode="bio">❤️ 感知</button>
+</div>
 
 <!-- 主界面 -->
 <div class="main-screen" id="mainScreen">
@@ -236,6 +304,72 @@ html,body{height:100%;overflow:hidden;font-family:'Noto Sans SC',sans-serif;back
       <div class="label">设备状态</div>
       <div class="desc">IoT设备在线监控</div>
     </div>
+  </div>
+</div>
+
+<!-- 脑机接口模式 -->
+<div class="bci-screen" id="bciScreen">
+  <div class="bci-wave">
+    <div class="bci-wave-ring"></div>
+    <div class="bci-wave-ring"></div>
+    <div class="bci-wave-ring"></div>
+    <div class="bci-brain">🧠</div>
+  </div>
+  <div class="bci-status">
+    <h2>意念控制模式</h2>
+    <p>请集中注意力，选择要执行的操作</p>
+    <div class="bci-progress"><div class="bci-progress-bar" id="bciProgress"></div></div>
+  </div>
+  <div class="bci-commands">
+    <div class="bci-cmd" onclick="bciCommand('灌溉')">💧 启动智能灌溉</div>
+    <div class="bci-cmd" onclick="bciCommand('巡检')">🔍 启动无人机巡检</div>
+    <div class="bci-cmd" onclick="bciCommand('预警')">🚨 查看紧急预警</div>
+    <div class="bci-cmd" onclick="bciCommand('收割')">🚜 启动收割程序</div>
+  </div>
+</div>
+
+<!-- 全息手势模式 -->
+<div class="gesture-screen" id="gestureScreen">
+  <div class="gesture-area">
+    <div class="gesture-trail"></div>
+    <div class="gesture-hand">✋</div>
+    <div class="gesture-hints">
+      <div class="gesture-hint">👆 上滑 · 查看长势</div>
+      <div class="gesture-hint">👉 右滑 · 下一页</div>
+      <div class="gesture-hint">👈 左滑 · 上一页</div>
+    </div>
+  </div>
+  <div class="gesture-status">
+    <h2>全息手势模式</h2>
+    <p>在空中做出手势，控制农场系统</p>
+  </div>
+</div>
+
+<!-- 生物感知模式 -->
+<div class="bio-screen" id="bioScreen">
+  <div class="bio-avatar">
+    <div class="bio-face">👤</div>
+  </div>
+  <div class="bio-vitals">
+    <div class="bio-vital">
+      <div class="bio-vital-label">心率</div>
+      <div class="bio-vital-value" id="heartRate">72</div>
+      <div class="bio-vital-unit">BPM</div>
+    </div>
+    <div class="bio-vital">
+      <div class="bio-vital-label">体温</div>
+      <div class="bio-vital-value" id="bodyTemp">36.5</div>
+      <div class="bio-vital-unit">°C</div>
+    </div>
+    <div class="bio-vital">
+      <div class="bio-vital-label">专注度</div>
+      <div class="bio-vital-value" id="focusLevel">85</div>
+      <div class="bio-vital-unit">%</div>
+    </div>
+  </div>
+  <div class="bio-status">
+    <h2>生物感知模式</h2>
+    <p>AI根据您的生理状态自动调节农场环境</p>
   </div>
 </div>
 
@@ -457,6 +591,69 @@ function showTyping(){
 function hideTyping(){
   var el=document.getElementById('typingIndicator');
   if(el)el.remove();
+}
+
+function switchMode(mode){
+  document.querySelectorAll('.mode-btn').forEach(function(btn){btn.classList.remove('active')});
+  document.querySelector('.mode-btn[data-mode="'+mode+'"]').classList.add('active');
+  document.getElementById('mainScreen').classList.add('hidden');
+  document.getElementById('chatScreen').classList.remove('active');
+  document.getElementById('bciScreen').classList.remove('active');
+  document.getElementById('gestureScreen').classList.remove('active');
+  document.getElementById('bioScreen').classList.remove('active');
+  if(mode==='chat'){
+    document.getElementById('mainScreen').classList.remove('hidden');
+  }else if(mode==='bci'){
+    document.getElementById('bciScreen').classList.add('active');
+  }else if(mode==='gesture'){
+    document.getElementById('gestureScreen').classList.add('active');
+  }else if(mode==='bio'){
+    document.getElementById('bioScreen').classList.add('active');
+    startBioSimulation();
+  }
+}
+
+function bciCommand(cmd){
+  var cmds=document.querySelectorAll('.bci-cmd');
+  cmds.forEach(function(c){c.classList.remove('active')});
+  event.target.classList.add('active');
+  var progress=document.getElementById('bciProgress');
+  progress.style.width='0%';
+  setTimeout(function(){progress.style.width='30%'},200);
+  setTimeout(function(){progress.style.width='60%'},600);
+  setTimeout(function(){progress.style.width='100%'},1000);
+  setTimeout(function(){
+    progress.style.width='0%';
+    cmds.forEach(function(c){c.classList.remove('active')});
+    var replies={
+      '灌溉':'💧 <b>意念指令已接收</b><br><br>脑电波频率匹配成功<br>α波强度：85μV<br>专注度：92%<br><br>✅ 3号田智能灌溉已启动<br>💧 流量：15m³/h<br>⏱️ 预计2小时完成',
+      '巡检':'🔍 <b>意念指令已接收</b><br><br>脑电波识别：巡检指令<br>β波活跃度：78%<br>意图置信度：96%<br><br>🚁 无人机编队已起飞<br>📍 航线：W1→W6号田<br>⏱️ 预计25分钟完成全场扫描',
+      '预警':'🚨 <b>意念指令已接收</b><br><br>检测到焦虑脑波模式<br>γ波异常升高<br>情绪识别：担忧<br><br>🔴 当前5条预警已推送<br>⚠️ 建议优先处理：3号田干旱<br>💡 AI已生成应急方案',
+      '收割':'🚜 <b>意念指令已接收</b><br><br>θ波检测到决策意图<br>认知负荷：中等<br>风险评估：通过<br><br>✅ 无人收割机编队待命<br>🌾 目标：镇麦12田块<br>⏰ 明日05:30自动启动'
+    };
+    openChat();
+    setTimeout(function(){addMsg('意念控制：'+cmd,'user');addMsg(replies[cmd]||'指令已执行','bot')},400);
+  },1200);
+}
+
+var bioInterval=null;
+function startBioSimulation(){
+  if(bioInterval)clearInterval(bioInterval);
+  bioInterval=setInterval(function(){
+    var hr=68+Math.floor(Math.random()*12);
+    var temp=(36.2+Math.random()*0.8).toFixed(1);
+    var focus=75+Math.floor(Math.random()*20);
+    document.getElementById('heartRate').textContent=hr;
+    document.getElementById('bodyTemp').textContent=temp;
+    document.getElementById('focusLevel').textContent=focus;
+    if(focus>90){
+      document.getElementById('bioScreen').querySelector('.bio-status p').textContent='专注度极高 · AI已切换至深度工作模式 · 农场系统全速运行';
+    }else if(focus<80){
+      document.getElementById('bioScreen').querySelector('.bio-status p').textContent='检测到疲劳迹象 · AI建议休息 · 已切换至节能模式';
+    }else{
+      document.getElementById('bioScreen').querySelector('.bio-status p').textContent='生理状态良好 · AI根据您的状态自动调节农场环境';
+    }
+  },2000);
 }
 
 function processReply(q){
