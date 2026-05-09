@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>小丰管家 · 生产规划 · 作业中心 · 我的整合版</title>
+<style>
+:root{
+  --bg1:#edf7f2;--bg2:#f8fbfa;--card:#fff;--line:#e3ece8;--text:#0f1d2d;--sub:#68788d;
+  --green:#2fb166;--green-dark:#127742;--green-soft:#def6e6;--green-light:#f1fbf5;
+  --orange:#ef8d39;--orange-soft:#fff4e9;--red:#de5b44;--red-soft:#fff0ed;--blue-soft:#eff4f8;
+  --shadow:0 10px 26px rgba(23,68,48,.06);--radius:24px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+  padding:18px 0;
+}
+.phone{
+  width:min(430px,100vw);
+  min-height:100vh;
+  background:linear-gradient(180deg,#eef8f3 0%,#f8fbfa 24%,#fff 100%);
+  border:1px solid #dbe9e3;
+  border-radius:30px;
+  box-shadow:0 24px 70px rgba(26,61,44,.14);
+  position:relative;
+  overflow:hidden;
+}
+.screen{display:none;padding:16px 16px 100px;animation:fade .18s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:rgba(255,255,255,.98);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+.page-head{display:flex;align-items:center;justify-content:center;position:relative;margin:2px 0 14px;min-height:46px}
+.page-head h1{margin:0;font-size:20px;color:#55667a}
+.back{position:absolute;left:0;top:0;width:48px;height:46px;border:none;border-radius:16px;background:#eef4f7;color:#324355;font-size:22px;cursor:pointer}
+.title-row,.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.title{margin:0;font-size:19px;font-weight:900;display:flex;align-items:center;gap:8px}
+.small{font-size:13px;color:var(--sub);line-height:1.55}.muted{color:var(--sub)}
+.badge,.pill{padding:6px 10px;border-radius:999px;background:var(--green-soft);color:var(--green-dark);font-size:12px;font-weight:850;white-space:nowrap;display:inline-block}
+.badge.orange,.pill.orange{background:var(--orange-soft);color:#b76017}
+.badge.red,.pill.red{background:#ffd8d1;color:#b93422}
+.badge.dark,.pill.dark{background:linear-gradient(135deg,#34b76d,#1c9455);color:#fff}
+.btn{border:1px solid #d7e6df;background:#fff;color:#355068;border-radius:14px;height:42px;padding:0 12px;font-weight:800;cursor:pointer}
+.assistant-head{display:grid;grid-template-columns:78px 1fr;gap:12px;align-items:center}
+.assistant-head.reverse{grid-template-columns:1fr 70px}
+.robot{display:flex;flex-direction:column;align-items:center;gap:6px}
+.robot-face,.face{width:66px;height:66px;border-radius:24px;background:linear-gradient(145deg,#f7fff9,#cbf0d8);position:relative;box-shadow:inset 0 0 0 2px rgba(47,177,102,.1),0 8px 18px rgba(39,110,69,.12)}
+.robot-face:before,.face:before{content:"";position:absolute;left:10px;right:10px;top:14px;height:34px;border-radius:14px;background:#15372e}
+.robot-face:after,.face:after{content:"◠ ◠";position:absolute;left:18px;top:18px;color:#7effba;font-size:18px;font-weight:900}
+.robot-face i{position:absolute;left:24px;top:-10px;font-style:normal;color:var(--green);font-size:24px}
+.robot-name,.rname{padding:5px 14px;border-radius:999px;background:var(--green-soft);color:#177d48;font-size:14px;font-weight:800}
+.speech{padding:13px 14px;background:linear-gradient(180deg,#fbfffd,#f4fbf7);border:1px solid #cfe9d9;border-radius:18px;line-height:1.68;font-size:14px;position:relative}
+.speech:before{content:"";position:absolute;left:-7px;top:28px;width:14px;height:14px;background:#f8fefb;border-left:1px solid #cfe9d9;border-bottom:1px solid #cfe9d9;transform:rotate(45deg)}
+.speech.right{background:#dff4df;border-color:#d6eed6}.speech.right:before{left:auto;right:-7px;top:22px;border-left:none;border-bottom:none;border-right:1px solid #d6eed6;border-top:1px solid #d6eed6;background:#dff4df}
+.chips,.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip,.tag{padding:8px 12px;border-radius:999px;border:1px solid #dbe9e2;background:#fff;color:#385166;font-size:12px;font-weight:750;cursor:pointer}
+.chip.primary,.chip.active,.tag.green{background:var(--green-light);border-color:#cfead9;color:#167c47}
+.tag.orange{background:var(--orange-soft);color:#b76017}.tag.red{background:var(--red-soft);color:#b93422}
+.metrics4,.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.metric,.stat{padding:12px;border-radius:18px;border:1px solid var(--line);background:#fbfefd;text-align:left}
+.stat{text-align:center}.stat.red{background:var(--red-soft);border-color:#ffd5ce}.stat.orange{background:var(--orange-soft);border-color:#ffe0be}.stat.green{background:var(--green-light);border-color:#cdebd8}
+.metric .k,.stat .lab,.field .k,.plan-box .k,.mcard .k{font-size:12px;color:var(--sub);margin-bottom:5px;white-space:nowrap}
+.metric .v,.stat .num{font-size:18px;font-weight:900;letter-spacing:-.3px}.stat .num{font-size:22px}.metric .v.green,.plan-box .v.green,.mcard .v{color:var(--green-dark)}
+.summary-box{display:grid;grid-template-columns:1fr 132px;gap:10px;align-items:stretch}
+.summary-art{border-radius:18px;background:linear-gradient(180deg,#f2fbf5,#eef8f3);border:1px solid #ebf4ef;position:relative;overflow:hidden}
+.summary-art:before{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:radial-gradient(circle at 20% 100%, #dff3e5 0 35%, transparent 36%),radial-gradient(circle at 55% 100%, #e4f6e9 0 32%, transparent 33%),radial-gradient(circle at 85% 100%, #e9f8ed 0 28%, transparent 29%)}
+.summary-art:after{content:"🚜";position:absolute;right:14px;bottom:12px;font-size:36px;opacity:.8}
+.rows{display:grid;gap:10px}.row2{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;font-size:15px}.row2 .name{color:#44576b}.row2 .value{font-weight:800}
+.progress{height:10px;background:#def1e6;border-radius:999px;overflow:hidden;margin-top:6px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#31b66e,#8cddb0);border-radius:999px}
+.warn{padding:10px 12px;border-radius:14px;background:#fff9f1;border:1px solid #f5d8b5;font-size:14px;line-height:1.6;cursor:pointer}.warn+.warn{margin-top:8px}
+.chat-box{margin-top:6px;border:1px solid #dfe9e4;border-radius:18px;padding:12px;background:#fbfefd}
+.chat-bubble{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start}
+.chat-avatar{width:44px;height:44px;border-radius:16px;background:linear-gradient(145deg,#f7fff9,#cbf0d8);display:flex;align-items:center;justify-content:center;font-size:22px}
+.chat-input{display:grid;grid-template-columns:1fr 44px;gap:8px;margin-top:12px}
+.chat-input input{height:42px;border:1px solid #d9e6e0;border-radius:999px;padding:0 14px;font-size:14px;outline:none}
+.send{border:none;border-radius:999px;background:var(--green);color:#fff;font-size:20px;cursor:pointer}
+.step-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:14px 8px;margin-bottom:14px}
+.plan-step{display:flex;align-items:center;justify-content:center;gap:4px;color:#5b6e83;font-size:13px;font-weight:650;text-align:center}
+.step-num{width:25px;height:25px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#edf3f6;color:#587088;font-weight:850;flex:0 0 25px}
+.plan-step.active{color:var(--text);font-weight:900}.plan-step.active .step-num{background:var(--green-soft);color:var(--green-dark)}
+.field-grid,.grid2,.plan-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field,.plan-box{padding:12px;border-radius:16px;border:1px solid var(--line);background:#fbfefd}
+.field .v,.plan-box .v{font-size:16px;font-weight:850;line-height:1.35}.plan-box .v{font-size:20px;margin-top:4px}.plan-box .v.orange{color:var(--orange)}
+.list-item,.land,.variety-card,.timeline-item,.work-card,.my-card{padding:14px;border-radius:18px;border:1px solid var(--line);background:#fff;cursor:pointer;transition:.15s ease;margin-bottom:10px}
+.list-item:hover,.land:hover,.variety-card:hover,.timeline-item:hover,.work-card:hover,.my-card:hover{transform:translateY(-1px)}
+.land.highlight,.variety-card.recommend,.work-card.urgent{border-color:#39b46d;box-shadow:0 10px 22px rgba(57,180,109,.08);background:#e4f8ea}
+.work-card.critical{background:#fff5f2;border-color:#ffd0c8}
+.item-top,.work-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.item-name,.work-title{font-size:20px;font-weight:900;line-height:1.2}.work-title{font-size:20px}
+.rank{display:inline-flex;width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;margin-right:6px;font-size:14px;font-weight:900;background:#eff4f8;color:#657488}
+.gold{background:#fff1c8;color:#bc840a}.silver{background:#eef3f8;color:#677689}.bronze{background:#ffe7d8;color:#b66d32}
+.meta{margin:6px 0 8px;color:#617387;font-size:14px}
+.score{padding:8px 12px;border-radius:12px;background:linear-gradient(135deg,#32b66f,#1c9455);color:#fff;font-size:15px;font-weight:900;white-space:nowrap}
+.reason{font-size:14px;color:#304254;line-height:1.6;margin-top:8px}
+.timeline{display:grid;gap:10px}.timeline-item{display:grid;grid-template-columns:58px 1fr;gap:8px}
+.timeline-day{color:#5a6d83;font-size:13px;line-height:1.4}.timeline-name{font-size:17px;font-weight:900;line-height:1.45}.timeline-desc{color:var(--sub);font-size:12px;margin-top:4px;line-height:1.45}
+table{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:13px}th{text-align:left;color:var(--sub);font-weight:750;padding:0 6px}td{background:#fbfefd;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 6px;line-height:1.35}td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px;font-weight:850}td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
+
+/* 作业中心排版样式 */
+.wk-title{font-size:19px;font-weight:900;margin:0;display:flex;gap:8px;align-items:center}
+.wk-flow{display:grid;gap:12px}
+.wk-step{border:1px solid var(--line);border-radius:22px;background:#fff;padding:16px}
+.wk-stephead{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.wk-snum{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--green-soft);color:var(--green-dark);font-size:24px;font-weight:950;flex:0 0 42px}
+.wk-stitle{font-size:24px;font-weight:950}
+.dispatch-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.block-title{font-size:18px;font-weight:950;color:var(--green-dark);margin:0 0 12px}
+.rx-table{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fbfefd}
+.rx-row{display:grid;grid-template-columns:92px 1fr;border-bottom:1px solid #eef3f0}.rx-row:last-child{border-bottom:0}
+.rx-row div{padding:12px 10px;font-size:15px;line-height:1.35}.rx-row div:first-child{font-weight:950;background:#fbfefd;color:#23364a}.rx-row .value{font-weight:850}.rx-row .green{color:var(--green-dark);font-size:17px;font-weight:950}
+.status-stack{display:grid;gap:14px}
+.status-card{border:1px solid var(--line);border-radius:20px;background:#fbfefd;padding:14px;display:grid;grid-template-columns:50px 1fr;gap:10px;align-items:center;min-height:118px}
+.status-icon{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--green-soft);font-size:28px}.status-icon.orange{background:var(--orange-soft)}
+.status-title{font-size:20px;font-weight:950}.status-time{color:var(--sub);font-size:15px;line-height:1.5;margin-top:4px}
+.device-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:10px}
+.device-table{border:1px solid var(--line);border-radius:14px;overflow:hidden}.device-row{display:grid;grid-template-columns:1fr 80px;border-bottom:1px solid #eef3f0}.device-row:last-child{border-bottom:0}.device-row div{padding:9px 10px;font-size:13px}
+.status-ok{color:var(--green-dark);font-weight:900;background:var(--green-soft);border-radius:999px;padding:4px 10px}.status-bad{color:#b93422;font-weight:900;background:#ffd8d1;border-radius:999px;padding:4px 10px}
+.scan{display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1px solid var(--line);min-height:150px}
+.ring{width:110px;height:110px;border-radius:50%;border:2px solid #bdeed0;position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#fff 0 35%,#e8f9ef 36% 52%,transparent 53%)}
+.ring:before{content:'';position:absolute;inset:8px;border-radius:50%;border:4px dotted #29a864}
+.check{width:48px;height:48px;background:linear-gradient(135deg,#30b86c,#169652);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:28px;font-weight:900}
+.bar-row{display:grid;grid-template-columns:80px 1fr 86px;gap:8px;align-items:center;margin:10px 0}.bar{height:11px;background:#e7edf0;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,#2fb166,#0c8648);border-radius:999px}.bar-num{font-weight:900;text-align:right}.percent{font-size:12px;margin-left:4px}.percent.good{color:var(--green-dark)}.percent.warn{color:var(--orange)}
+.compare{display:grid;grid-template-columns:1fr 34px 1fr;gap:10px;align-items:center}.cmp{border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;background:#fffaf3}.cmp.after{background:#f1fbf5}.cmp .label{font-weight:850;font-size:13px}.cmp .big{font-size:30px;font-weight:950;margin-top:6px}.cmp.before .big{color:#d17718}.cmp.after .big{color:var(--green-dark)}.arrow{font-size:24px;text-align:center;color:#2b4055}
+.chart-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}.chart-wrap{height:240px;position:relative;margin-top:10px}.chart-wrap svg{width:100%;height:100%;overflow:visible}.axis{stroke:#d9e3df;stroke-width:1}.actual{fill:none;stroke:#20a85e;stroke-width:3}.pred{fill:none;stroke:#20a85e;stroke-width:3;stroke-dasharray:8 7}.area{fill:rgba(47,177,102,.12)}.pt{fill:#20a85e;stroke:#fff;stroke-width:2}.chart-label{font-size:10px;fill:#31465a}.legend{display:flex;justify-content:flex-end;gap:16px;font-size:12px;color:#33465b}.legend span:before{content:'';display:inline-block;width:20px;height:3px;background:#20a85e;margin-right:6px;vertical-align:middle}.legend .dash:before{background:repeating-linear-gradient(90deg,#20a85e 0 7px,transparent 7px 12px)}
+.metric3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.mcard{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fbfefd;text-align:center}.micon{width:38px;height:38px;border-radius:50%;background:var(--green-soft);margin:auto;display:flex;align-items:center;justify-content:center;font-size:22px}.mcard .v{font-weight:950;color:var(--green-dark);font-size:18px}
+
+/* 我的 */
+.my-profile{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center}
+.avatar{width:76px;height:76px;border-radius:22px;background:linear-gradient(180deg,#dff8e8,#f4fff8);display:flex;align-items:center;justify-content:center;font-size:38px;border:1px solid #d5ebe0}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quick-btn{border:1px solid var(--line);background:linear-gradient(180deg,#fbfffd,#f4faf7);border-radius:18px;padding:16px 12px;text-align:center;cursor:pointer}
+.quick-icon{width:44px;height:44px;border-radius:14px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:22px}
+.quick-title{font-weight:900}.quick-sub{margin-top:4px;font-size:12px;color:var(--sub)}
+
+.bottom-nav{position:absolute;left:14px;right:14px;bottom:12px;height:76px;background:rgba(255,255,255,.98);border-radius:28px;border:1px solid #dce8e5;display:grid;grid-template-columns:repeat(4,1fr);box-shadow:0 -10px 28px rgba(20,47,35,.08);z-index:20}
+.nav{border:none;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#617285;font-size:12px;font-weight:750;cursor:pointer}
+.nav.active{color:#157846;background:linear-gradient(180deg,#ddf7e6,#f3fff7);margin:8px 4px;height:60px;border-radius:22px}
+.nav .icon{font-size:22px}
+.toast{position:fixed;left:50%;bottom:108px;transform:translateX(-50%) translateY(20px);background:rgba(18,29,43,.88);color:#fff;padding:12px 16px;border-radius:12px;font-size:14px;max-width:86%;line-height:1.5;opacity:0;pointer-events:none;transition:.22s ease;z-index:99}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal{position:fixed;inset:0;background:rgba(6,16,26,.32);display:none;align-items:flex-end;justify-content:center;z-index:100}.modal.show{display:flex}.sheet{width:min(430px,100%);background:#fff;border-radius:24px 24px 0 0;padding:18px 16px 24px;box-shadow:0 -12px 40px rgba(0,0,0,.15)}.sheet h3{margin:0 0 10px;font-size:20px}.sheet p{margin:0 0 8px;color:#3e5166;line-height:1.65;font-size:14px}.sheet .close{margin-top:12px;width:100%;height:46px;border:none;border-radius:14px;background:var(--green);color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+@media (max-width:390px){
+  .assistant-head{grid-template-columns:70px 1fr}.assistant-head.reverse{grid-template-columns:1fr 60px}
+  .robot{transform:scale(.92);transform-origin:center}.speech:before{display:none}.item-name{font-size:18px}
+  .metrics4,.stats,.metric3{grid-template-columns:repeat(2,1fr)}
+  .field-grid,.plan-summary,.quick-grid{grid-template-columns:1fr 1fr}
+  .summary-box{grid-template-columns:1fr 118px}
+  .device-grid,.dispatch-grid{grid-template-columns:1fr}
+  .scan{border-left:0;border-top:1px solid var(--line);padding-top:12px}
+  .bar-row{grid-template-columns:70px 1fr 78px}
+}
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- 小丰管家：来自 preview(1) -->
+  <section class="screen active" id="screen-assistant">
+    <div class="card">
+      <div class="title-row">
+        <div>
+          <h1 class="title" style="font-size:24px;color:var(--green-dark);margin-bottom:4px;">智能管家小丰</h1>
+          <div class="small">农场整体情况汇报</div>
+        </div>
+        <div class="robot" style="gap:4px">
+          <div class="robot-face"><i>⌁</i></div>
+          <div class="robot-name">小丰</div>
+        </div>
+      </div>
+      <div class="speech">您好，我是智能管家小丰。今日农场整体运行平稳，种植进度正常，发现 <b style="color:var(--red);">2块</b> 预警地块、<b>32项</b> 待作业任务。建议优先处理邗江-02号地墒情偏低和邗江-07号地病害风险。</div>
+    </div>
+
+    <div class="metrics4">
+      <div class="metric card"><div class="k">在田面积</div><div class="v">382.1亩</div></div>
+      <div class="metric card"><div class="k">作业完成率</div><div class="v">67%</div></div>
+      <div class="metric card"><div class="k">设备在线率</div><div class="v">86%</div></div>
+      <div class="metric card"><div class="k">预计产量</div><div class="v">171.9吨</div></div>
+    </div>
+
+    <div class="card section-gap">
+      <div class="summary-box">
+        <div class="left">
+          <div class="section-title"><h2 class="title">🌱 种植情况</h2></div>
+          <div class="rows">
+            <div class="row2"><div class="name">主要作物</div><div class="value">蔬菜、水稻、小麦</div></div>
+            <div class="row2"><div class="name">播种进度</div><div class="value">72%<div class="progress"><span style="width:72%"></span></div></div></div>
+            <div class="row2"><div class="name">长势情况</div><div class="value"><span style="color:var(--green-dark)">9块良好</span> / <span style="color:var(--red)">2块异常</span></div></div>
+          </div>
+        </div>
+        <div class="summary-art"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">🔔 预警情况</h2><span class="badge orange">预警地块 2项</span></div>
+      <div class="warn open-sheet" data-title="邗江-02号地预警" data-content="土壤墒情偏低，建议立即灌溉；若连续高温，建议同步复核土壤湿度数据。">⚠️ 邗江-02号地：土壤墒情偏低，建议尽快灌溉</div>
+      <div class="warn open-sheet" data-title="邗江-07号地预警" data-content="叶片疑似病害风险，建议安排无人机巡检与人工复核，避免风险扩大。">⚠️ 邗江-07号地：叶片疑似病害风险，建议巡检复核</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">📋 作业情况</h2></div>
+      <div class="rows">
+        <div class="row2"><div class="name">今日已完成</div><div class="value">施肥 8项、巡田 6项</div></div>
+        <div class="row2"><div class="name">待作业任务</div><div class="value">32件</div></div>
+        <div class="row2"><div class="name">重点任务</div><div class="value">灌溉、病虫巡检、播种复核</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">💬 和小丰沟通</h2></div>
+      <div class="chat-box">
+        <div class="chat-bubble">
+          <div class="chat-avatar">🤖</div>
+          <div class="speech" style="margin:0">建议优先处理邗江-02号地墒情低任务，其次安排邗江-07号地病害巡查复核，避免风险扩大。</div>
+        </div>
+        <div class="chips">
+          <button class="chip" data-toast="已模拟提问：今天最需要优先处理什么？">小丰，今天最需要优先处理什么？</button>
+          <button class="chip" data-target="screen-planning-home">查看生产规划建议</button>
+        </div>
+        <div class="chat-input">
+          <input placeholder="输入问题，与小丰沟通……" />
+          <button class="send" data-toast="演示原型：已发送消息">➜</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 生产规划：来自 preview(1) -->
+  <section class="screen" id="screen-planning-home">
+    <div class="card">
+      <div class="title-row" style="margin-bottom:6px;align-items:flex-start">
+        <div><h1 class="title" style="font-size:22px;color:#111e2f;margin-bottom:2px;">管家小丰</h1></div>
+      </div>
+      <div class="assistant-head">
+        <div class="robot"><div class="robot-face"><i>⌁</i></div><div class="robot-name">小丰</div></div>
+        <div>
+          <div class="speech">您好，我是管家小丰。当前农场共有空闲地块4块，合计40亩，主要因轮作调整、季节性休耕和上季收获完成形成空闲。您想了解哪些空闲地块？</div>
+          <div class="chips">
+            <button class="chip scenario-btn active" data-scene="idle">👤 查看空闲地块</button>
+            <button class="chip scenario-btn" data-scene="crop">🌱 推荐适合种植作物</button>
+            <button class="chip scenario-btn" data-scene="duration">🕒 按空闲时长排序</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="assistant-head reverse" style="align-items:start">
+        <div><div class="speech right">我想知道哪些地块空闲了</div></div>
+        <div class="robot" style="align-items:flex-end;gap:0"><div class="chat-avatar" style="border-radius:50%;background:#e4f3e6;width:46px;height:46px">👤</div></div>
+      </div>
+      <div class="assistant-head" style="margin-top:10px;grid-template-columns:52px 1fr">
+        <div class="robot" style="gap:2px"><div class="chat-avatar" style="width:46px;height:46px">🤖</div><div class="small">小丰</div></div>
+        <div class="speech" style="margin:0">已为您筛选出当前所有空闲地块，并展示空闲时长、空闲原因及最适合种植的农作物。</div>
+      </div>
+    </div>
+
+    <div id="scene-idle" class="card">
+      <div class="section-title"><h2 class="title">🧩 空闲地块列表</h2><button class="chip" data-toast="已按默认顺序展示，可继续扩展筛选">排序 ⏷</button></div>
+      <div class="land highlight open-field-detail" data-field="邗江-08号地">
+        <div class="item-top"><div><div class="item-name"><span class="rank gold">1</span>邗江-08号地</div><div class="meta">面积 18.6亩 · 土壤 壤土</div></div><div class="score">空闲 18天</div></div>
+        <div class="reason"><b>空闲原因：</b>上季蔬菜已完成采收　　<b>推荐作物：</b>西红柿</div>
+        <div class="reason"><b>推荐理由：</b>土壤条件适宜，当前水肥条件可满足西红柿种植需求</div>
+        <div class="tags"><span class="tag green">空闲中</span><span class="tag green">适合茄果类</span><span class="tag green">灌溉方便</span><span class="tag green">排水良好</span></div>
+      </div>
+      <div class="land open-field-detail" data-field="邗江-12号地">
+        <div class="item-top"><div><div class="item-name"><span class="rank silver">2</span>邗江-12号地</div><div class="meta">面积 23.1亩 · 土壤 沙壤土</div></div><div class="score">空闲 25天</div></div>
+        <div class="reason"><b>空闲原因：</b>轮作调整待排产　　<b>推荐作物：</b>玉米</div>
+        <div class="reason"><b>推荐理由：</b>土壤肥力较好，排水良好，适宜玉米生长</div>
+        <div class="tags"><span class="tag green">空闲中</span><span class="tag green">轮作窗口期</span><span class="tag green">灌溉条件好</span><span class="tag green">排水良好</span></div>
+      </div>
+      <div class="land open-field-detail" data-field="邗江-15号地">
+        <div class="item-top"><div><div class="item-name"><span class="rank bronze">3</span>邗江-15号地</div><div class="meta">面积 19.3亩 · 土壤 壤土</div></div><div class="score">空闲 32天</div></div>
+        <div class="reason"><b>空闲原因：</b>季节性休耕　　<b>推荐作物：</b>小白菜</div>
+        <div class="reason"><b>推荐理由：</b>近期气温适宜，土壤湿度适宜，利于生长</div>
+        <div class="tags"><span class="tag green">空闲中</span><span class="tag green">适合叶菜类</span><span class="tag green">灌溉方便</span><span class="tag green">排水良好</span></div>
+      </div>
+      <div class="land open-field-detail" data-field="邗江-18号地">
+        <div class="item-top"><div><div class="item-name">邗江-18号地</div><div class="meta">面积 25.0亩 · 土壤 壤土</div></div><div class="score">空闲 40天</div></div>
+        <div class="reason"><b>空闲原因：</b>地块整理完成待播种　　<b>推荐作物：</b>毛豆</div>
+        <div class="reason"><b>推荐理由：</b>土壤有机质适中，适合毛豆生长</div>
+        <div class="tags"><span class="tag green">空闲中</span><span class="tag green">适合豆类</span><span class="tag green">灌溉方便</span><span class="tag green">排水良好</span></div>
+      </div>
+      <div class="small" style="margin-top:10px">ℹ️ 推荐作物综合土壤、近年轮作、灌溉条件、季节适宜性等维度分析得出。</div>
+    </div>
+
+    <div id="scene-crop" class="card" style="display:none">
+      <div class="section-title"><h2 class="title">🍅 适合种西红柿的地块</h2><span class="badge">按适配度排序</span></div>
+      <div class="land highlight open-field-detail" data-field="邗江-01号地"><div class="item-top"><div><div class="item-name"><span class="rank gold">1</span>邗江-01号地</div><div class="meta">面积 30.4亩 · 土壤 沙性土 · 历史种植西红柿</div></div><div class="score">评分 92</div></div><div class="reason">推荐理由：沙性土适合西红柿根系生长，历史产量稳定，适合机械化作业，成本可控。</div><div class="tags"><span class="tag green">沙性土适配</span><span class="tag green">适合机械化</span><span class="tag green">历史种植西红柿</span><span class="tag">收益较好</span></div></div>
+      <div class="land open-field-detail" data-field="邗江-12号地"><div class="item-top"><div><div class="item-name"><span class="rank silver">2</span>邗江-12号地</div><div class="meta">面积 23.1亩 · 土壤 沙壤土</div></div><div class="score">评分 88</div></div><div class="reason">推荐理由：土壤肥力好，排灌便利，适合西红柿生长。</div></div>
+      <div class="land open-field-detail" data-field="邗江-03号地"><div class="item-top"><div><div class="item-name"><span class="rank bronze">3</span>邗江-03号地</div><div class="meta">面积 31.2亩 · 土壤 砂壤土</div></div><div class="score">评分 84</div></div><div class="reason">推荐理由：土层深厚，光照充足，轮作合理。</div></div>
+    </div>
+
+    <div id="scene-duration" class="card" style="display:none">
+      <div class="section-title"><h2 class="title">🕒 按空闲时长排序</h2><span class="badge orange">长到短</span></div>
+      <div class="list-item open-sheet" data-title="空闲时长排序说明" data-content="当前空闲时长排序为：邗江-18号地40天、邗江-15号地32天、邗江-12号地25天、邗江-08号地18天。"><div class="item-name">邗江-18号地 → 邗江-15号地 → 邗江-12号地 → 邗江-08号地</div><div class="meta">点击查看完整说明</div></div>
+    </div>
+  </section>
+
+  <!-- 地块详情 + 多品种推荐 -->
+  <section class="screen" id="screen-field-detail">
+    <div class="page-head"><button class="back" data-target="screen-planning-home">←</button><h1>地块详情</h1></div>
+    <div class="card step-bar">
+      <div class="plan-step active"><span class="step-num">1</span><span>选地块</span></div>
+      <div class="plan-step active"><span class="step-num">2</span><span>品种推荐</span></div>
+      <div class="plan-step"><span class="step-num">3</span><span>生成计划</span></div>
+      <div class="plan-step"><span class="step-num">4</span><span>完成规划</span></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">🌱 地块信息</h2><span class="badge" id="field-badge">邗江-01号地</span></div>
+      <div class="field-grid">
+        <div class="field"><div class="k">地块名称</div><div class="v" id="field-name">邗江-01号地</div></div>
+        <div class="field"><div class="k">地块编号</div><div class="v" id="field-code">HJ-01</div></div>
+        <div class="field"><div class="k">地块面积</div><div class="v" id="field-area">30.4亩</div></div>
+        <div class="field"><div class="k">土壤性质</div><div class="v" id="field-soil">沙性土</div></div>
+        <div class="field"><div class="k">历史种植品种</div><div class="v" id="field-history">西红柿</div></div>
+        <div class="field"><div class="k">机械化条件</div><div class="v" id="field-mech">适合机械化</div></div>
+      </div>
+      <div class="tags"><span class="tag green">排水良好</span><span class="tag green">滴灌覆盖</span><span class="tag green">可规划</span><span class="tag orange">需关注连作风险</span></div>
+    </div>
+
+    <div class="card">
+      <div class="assistant-head">
+        <div class="robot"><div class="robot-face"><i>⌁</i></div><div class="robot-name">小丰</div></div>
+        <div class="speech" id="field-speech">邗江-01号地土壤为沙性土，西红柿喜疏松、透气、排水良好的沙性土壤，适配度较高。同时地块规整，适合机械化作业。小丰为您推荐多个适合品种，供您选择。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">🍅 品种推荐</h2><span class="badge dark">支持多品种推荐</span></div>
+      <div class="variety-card recommend" data-select-variety="西红柿">
+        <div class="item-top"><div><div class="item-name">优选A · 西红柿</div><div class="meta">高适配 · 历史种植稳定 · 适合机械化</div></div><div class="score">适配 92</div></div>
+        <div class="reason">推荐理由：土壤为沙性土，西红柿喜沙土，土壤适配度高；成本价300元/亩，收益800元/亩，其他农资成本200元/亩，净利润300元/亩；历史种植品种为西红柿，适合机械化作业。</div>
+        <div class="tags"><span class="tag green">沙性土适配</span><span class="tag green">历史种植一致</span><span class="tag green">适合机械化</span></div>
+      </div>
+      <div class="variety-card" data-select-variety="辣椒">
+        <div class="item-top"><div><div class="item-name">优选B · 辣椒</div><div class="meta">耐热性强 · 生长期适配 · 管理成熟</div></div><div class="score">适配 88</div></div>
+        <div class="reason">推荐理由：当前地块排水良好、日照条件较优，适宜辣椒生长；投入强度适中，市场需求稳定，便于标准化管理。</div>
+        <div class="tags"><span class="tag green">耐热性强</span><span class="tag">管理成熟</span><span class="tag">收益稳定</span></div>
+      </div>
+      <div class="variety-card" data-select-variety="小番茄">
+        <div class="item-top"><div><div class="item-name">优选C · 小番茄</div><div class="meta">高商品性 · 市场潜力好 · 轻投入</div></div><div class="score">适配 84</div></div>
+        <div class="reason">推荐理由：适合当前土壤结构和灌溉条件，商品性较高，适合精品果蔬路线，可作为差异化种植选择。</div>
+        <div class="tags"><span class="tag green">商品性高</span><span class="tag">轻投入</span><span class="tag">适合精品化</span></div>
+      </div>
+      <button class="chip primary" style="width:100%;justify-content:center;border-radius:18px;padding:14px 12px;font-size:16px" data-target="screen-plan" id="gen-plan-btn">生成种植计划（当前：西红柿）</button>
+    </div>
+  </section>
+
+  <!-- 种植计划 -->
+  <section class="screen" id="screen-plan">
+    <div class="page-head"><button class="back" data-target="screen-field-detail">←</button><h1>种植计划</h1></div>
+    <div class="card step-bar">
+      <div class="plan-step active"><span class="step-num">1</span><span>选地块</span></div>
+      <div class="plan-step active"><span class="step-num">2</span><span>品种推荐</span></div>
+      <div class="plan-step active"><span class="step-num">3</span><span>生成计划</span></div>
+      <div class="plan-step"><span class="step-num">4</span><span>完成规划</span></div>
+    </div>
+    <div class="card">
+      <div class="assistant-head">
+        <div class="robot"><div class="robot-face"><i>⌁</i></div><div class="robot-name">小丰</div></div>
+        <div class="speech">小丰已为您生成种植计划。西红柿种植周期为 <b>130天</b>，预计采收数量 <b>2000kg</b>，预估成本 <b>800元</b>，预估收益 <b>1500元</b>，预估净利润 <b>700元</b>。</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="title">📌 计划摘要</div>
+      <div class="plan-summary">
+        <div class="plan-box"><div class="k">种植地块</div><div class="v">HJ-01</div></div>
+        <div class="plan-box"><div class="k">种植品种</div><div class="v" id="plan-variety-name">西红柿</div></div>
+        <div class="plan-box"><div class="k">种植周期</div><div class="v">130天</div></div>
+        <div class="plan-box"><div class="k">预计采收</div><div class="v green">2000kg</div></div>
+        <div class="plan-box"><div class="k">预估成本</div><div class="v">800元</div></div>
+        <div class="plan-box"><div class="k">预估收益</div><div class="v green">1500元</div></div>
+        <div class="plan-box"><div class="k">预估净利润</div><div class="v orange">700元</div></div>
+        <div class="plan-box"><div class="k">综合建议</div><div class="v">建议实施</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title"><h2 class="title">🗓️ 种植计划</h2><span class="badge">点击查看作业详情</span></div>
+      <div class="timeline">
+        <div class="timeline-item open-task" data-task="整地与水肥准备" data-day="第1天" data-content="对邗江-01号地进行整地、起垄、土壤处理、基肥施用和灌溉设备检查，确保具备西红柿定植条件。"><div class="timeline-day">第1天</div><div><div class="timeline-name">整地与水肥准备</div><div class="timeline-desc">地块整理、土壤处理、基肥施用和灌溉系统检查</div></div></div>
+        <div class="timeline-item open-task" data-task="播栽/定植" data-day="第3天" data-content="按推荐株距完成西红柿定植，并开展成活率检查和补苗安排。"><div class="timeline-day">第3天</div><div><div class="timeline-name">播栽/定植</div><div class="timeline-desc">按推荐株距完成定植，并进行成活率检查</div></div></div>
+        <div class="timeline-item open-task" data-task="追肥与病虫监测" data-day="第10天" data-content="结合苗情追肥，开展病虫害巡检，形成监测记录。"><div class="timeline-day">第10天</div><div><div class="timeline-name">追肥与病虫监测</div><div class="timeline-desc">结合苗情追肥，开展病虫害巡检</div></div></div>
+        <div class="timeline-item open-task" data-task="植保作业（飞防）" data-day="第18天" data-content="使用无人机或植保设备开展病虫害防控，关注施药安全与覆盖均匀性。"><div class="timeline-day">第18天</div><div><div class="timeline-name">植保作业（飞防）</div><div class="timeline-desc">使用无人机或植保设备开展病虫害防控</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 农事作业详情 -->
+  <section class="screen" id="screen-task-detail">
+    <div class="page-head"><button class="back" data-target="screen-plan">←</button><h1>农事作业详情</h1></div>
+    <div class="card">
+      <div class="section-title"><h2 class="title" id="task-title">🚜 整地与水肥准备</h2><span class="badge" id="task-day">第1天</span></div>
+      <div class="field-grid">
+        <div class="field"><div class="k">所属地块</div><div class="v">邗江-01号地</div></div>
+        <div class="field"><div class="k">种植品种</div><div class="v" id="task-variety-name">西红柿</div></div>
+        <div class="field"><div class="k">作业方式</div><div class="v">机械化 + 人工复核</div></div>
+        <div class="field"><div class="k">预计成本</div><div class="v">150元</div></div>
+      </div>
+    </div>
+    <div class="card"><div class="title">📋 作业内容</div><div class="reason" id="task-content">对邗江-01号地进行整地、起垄、土壤处理、基肥施用和灌溉设备检查，确保地块具备西红柿定植条件。</div></div>
+    <div class="card"><div class="title">✅ 作业规范</div><table><tbody><tr><td>整地要求</td><td colspan="2">地块表面平整，土壤疏松，无明显大土块</td></tr><tr><td>起垄要求</td><td colspan="2">按种植行距起垄，保证排水顺畅</td></tr><tr><td>基肥要求</td><td colspan="2">按推荐用量施入基肥，避免过量施肥</td></tr><tr><td>验收要求</td><td colspan="2">作业完成后上传现场照片并记录结果</td></tr></tbody></table></div>
+  </section>
+
+  <!-- 作业中心：来自 xiaofeng_work_center_relayout -->
+  <section class="screen" id="screen-work">
+    <div class="page-head"><h1>作业中心</h1></div>
+    <div class="card"><div class="title-row"><div><h2 class="wk-title">🚜 作业中心</h2><div class="small">展示与生产规划打通后的作业任务</div></div><span class="pill dark">小丰排序</span></div></div>
+    <div class="card">
+      <div class="title-row"><h2 class="wk-title">📊 作业信息统计</h2><span class="pill">今日</span></div>
+      <div class="stats"><div class="stat red"><div class="num">32</div><div class="lab">待作业</div></div><div class="stat green"><div class="num">14</div><div class="lab">已作业</div></div><div class="stat orange"><div class="num">3</div><div class="lab">紧急作业</div></div><div class="stat"><div class="num">29</div><div class="lab">一般作业</div></div></div>
+      <div class="reason"><b>排序规则：</b>工单默认由智能管家小丰根据紧急程度排序，综合判断作业环境、墒情变化、病虫风险、对农作物生长影响程度和作业时效。</div>
+    </div>
+    <div class="card">
+      <div class="title-row"><h2 class="wk-title">📋 工单列表</h2><button class="btn" data-toast="筛选：可按紧急程度、作业类型、地块筛选">筛选</button></div>
+      <div class="work-card critical" data-work="邗江-02号地灌溉工单" data-type="灌溉作业" data-field="邗江-02号地" data-level="紧急" data-reason="当前土壤墒情低于适宜范围，作业环境连续无有效降雨，如不及时处理，可能影响作物正常生长。">
+        <div class="work-top"><div><div class="work-title">邗江-02号地灌溉工单</div><div class="reason">土壤墒情偏低，连续无有效降雨，影响作物水分供应</div></div><span class="pill red">紧急</span></div>
+        <div class="tags"><span class="tag red">小丰优先级96</span><span class="tag orange">影响生长</span><span class="tag green">需今日处理</span></div>
+      </div>
+      <div class="work-card urgent" data-work="邗江-07号地病虫巡检工单" data-type="病虫巡检" data-field="邗江-07号地" data-level="较急" data-reason="叶片疑似病害风险，近期湿度偏高，如未及时复核，可能造成病害扩散。">
+        <div class="work-top"><div><div class="work-title">邗江-07号地病虫巡检工单</div><div class="reason">叶片疑似病害风险，近期湿度偏高，需巡检复核</div></div><span class="pill orange">较急</span></div>
+        <div class="tags"><span class="tag orange">小丰优先级88</span><span class="tag">病虫风险</span><span class="tag green">无人机巡检</span></div>
+      </div>
+      <div class="work-card" data-work="邗江-01号地整地与水肥准备" data-type="整地准备" data-field="邗江-01号地" data-level="一般" data-reason="西红柿种植计划已生成，需开展整地、基肥和水肥准备，不属于紧急风险，但需按计划推进。">
+        <div class="work-top"><div><div class="work-title">邗江-01号地整地与水肥准备</div><div class="reason">西红柿种植计划已生成，需开展整地、基肥和水肥准备</div></div><span class="pill">一般</span></div>
+        <div class="tags"><span class="tag green">生产规划生成</span><span class="tag">机械化作业</span><span class="tag">待执行</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-work-detail">
+    <div class="page-head"><button class="back" data-target="screen-work">←</button><h1>工单详情</h1></div>
+    <div class="card"><div class="assistant-head"><div class="robot"><div class="robot-face"><i>⌁</i></div><div class="robot-name">小丰</div></div><div class="speech">小丰将对该工单进行全流程监管，从工单下发、作业前设备自检、作业中监管到作业完成核实，持续跟踪作业环境、执行进度和作业效果。</div></div></div>
+    <div class="card">
+      <div class="title-row"><h2 class="wk-title">📄 工单信息</h2><span class="pill red" id="work-level-pill">紧急</span></div>
+      <div class="grid2">
+        <div class="field"><div class="k">工单名称</div><div class="v" id="work-name">邗江-02号地灌溉工单</div></div>
+        <div class="field"><div class="k">所属地块</div><div class="v" id="work-field">邗江-02号地</div></div>
+        <div class="field"><div class="k">作业类型</div><div class="v" id="work-type">灌溉作业</div></div>
+        <div class="field"><div class="k">紧急程度</div><div class="v" id="work-level">紧急</div></div>
+      </div>
+      <div class="reason"><b>紧急判断：</b><span id="work-reason">当前土壤墒情低于适宜范围，作业环境连续无有效降雨，如不及时处理，可能影响作物正常生长。</span></div>
+    </div>
+    <div class="card">
+      <h2 class="wk-title">🤖 小丰作业监管</h2>
+      <div class="wk-flow" style="margin-top:12px">
+        <div class="wk-step">
+          <div class="wk-stephead"><div class="wk-snum">1</div><div class="wk-stitle">工单下发</div></div>
+          <div class="dispatch-grid">
+            <div>
+              <div class="block-title">处方信息</div>
+              <div class="rx-table">
+                <div class="rx-row"><div>地块名称</div><div class="value">邗江-02号地</div></div>
+                <div class="rx-row"><div>地块编号</div><div class="value">HJ-02</div></div>
+                <div class="rx-row"><div>灌溉水总量</div><div class="value green">12m³</div></div>
+                <div class="rx-row"><div>设备名称</div><div class="value">喷灌1号、滴灌2号、滴灌3号</div></div>
+                <div class="rx-row"><div>设备水量</div><div class="value green">4m³、4m³、4m³</div></div>
+                <div class="rx-row"><div>负责人</div><div class="value">张强</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="block-title">工单状态</div>
+              <div class="status-stack">
+                <div class="status-card"><div class="status-icon">➤</div><div><div class="status-title">工单状态</div><span class="pill dark">已下发</span><div class="status-time">2024-05-15<br>07:30</div></div></div>
+                <div class="status-card"><div class="status-icon orange">⌕</div><div><div class="status-title">核验状态</div><span class="pill orange">待核验</span><div class="status-time">待作业完成后<br>核验</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wk-step">
+          <div class="wk-stephead"><div class="wk-snum">2</div><div class="wk-stitle">作业前设备检查/自检</div></div>
+          <div class="device-grid">
+            <div>
+              <div class="block-title">设备检查清单</div>
+              <div class="device-table">
+                <div class="device-row"><div><b>设备名称</b></div><div><b>自检情况</b></div></div>
+                <div class="device-row"><div>💦 喷灌1号</div><div><span class="status-ok">正常</span></div></div>
+                <div class="device-row"><div>💧 滴灌2号</div><div><span class="status-ok">正常</span></div></div>
+                <div class="device-row"><div>💧 滴灌3号</div><div><span class="status-bad">故障</span></div></div>
+              </div>
+              <div class="reason" style="color:var(--red);font-weight:900">⚠ 系统已提醒检修</div>
+            </div>
+            <div class="scan"><div class="block-title">设备自检中...</div><div class="ring"><div class="check">✓</div></div><div class="small" style="margin-top:10px">正在检测设备状态</div></div>
+          </div>
+        </div>
+        <div class="wk-step">
+          <div class="wk-stephead"><div class="wk-snum">3</div><div class="wk-stitle">作业中监管</div></div>
+          <div class="block-title">实际灌溉水量 / 计划灌溉水量（m³）</div>
+          <div class="bar-row"><div>💦 喷灌1号</div><div class="bar"><span style="width:100%"></span></div><div class="bar-num">4.1 / 4.0 <span class="percent good">103%</span></div></div>
+          <div class="bar-row"><div>💧 滴灌2号</div><div class="bar"><span style="width:95%"></span></div><div class="bar-num">3.8 / 4.0 <span class="percent warn">95%</span></div></div>
+          <div class="bar-row"><div>💧 滴灌3号</div><div class="bar"><span style="width:100%"></span></div><div class="bar-num">4.0 / 4.0 <span class="percent good">100%</span></div></div>
+          <div class="small">更新于 2024-05-15 09:30</div>
+        </div>
+        <div class="wk-step">
+          <div class="wk-stephead"><div class="wk-snum">4</div><div class="wk-stitle">作业完成后作业结果核实</div></div>
+          <div class="compare"><div class="cmp before"><div class="label">作业前土壤湿度</div><div class="big">12%</div></div><div class="arrow">→</div><div class="cmp after"><div class="label">作业后土壤湿度</div><div class="big">40%</div></div></div>
+          <div class="speech" style="margin-top:12px">灌溉执行基本达标，土壤湿度由12%提升至40%，已进入目标区间，建议继续观察后续24小时湿度变化。</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="title-row"><h2 class="wk-title">📊 作业效果核实</h2></div>
+      <div class="block-title">土壤湿度变化趋势（24小时）</div>
+      <div class="legend"><span>实际湿度</span><span class="dash">预测湿度</span></div>
+      <div class="chart-wrap">
+        <svg viewBox="0 0 360 210" preserveAspectRatio="none">
+          <line class="axis" x1="25" y1="15" x2="25" y2="175"/><line class="axis" x1="25" y1="175" x2="350" y2="175"/>
+          <text class="chart-label" x="0" y="24">60</text><text class="chart-label" x="0" y="64">45</text><text class="chart-label" x="0" y="104">30</text><text class="chart-label" x="0" y="144">15</text><text class="chart-label" x="6" y="178">0</text>
+          <polygon class="area" points="25,143 80,121 135,95 190,69 190,175 25,175"/>
+          <polyline class="actual" points="25,143 80,121 135,95 190,69"/>
+          <polyline class="pred" points="190,69 215,63 240,66 265,69 290,74 315,79 340,84 350,88"/>
+          <circle class="pt" cx="25" cy="143" r="4"/><circle class="pt" cx="80" cy="121" r="4"/><circle class="pt" cx="135" cy="95" r="4"/><circle class="pt" cx="190" cy="69" r="4"/>
+          <text class="chart-label" x="18" y="136">12%</text><text class="chart-label" x="73" y="114">20%</text><text class="chart-label" x="128" y="88">30%</text><text class="chart-label" x="183" y="62">40%</text>
+          <text class="chart-label" x="17" y="196">08:00</text><text class="chart-label" x="72" y="196">10:00</text><text class="chart-label" x="126" y="196">12:00</text><text class="chart-label" x="182" y="196">14:00</text><text class="chart-label" x="236" y="196">18:00</text><text class="chart-label" x="292" y="196">00:00</text><text class="chart-label" x="322" y="196">04:00</text>
+        </svg>
+      </div>
+      <div class="metric3"><div class="mcard"><div class="micon">💧</div><div class="k">当前湿度</div><div class="v">40%</div><div class="small">14:00</div></div><div class="mcard"><div class="micon">🎯</div><div class="k">目标区间</div><div class="v">35% - 45%</div></div><div class="mcard"><div class="micon">🕒</div><div class="k">24小时预测</div><div class="v">34% - 42%</div></div></div>
+      <div class="speech" style="margin-top:12px">预计未来6小时土壤湿度保持在适宜区间，夜间将缓慢回落，建议明日8:00继续复测。</div>
+    </div>
+  </section>
+
+  <!-- 我的：来自 preview(2)经营分析并改名 -->
+  <section class="screen" id="screen-my">
+    <div class="page-head"><h1>我的</h1></div>
+    <div class="card">
+      <div class="my-profile">
+        <div class="avatar">👨‍🌾</div>
+        <div>
+          <div class="title" style="font-size:22px">王刚</div>
+          <div class="small">生产主管｜邗江示范无人农场</div>
+          <div style="margin-top:8px"><span class="pill">今日值班</span> <span class="pill orange">待处理 3 项</span></div>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:14px">
+        <div class="field"><div class="k">手机号</div><div class="v">138****5621</div></div>
+        <div class="field"><div class="k">所属区域</div><div class="v">邗江示范无人农场</div></div>
+        <div class="field"><div class="k">角色权限</div><div class="v">生产主管 / 审批人</div></div>
+        <div class="field"><div class="k">今日排班</div><div class="v">08:00 - 18:00</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">🍱 吃饭审批确认</h2><button class="btn" data-toast="已打开全部审批列表">全部</button></div>
+      <div class="my-card" data-toast="已确认：上午巡检组午餐申请">
+        <div class="item-name">上午巡检组午餐申请 <span class="pill orange">待确认</span></div>
+        <div class="reason">申请人数：6人｜用餐时间：12:00｜申请人：李强｜备注：外场巡检结束后统一就餐</div>
+      </div>
+      <div class="my-card" data-toast="已确认：灌溉作业组晚餐申请">
+        <div class="item-name">灌溉作业组晚餐申请 <span class="pill orange">待确认</span></div>
+        <div class="reason">申请人数：4人｜用餐时间：18:30｜申请人：张强｜备注：灌溉任务延后，需安排晚餐</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">📋 我的工单</h2><button class="btn" data-target="screen-work">查看全部</button></div>
+      <div class="my-card" data-work="邗江-02号地灌溉工单" data-type="灌溉作业" data-field="邗江-02号地" data-level="紧急" data-reason="当前土壤墒情低于适宜范围，作业环境连续无有效降雨，如不及时处理，可能影响作物正常生长。">
+        <div class="item-name">邗江-02号地灌溉工单 <span class="pill red">紧急</span></div>
+        <div class="reason">状态：执行中｜负责人：张强｜截止时间：今日 15:00｜建议优先处理</div>
+      </div>
+      <div class="my-card" data-work="邗江-07号地病虫巡检工单" data-type="病虫巡检" data-field="邗江-07号地" data-level="较急" data-reason="叶片疑似病害风险，近期湿度偏高，如未及时复核，可能造成病害扩散。">
+        <div class="item-name">邗江-07号地病虫巡检工单 <span class="pill orange">较急</span></div>
+        <div class="reason">状态：待执行｜负责人：王伟｜作业方式：无人机巡检｜建议今日完成</div>
+      </div>
+      <div class="my-card" data-work="邗江-01号地整地与水肥准备" data-type="整地准备" data-field="邗江-01号地" data-level="一般" data-reason="西红柿种植计划已生成，需开展整地、基肥和水肥准备，不属于紧急风险，但需按计划推进。">
+        <div class="item-name">邗江-01号地整地与水肥准备 <span class="pill">一般</span></div>
+        <div class="reason">状态：待安排｜负责人：陈磊｜来源：生产规划自动生成</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h2 class="title">⚠️ 异常上报</h2><button class="btn" data-toast="已打开异常上报列表">历史记录</button></div>
+      <div class="quick-grid">
+        <div class="quick-btn" data-toast="进入设备异常上报"><div class="quick-icon">🛠️</div><div class="quick-title">设备异常</div><div class="quick-sub">故障、离线、失联</div></div>
+        <div class="quick-btn" data-toast="进入作物异常上报"><div class="quick-icon">🌿</div><div class="quick-title">作物异常</div><div class="quick-sub">病虫害、长势异常</div></div>
+        <div class="quick-btn" data-toast="进入环境异常上报"><div class="quick-icon">🌧️</div><div class="quick-title">环境异常</div><div class="quick-sub">温湿度、降雨、风速</div></div>
+        <div class="quick-btn" data-toast="进入安全异常上报"><div class="quick-icon">🚨</div><div class="quick-title">安全异常</div><div class="quick-sub">人员、围栏、现场安全</div></div>
+      </div>
+      <div class="my-card" style="margin-top:12px">
+        <div class="item-name">最新上报：滴灌3号故障 <span class="pill red">处理中</span></div>
+        <div class="reason">上报时间：09:20｜上报人：王刚｜处理人：设备运维组｜说明：自检异常，已安排检修</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="bottom-nav">
+    <button class="nav active" data-root="screen-assistant"><div class="icon">🤖</div><div>小丰管家</div></button>
+    <button class="nav" data-root="screen-planning-home"><div class="icon">🌱</div><div>生产规划</div></button>
+    <button class="nav" data-root="screen-work"><div class="icon">🚜</div><div>作业中心</div></button>
+    <button class="nav" data-root="screen-my"><div class="icon">👤</div><div>我的</div></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="sheet"><h3 id="sheetTitle">详情</h3><p id="sheetContent"></p><button class="close" id="closeModal">关闭</button></div></div>
+
+<script>
+const screens = document.querySelectorAll('.screen');
+const navs = document.querySelectorAll('.nav');
+const toast = document.getElementById('toast');
+const modal = document.getElementById('modal');
+const sheetTitle = document.getElementById('sheetTitle');
+const sheetContent = document.getElementById('sheetContent');
+let currentVariety = '西红柿';
+
+function showToast(text){
+  toast.textContent = text;
+  toast.classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(()=>toast.classList.remove('show'), 1800);
+}
+function setText(id, value){
+  const el = document.getElementById(id);
+  if(el) el.textContent = value;
+}
+function switchScreen(id){
+  screens.forEach(p => p.classList.toggle('active', p.id === id));
+  const planningGroup = ['screen-planning-home','screen-field-detail','screen-plan','screen-task-detail'];
+  const workGroup = ['screen-work','screen-work-detail'];
+  navs.forEach(n => {
+    const root = n.dataset.root;
+    const active = root === id || (root === 'screen-planning-home' && planningGroup.includes(id)) || (root === 'screen-work' && workGroup.includes(id));
+    n.classList.toggle('active', active);
+  });
+}
+function openSheet(title, content){
+  sheetTitle.textContent = title || '详情';
+  sheetContent.textContent = content || '暂无详细内容';
+  modal.classList.add('show');
+}
+function openWorkDetail(el){
+  setText('work-name', el.dataset.work || '邗江-02号地灌溉工单');
+  setText('work-type', el.dataset.type || '灌溉作业');
+  setText('work-field', el.dataset.field || '邗江-02号地');
+  setText('work-level', el.dataset.level || '紧急');
+  setText('work-level-pill', el.dataset.level || '紧急');
+  setText('work-reason', el.dataset.reason || '当前土壤墒情低于适宜范围，作业环境连续无有效降雨，如不及时处理，可能影响作物正常生长。');
+  switchScreen('screen-work-detail');
+}
+
+navs.forEach(btn => btn.addEventListener('click', ()=>switchScreen(btn.dataset.root)));
+document.addEventListener('click', e => {
+  const work = e.target.closest('[data-work]');
+  if(work){ openWorkDetail(work); return; }
+
+  const target = e.target.closest('[data-target]');
+  if(target){ switchScreen(target.dataset.target); return; }
+
+  const toastEl = e.target.closest('[data-toast]');
+  if(toastEl){ showToast(toastEl.dataset.toast); return; }
+
+  const sheet = e.target.closest('.open-sheet');
+  if(sheet){ openSheet(sheet.dataset.title, sheet.dataset.content); return; }
+});
+
+const fieldProfiles = {
+  '邗江-08号地': {name:'邗江-08号地', code:'HJ-08', area:'18.6亩', soil:'壤土', history:'蔬菜', mechanization:'适合机械化', speech:'邗江-08号地目前为空闲地块，土壤为壤土，土层条件较好，灌溉方便、排水良好，适合安排新一轮生产规划。综合分析后，小丰认为该地块较适合优先纳入种植规划。'},
+  '邗江-12号地': {name:'邗江-12号地', code:'HJ-12', area:'23.1亩', soil:'沙壤土', history:'玉米/轮作', mechanization:'适合机械化', speech:'邗江-12号地当前为空闲地块，土壤为沙壤土，排灌便利，病害风险较低，适合作为下一轮规划备选地块。'},
+  '邗江-15号地': {name:'邗江-15号地', code:'HJ-15', area:'19.3亩', soil:'壤土', history:'叶菜类', mechanization:'适合机械化', speech:'邗江-15号地目前处于季节性休耕状态，近期气温和土壤湿度较适宜，可优先考虑小白菜等叶菜类种植。'},
+  '邗江-18号地': {name:'邗江-18号地', code:'HJ-18', area:'25.0亩', soil:'壤土', history:'豆类', mechanization:'适合机械化', speech:'邗江-18号地已完成整备待播种，土壤有机质适中，适合豆类等作物生长，可纳入近期排产。'},
+  '邗江-01号地': {name:'邗江-01号地', code:'HJ-01', area:'30.4亩', soil:'沙性土', history:'西红柿', mechanization:'适合机械化', speech:'邗江-01号地土壤为沙性土，西红柿喜疏松、透气、排水良好的沙性土壤，适配度较高。同时地块规整，适合机械化作业。小丰为您推荐多个适合品种，供您选择。'},
+  '邗江-03号地': {name:'邗江-03号地', code:'HJ-03', area:'31.2亩', soil:'砂壤土', history:'轮作种植', mechanization:'适合机械化', speech:'邗江-03号地光照条件较好，土层深厚，轮作条件较优，适合开展新一轮种植规划。'}
+};
+document.querySelectorAll('.open-field-detail').forEach(el => el.addEventListener('click', ()=> {
+  const profile = fieldProfiles[el.dataset.field] || fieldProfiles['邗江-01号地'];
+  setText('field-name', profile.name);
+  setText('field-code', profile.code);
+  setText('field-area', profile.area);
+  setText('field-soil', profile.soil);
+  setText('field-history', profile.history);
+  setText('field-mech', profile.mechanization);
+  setText('field-badge', profile.name);
+  setText('field-speech', profile.speech);
+  switchScreen('screen-field-detail');
+}));
+
+document.querySelectorAll('.scenario-btn').forEach(btn => {
+  btn.addEventListener('click', ()=> {
+    document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const scene = btn.dataset.scene;
+    document.getElementById('scene-idle').style.display = scene === 'idle' ? 'block' : 'none';
+    document.getElementById('scene-crop').style.display = scene === 'crop' ? 'block' : 'none';
+    document.getElementById('scene-duration').style.display = scene === 'duration' ? 'block' : 'none';
+    showToast(scene === 'idle' ? '已切换到“查看空闲地块”' : scene === 'crop' ? '已切换到“推荐适合种植作物”' : '已切换到“按空闲时长排序”');
+  });
+});
+
+document.querySelectorAll('[data-select-variety]').forEach(card => {
+  card.addEventListener('click', ()=> {
+    document.querySelectorAll('[data-select-variety]').forEach(c => c.classList.remove('recommend'));
+    card.classList.add('recommend');
+    currentVariety = card.dataset.selectVariety;
+    setText('plan-variety-name', currentVariety);
+    setText('task-variety-name', currentVariety);
+    document.getElementById('gen-plan-btn').textContent = `生成种植计划（当前：${currentVariety}）`;
+    showToast(`已选择推荐品种：${currentVariety}`);
+  });
+});
+
+document.querySelectorAll('.open-task').forEach(el => {
+  el.addEventListener('click', ()=> {
+    setText('task-title', '🚜 ' + el.dataset.task);
+    setText('task-day', el.dataset.day);
+    setText('task-content', (el.dataset.content || '').replaceAll('西红柿', currentVariety));
+    setText('task-variety-name', currentVariety);
+    switchScreen('screen-task-detail');
+  });
+});
+
+document.getElementById('closeModal').addEventListener('click', ()=> modal.classList.remove('show'));
+modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('show'); });
+</script>
+</body>
+</html>
