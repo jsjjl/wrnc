@@ -63,6 +63,28 @@ main { flex: 1; display: flex; flex-direction: column; }
 .status-badge-blue { background: rgba(59,130,246,0.1); color: #3B82F6; border: 1px solid rgba(59,130,246,0.3); }
 .status-badge-green { background: rgba(21,128,61,0.1); color: #15803D; border: 1px solid rgba(21,128,61,0.3); }
 .nav-item { transition: all 0.3s ease; position: relative; }
+.page-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px; }
+.page-title { font-size: 20px; font-weight: 700; color: #1A5D1A; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.page-section-title { font-size: 18px; font-weight: 600; color: #1A5D1A; margin-bottom: 12px; }
+.page-stat-card { background: #F0FDF4; border-radius: 12px; padding: 16px; text-align: center; }
+.page-stat-value { font-size: 32px; font-weight: 700; color: #1A5D1A; }
+.page-stat-label { font-size: 14px; color: #15803D; margin-top: 4px; }
+.page-stat-sub { font-size: 13px; color: #64748B; margin-top: 2px; }
+.page-btn { padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+.page-btn-primary { background: linear-gradient(135deg, #1A5D1A, #15803D); color: #fff; }
+.page-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26,93,26,0.3); }
+.page-btn-secondary { background: #F1F5F9; color: #1A5D1A; border: 2px solid #1A5D1A; }
+.page-btn-warning { background: linear-gradient(135deg, #F97316, #EA580C); color: #fff; }
+.page-btn-danger { background: linear-gradient(135deg, #DC2626, #B91C1C); color: #fff; }
+.page-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.page-badge-success { background: #DCFCE7; color: #15803D; }
+.page-badge-warning { background: #FEF3C7; color: #CA8A04; }
+.page-badge-danger { background: #FEE2E2; color: #DC2626; }
+.page-badge-info { background: #DBEAFE; color: #2563EB; }
+.page-progress-bar { width: 100%; height: 8px; background: #E2E8F0; border-radius: 4px; overflow: hidden; }
+.page-progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.page-list-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F1F5F9; }
+.page-list-item:last-child { border-bottom: none; }
 .nav-item.active { color: #1A5D1A; background: rgba(26,93,26,0.08); }
 .nav-item:hover { color: #1A5D1A; background: rgba(26,93,26,0.05); }
 .section-page { display: none; flex: 1; overflow-y: auto; }
@@ -95,16 +117,24 @@ main { flex: 1; display: flex; flex-direction: column; }
   .desktop-sidebar { display: none !important; }
   .main-content { margin-left: 0 !important; padding-bottom: 70px; }
   body { font-size: 16px; }
-  #section-home .grid { grid-template-columns: 1fr !important; }
-  #section-home .grid-cols-4 { grid-template-columns: repeat(2, 1fr) !important; }
-  #section-home .grid-cols-5 { grid-template-columns: repeat(2, 1fr) !important; }
-  #section-home .grid-cols-3 { grid-template-columns: 1fr !important; }
-  #section-home h2 { font-size: 22px !important; }
-  #section-home h3 { font-size: 18px !important; }
-  #section-home .text-4xl, #section-home .text-5xl { font-size: 28px !important; }
+  .page-card { border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .page-title { font-size: 18px; }
+  .page-section-title { font-size: 16px; }
+  .page-stat-card { padding: 12px; }
+  .page-stat-value { font-size: 24px; }
+  .page-btn { padding: 10px 16px; font-size: 14px; }
+  #section-home { padding: 12px; }
+  #section-home > div { border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  #section-home [style*="grid-template-columns:repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  #section-home [style*="grid-template-columns:repeat(5"] { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  #section-home [style*="grid-template-columns:repeat(3"] { grid-template-columns: 1fr !important; gap: 8px !important; }
   #section-home [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; gap: 12px !important; }
-  #section-home [style*="display:flex"][style*="overflow-x:auto"] { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; overflow: visible !important; gap: 6px !important; }
-  #section-home [style*="display:flex"][style*="overflow-x:auto"] > div { min-width: unset !important; padding: 8px 4px !important; }
+  #section-home h2 { font-size: 20px !important; }
+  #section-home h3 { font-size: 16px !important; }
+  #section-monitor, #section-video, #section-device, #section-operation, #section-alert, #section-plan, #section-report { padding: 12px; }
+  #section-monitor > div, #section-video > div, #section-device > div, #section-operation > div, #section-alert > div, #section-plan > div, #section-report > div { border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .section-header { font-size: 18px !important; margin-bottom: 12px !important; }
+  .section-subtitle { font-size: 13px !important; }
 }
 @media (min-width: 768px) and (max-width: 1199px) { .desktop-sidebar { width: 60px !important; } .desktop-sidebar .nav-text { display: none; } .main-content { margin-left: 60px !important; } }
 </style>
@@ -433,11 +463,11 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 <!-- ==================== MONITOR 农情监测 ==================== -->
 <section id="section-monitor" class="section-page" style="background:#F1F5F9; padding:16px;">
-  <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:12px; margin-bottom:16px;" id="monitorTabs">
-    <button class="tab-btn active" onclick="switchMonitorTab('weather')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#1A5D1A; color:#fff; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">天气监测</button>
-    <button class="tab-btn" onclick="switchMonitorTab('soil')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">土壤监测</button>
-    <button class="tab-btn" onclick="switchMonitorTab('pest')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">虫子监测</button>
-    <button class="tab-btn" onclick="switchMonitorTab('seedling')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">庄稼长势</button>
+  <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:12px; margin-bottom:16px; -webkit-overflow-scrolling:touch;" id="monitorTabs">
+    <button class="tab-btn active" onclick="switchMonitorTab('weather')" style="min-height:44px; padding:10px 20px; border-radius:22px; border:none; background:linear-gradient(135deg, #1A5D1A, #15803D); color:#fff; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 2px 8px rgba(26,93,26,0.3);">天气监测</button>
+    <button class="tab-btn" onclick="switchMonitorTab('soil')" style="min-height:44px; padding:10px 20px; border-radius:22px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">土壤监测</button>
+    <button class="tab-btn" onclick="switchMonitorTab('pest')" style="min-height:44px; padding:10px 20px; border-radius:22px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">虫子监测</button>
+    <button class="tab-btn" onclick="switchMonitorTab('seedling')" style="min-height:44px; padding:10px 20px; border-radius:22px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">庄稼长势</button>
   </div>
 
   <!-- 天气监测 -->
@@ -597,7 +627,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 <!-- ==================== VIDEO 视频监控 ==================== -->
 <section id="section-video" class="section-page" style="background:#F1F5F9; padding:16px;">
-  <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px;">
+  <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:12px;">
     <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
         <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">高空鹰眼全景</span></div>
@@ -755,10 +785,10 @@ main { flex: 1; display: flex; flex-direction: column; }
   <!-- OPERATION -->
   <section id="section-operation" class="section-page">
     <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">作业管理</div><div style="font-size:14px; color:#64748B; margin-top:4px;">灌溉、农机、无人机作业调度</div></div>
-    <div style="display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto;">
-      <button class="tab-btn active" onclick="switchOpTab(this,'irrigation')">智能灌溉</button>
-      <button class="tab-btn" onclick="switchOpTab(this,'machinery')">农机作业</button>
-      <button class="tab-btn" onclick="switchOpTab(this,'drone')">无人机</button>
+    <div style="display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+      <button class="tab-btn active" onclick="switchOpTab(this,'irrigation')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:linear-gradient(135deg, #1A5D1A, #15803D); color:#fff; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 2px 8px rgba(26,93,26,0.3);">智能灌溉</button>
+      <button class="tab-btn" onclick="switchOpTab(this,'machinery')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">农机作业</button>
+      <button class="tab-btn" onclick="switchOpTab(this,'drone')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">无人机</button>
     </div>
     <!-- 智能灌溉 -->
     <div id="op-irrigation" class="op-tab" style="display:block;">
@@ -913,11 +943,11 @@ main { flex: 1; display: flex; flex-direction: column; }
   <!-- PLAN -->
   <section id="section-plan" class="section-page">
     <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">生产规划</div><div style="font-size:14px; color:#64748B; margin-top:4px;">小麦水稻全周期种植计划</div></div>
-    <div style="display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto;">
-      <button class="tab-btn active" onclick="switchPlanTab(this,'prep')">备耕期</button>
-      <button class="tab-btn" onclick="switchPlanTab(this,'sow')">播种期</button>
-      <button class="tab-btn" onclick="switchPlanTab(this,'grow')">生长期</button>
-      <button class="tab-btn" onclick="switchPlanTab(this,'harvest')">收获期</button>
+    <div style="display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+      <button class="tab-btn active" onclick="switchPlanTab(this,'prep')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:linear-gradient(135deg, #1A5D1A, #15803D); color:#fff; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 2px 8px rgba(26,93,26,0.3);">备耕期</button>
+      <button class="tab-btn" onclick="switchPlanTab(this,'sow')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">播种期</button>
+      <button class="tab-btn" onclick="switchPlanTab(this,'grow')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">生长期</button>
+      <button class="tab-btn" onclick="switchPlanTab(this,'harvest')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">收获期</button>
     </div>
     <!-- 备耕期 -->
     <div id="plan-prep" class="plan-tab" style="display:block;">
@@ -1008,10 +1038,10 @@ main { flex: 1; display: flex; flex-direction: column; }
   <!-- REPORT -->
   <section id="section-report" class="section-page">
     <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">数据报告</div><div style="font-size:14px; color:#64748B; margin-top:4px;">农场运营数据分析</div></div>
-    <div style="display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto;">
-      <button class="tab-btn active" onclick="switchReportTab(this,'daily')">日报</button>
-      <button class="tab-btn" onclick="switchReportTab(this,'yield')">产量分析</button>
-      <button class="tab-btn" onclick="switchReportTab(this,'phenology')">生育期</button>
+    <div style="display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+      <button class="tab-btn active" onclick="switchReportTab(this,'daily')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:linear-gradient(135deg, #1A5D1A, #15803D); color:#fff; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 2px 8px rgba(26,93,26,0.3);">日报</button>
+      <button class="tab-btn" onclick="switchReportTab(this,'yield')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">产量分析</button>
+      <button class="tab-btn" onclick="switchReportTab(this,'phenology')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">生育期</button>
     </div>
     <!-- 日报 -->
     <div id="report-daily" class="report-tab" style="display:block;">
