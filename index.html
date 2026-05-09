@@ -136,7 +136,27 @@ main { flex: 1; display: flex; flex-direction: column; }
   .section-header { font-size: 18px !important; margin-bottom: 12px !important; }
   .section-subtitle { font-size: 13px !important; }
 }
-@media (min-width: 768px) and (max-width: 1199px) { .desktop-sidebar { width: 60px !important; } .desktop-sidebar .nav-text { display: none; } .main-content { margin-left: 60px !important; } }
+@media (min-width: 768px) and (max-width: 1199px) {
+  .desktop-sidebar { width: 60px !important; }
+  .desktop-sidebar .nav-text { display: none; }
+  .main-content { margin-left: 60px !important; }
+  body { font-size: 16px; }
+  #section-home { padding: 16px; }
+  #section-home > div { border-radius: 14px; padding: 20px; margin-bottom: 14px; }
+  #section-monitor, #section-video, #section-device, #section-operation, #section-alert, #section-plan, #section-report { padding: 16px; }
+  #section-monitor > div, #section-video > div, #section-device > div, #section-operation > div, #section-alert > div, #section-plan > div, #section-report > div { border-radius: 14px; padding: 20px; margin-bottom: 14px; }
+}
+@media (min-width: 1200px) {
+  body { font-size: 17px; }
+  .main-content { max-width: 1400px; margin-left: 200px !important; }
+  #section-home { padding: 24px; }
+  #section-home > div { border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+  #section-monitor, #section-video, #section-device, #section-operation, #section-alert, #section-plan, #section-report { padding: 24px; }
+  #section-monitor > div, #section-video > div, #section-device > div, #section-operation > div, #section-alert > div, #section-plan > div, #section-report > div { border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+  #section-home [style*="grid-template-columns:1fr 1fr"] { gap: 20px !important; }
+  #section-video [style*="grid-template-columns:repeat(2"] { grid-template-columns: repeat(3, 1fr) !important; }
+  #section-device [style*="grid-template-columns:repeat(4"] { grid-template-columns: repeat(4, 1fr) !important; }
+}
 </style>
 </head>
 <body>
@@ -712,18 +732,30 @@ main { flex: 1; display: flex; flex-direction: column; }
     <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:36px; font-weight:800; color:#3B82F6;">96.5%</div><div style="font-size:14px; color:#64748B; margin-top:4px;">在线率</div></div>
   </div>
   <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-    <div style="padding:16px 20px; border-bottom:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-      <h4 style="font-size:18px; font-weight:bold;">设备列表（共47台）</h4>
-      <div style="display:flex; gap:8px;">
-        <button onclick="filterDevices('all')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#1A5D1A; color:#fff; border:none; cursor:pointer;">全部</button>
-        <button onclick="filterDevices('online')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer;">在线</button>
-        <button onclick="filterDevices('offline')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer;">离线</button>
-        <button onclick="filterDevices('fault')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer;">故障</button>
+    <div style="padding:16px 20px; border-bottom:1px solid #E2E8F0;">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+        <h4 style="font-size:18px; font-weight:bold; color:#1A5D1A;">设备列表（共47台）</h4>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button id="devFilter-all" onclick="filterDevices('all')" style="font-size:13px; padding:6px 14px; border-radius:16px; background:linear-gradient(135deg,#1A5D1A,#15803D); color:#fff; border:none; cursor:pointer; font-weight:600;">全部</button>
+          <button id="devFilter-online" onclick="filterDevices('online')" style="font-size:13px; padding:6px 14px; border-radius:16px; background:#F0FDF4; color:#15803D; border:1px solid #DCFCE7; cursor:pointer; font-weight:600;">在线 42</button>
+          <button id="devFilter-offline" onclick="filterDevices('offline')" style="font-size:13px; padding:6px 14px; border-radius:16px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; font-weight:600;">离线 3</button>
+          <button id="devFilter-fault" onclick="filterDevices('fault')" style="font-size:13px; padding:6px 14px; border-radius:16px; background:#FFF7ED; color:#F97316; border:1px solid #FED7AA; cursor:pointer; font-weight:600;">故障 2</button>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px;">
+        <button id="cat-all" onclick="filterCategory('all')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#1A5D1A; color:#fff; border:none; cursor:pointer; white-space:nowrap;">全部</button>
+        <button id="cat-camera" onclick="filterCategory('camera')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; white-space:nowrap;">摄像头</button>
+        <button id="cat-soil" onclick="filterCategory('soil')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; white-space:nowrap;">土壤传感器</button>
+        <button id="cat-weather" onclick="filterCategory('weather')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; white-space:nowrap;">气象站</button>
+        <button id="cat-irrigation" onclick="filterCategory('irrigation')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; white-space:nowrap;">灌溉设备</button>
+        <button id="cat-pest" onclick="filterCategory('pest')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; white-space:nowrap;">虫情监测</button>
+        <button id="cat-robot" onclick="filterCategory('robot')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; white-space:nowrap;">机器人</button>
+        <button id="cat-other" onclick="filterCategory('other')" style="font-size:12px; padding:5px 12px; border-radius:12px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer; white-space:nowrap;">其他</button>
       </div>
     </div>
     <div id="deviceList" style="padding:8px 0;">
       <!-- 摄像头 8台 -->
-      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">高空鹰眼全景摄像机</div><div style="font-size:13px; color:#64748B;">全场覆盖 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 85%</div><div style="font-size:12px; color:#94A3B8;">2分钟前</div></div></div>
+      <div data-category="camera" data-status="online" style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">高空鹰眼全景摄像机</div><div style="font-size:13px; color:#64748B;">全场覆盖 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 85%</div><div style="font-size:12px; color:#94A3B8;">2分钟前</div></div></div>
       <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号监控球机</div><div style="font-size:13px; color:#64748B;">1号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 92%</div><div style="font-size:12px; color:#94A3B8;">1分钟前</div></div></div>
       <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">2号监控球机</div><div style="font-size:13px; color:#64748B;">2号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 88%</div><div style="font-size:12px; color:#94A3B8;">3分钟前</div></div></div>
       <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">3号监控球机</div><div style="font-size:13px; color:#64748B;">3号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 76%</div><div style="font-size:12px; color:#94A3B8;">2分钟前</div></div></div>
@@ -870,72 +902,161 @@ main { flex: 1; display: flex; flex-direction: column; }
   </section>
 
   <!-- ALERT -->
-  <section id="section-alert" class="section-page">
-    <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">预警中心</div><div style="font-size:14px; color:#64748B; margin-top:4px;">实时异常预警与处理记录</div></div>
-    <div class="card" style="border-left:4px solid #DC2626;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-        <div><div style="font-size:16px; font-weight:700; color:#DC2626;">紧急: 3号田灌溉阀门故障</div><div style="font-size:14px; color:#64748B; margin-top:4px;">6号智能灌溉阀无法正常关闭，已持续溢水3小时</div></div>
-        <span style="background:#FEE2E2; color:#DC2626; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">紧急</span>
+  <section id="section-alert" class="section-page" style="background:#F1F5F9; padding:16px;">
+    <!-- 统计卡片 -->
+    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:16px;">
+      <div style="background:linear-gradient(135deg,#DC2626,#EF4444); border-radius:16px; padding:16px; text-align:center; color:#fff;">
+        <div style="font-size:28px; font-weight:800;">1</div>
+        <div style="font-size:13px; opacity:0.9; margin-top:4px;">紧急预警</div>
       </div>
-      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 09:15 · 设备: 6号智能灌溉阀</div>
-      <div style="margin-top:12px; display:flex; gap:8px;">
-        <button style="background:#DC2626; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">立即处理</button>
-        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">派维修工</button>
+      <div style="background:linear-gradient(135deg,#CA8A04,#F59E0B); border-radius:16px; padding:16px; text-align:center; color:#fff;">
+        <div style="font-size:28px; font-weight:800;">3</div>
+        <div style="font-size:13px; opacity:0.9; margin-top:4px;">一般预警</div>
       </div>
-    </div>
-    <div class="card" style="border-left:4px solid #CA8A04;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-        <div><div style="font-size:16px; font-weight:700; color:#CA8A04;">预警: 稻飞虱虫口密度上升</div><div style="font-size:14px; color:#64748B; margin-top:4px;">3号田虫情测报灯监测到稻飞虱数量达120头/盏，超过预警阈值</div></div>
-        <span style="background:#FEF3C7; color:#CA8A04; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">预警</span>
+      <div style="background:linear-gradient(135deg,#1A5D1A,#15803D); border-radius:16px; padding:16px; text-align:center; color:#fff;">
+        <div style="font-size:28px; font-weight:800;">1</div>
+        <div style="font-size:13px; opacity:0.9; margin-top:4px;">提示信息</div>
       </div>
-      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 07:30 · 设备: 3号虫情测报灯</div>
-      <div style="margin-top:12px; display:flex; gap:8px;">
-        <button style="background:#F97316; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">启动防治</button>
-        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">查看详情</button>
+      <div style="background:linear-gradient(135deg,#2563EB,#3B82F6); border-radius:16px; padding:16px; text-align:center; color:#fff;">
+        <div style="font-size:28px; font-weight:800;">5</div>
+        <div style="font-size:13px; opacity:0.9; margin-top:4px;">已处理</div>
       </div>
     </div>
-    <div class="card" style="border-left:4px solid #CA8A04;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-        <div><div style="font-size:16px; font-weight:700; color:#CA8A04;">预警: 6号土壤传感器离线</div><div style="font-size:14px; color:#64748B; margin-top:4px;">3号田深层土壤湿度传感器电池耗尽，已离线1天</div></div>
-        <span style="background:#FEF3C7; color:#CA8A04; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">预警</span>
+    <!-- 筛选标签 -->
+    <div style="display:flex; gap:8px; margin-bottom:16px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+      <button onclick="filterAlerts('all')" id="alertFilter-all" style="padding:8px 18px; border-radius:20px; border:none; background:linear-gradient(135deg,#1A5D1A,#15803D); color:#fff; font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap;">全部 5</button>
+      <button onclick="filterAlerts('urgent')" id="alertFilter-urgent" style="padding:8px 18px; border-radius:20px; border:none; background:#FEE2E2; color:#DC2626; font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap;">紧急 1</button>
+      <button onclick="filterAlerts('warning')" id="alertFilter-warning" style="padding:8px 18px; border-radius:20px; border:none; background:#FEF3C7; color:#CA8A04; font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap;">预警 3</button>
+      <button onclick="filterAlerts('info')" id="alertFilter-info" style="padding:8px 18px; border-radius:20px; border:none; background:#DCFCE7; color:#15803D; font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap;">提示 1</button>
+    </div>
+    <!-- 预警列表 -->
+    <div id="alertList">
+      <div data-alert-type="urgent" style="background:#fff; border-radius:16px; padding:20px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); border-left:5px solid #DC2626;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:40px; height:40px; background:#FEE2E2; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">🚨</div>
+            <div>
+              <div style="font-size:16px; font-weight:700; color:#DC2626;">3号田灌溉阀门故障</div>
+              <div style="font-size:13px; color:#64748B; margin-top:2px;">6号智能灌溉阀 · 已持续溢水3小时</div>
+            </div>
+          </div>
+          <span style="background:#FEE2E2; color:#DC2626; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">紧急</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; font-size:13px; color:#94A3B8; margin-bottom:12px;">
+          <span>⏰ 09:15</span><span>📍 3号田</span><span>🔧 6号灌溉阀</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button style="background:linear-gradient(135deg,#DC2626,#EF4444); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">立即处理</button>
+          <button style="background:#F1F5F9; color:#64748B; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">派维修工</button>
+        </div>
       </div>
-      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-04 14:20 · 设备: 6号土壤湿度传感器</div>
-      <div style="margin-top:12px; display:flex; gap:8px;">
-        <button style="background:#F97316; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">安排更换</button>
-        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">忽略</button>
+      <div data-alert-type="warning" style="background:#fff; border-radius:16px; padding:20px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); border-left:5px solid #CA8A04;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:40px; height:40px; background:#FEF3C7; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">🐛</div>
+            <div>
+              <div style="font-size:16px; font-weight:700; color:#CA8A04;">稻飞虱虫口密度上升</div>
+              <div style="font-size:13px; color:#64748B; margin-top:2px;">3号田 · 120头/盏 超阈值</div>
+            </div>
+          </div>
+          <span style="background:#FEF3C7; color:#CA8A04; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">预警</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; font-size:13px; color:#94A3B8; margin-bottom:12px;">
+          <span>⏰ 07:30</span><span>📍 3号田</span><span>🔧 3号虫情灯</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button style="background:linear-gradient(135deg,#F97316,#EA580C); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">启动防治</button>
+          <button style="background:#F1F5F9; color:#64748B; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">查看详情</button>
+        </div>
+      </div>
+      <div data-alert-type="warning" style="background:#fff; border-radius:16px; padding:20px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); border-left:5px solid #CA8A04;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:40px; height:40px; background:#FEF3C7; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">🔋</div>
+            <div>
+              <div style="font-size:16px; font-weight:700; color:#CA8A04;">6号土壤传感器离线</div>
+              <div style="font-size:13px; color:#64748B; margin-top:2px;">3号田深层 · 电池耗尽已离线1天</div>
+            </div>
+          </div>
+          <span style="background:#FEF3C7; color:#CA8A04; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">预警</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; font-size:13px; color:#94A3B8; margin-bottom:12px;">
+          <span>⏰ 昨天 14:20</span><span>📍 3号田</span><span>🔧 6号传感器</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button style="background:linear-gradient(135deg,#F97316,#EA580C); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">安排更换</button>
+          <button style="background:#F1F5F9; color:#64748B; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">忽略</button>
+        </div>
+      </div>
+      <div data-alert-type="warning" style="background:#fff; border-radius:16px; padding:20px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); border-left:5px solid #CA8A04;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:40px; height:40px; background:#FEF3C7; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">⚡</div>
+            <div>
+              <div style="font-size:16px; font-weight:700; color:#CA8A04;">1号水质传感器数据异常</div>
+              <div style="font-size:13px; color:#64748B; margin-top:2px;">灌溉渠 · pH值读数波动需校准</div>
+            </div>
+          </div>
+          <span style="background:#FEF3C7; color:#CA8A04; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">预警</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; font-size:13px; color:#94A3B8; margin-bottom:12px;">
+          <span>⏰ 10:00</span><span>📍 灌溉渠</span><span>🔧 1号水质传感器</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button style="background:linear-gradient(135deg,#F97316,#EA580C); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">校准设备</button>
+          <button style="background:#F1F5F9; color:#64748B; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">查看趋势</button>
+        </div>
+      </div>
+      <div data-alert-type="info" style="background:#fff; border-radius:16px; padding:20px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); border-left:5px solid #15803D;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:40px; height:40px; background:#DCFCE7; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">🌾</div>
+            <div>
+              <div style="font-size:16px; font-weight:700; color:#15803D;">2号田小麦即将成熟</div>
+              <div style="font-size:13px; color:#64748B; margin-top:2px;">AI预测 · 预计6月8日最佳收获期</div>
+            </div>
+          </div>
+          <span style="background:#DCFCE7; color:#15803D; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600;">提示</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; font-size:13px; color:#94A3B8; margin-bottom:12px;">
+          <span>⏰ 06:00</span><span>📍 2号田</span><span>🤖 AI预测</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button style="background:linear-gradient(135deg,#1A5D1A,#15803D); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">安排收割</button>
+          <button style="background:#F1F5F9; color:#64748B; border:none; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">查看详情</button>
+        </div>
       </div>
     </div>
-    <div class="card" style="border-left:4px solid #CA8A04;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-        <div><div style="font-size:16px; font-weight:700; color:#CA8A04;">预警: 1号水质传感器数据异常</div><div style="font-size:14px; color:#64748B; margin-top:4px;">灌溉渠水质pH值读数异常波动，可能需校准</div></div>
-        <span style="background:#FEF3C7; color:#CA8A04; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">预警</span>
-      </div>
-      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 10:00 · 设备: 1号水质传感器</div>
-      <div style="margin-top:12px; display:flex; gap:8px;">
-        <button style="background:#F97316; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">校准设备</button>
-        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">查看趋势</button>
-      </div>
-    </div>
-    <div class="card" style="border-left:4px solid #15803D;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-        <div><div style="font-size:16px; font-weight:700; color:#15803D;">提示: 2号田小麦即将成熟</div><div style="font-size:14px; color:#64748B; margin-top:4px;">根据积温模型预测，2号田小麦预计6月8日达到最佳收获期</div></div>
-        <span style="background:#DCFCE7; color:#15803D; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">提示</span>
-      </div>
-      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 06:00 · 来源: AI预测模型</div>
-      <div style="margin-top:12px; display:flex; gap:8px;">
-        <button style="background:#1A5D1A; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">安排收割</button>
-        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">查看详情</button>
-      </div>
-    </div>
-    <div class="card">
-      <div style="font-size:18px; font-weight:700; margin-bottom:12px;">预警处理记录</div>
-      <div style="position:relative; padding-left:24px;">
-        <div style="position:absolute; left:6px; top:0; bottom:0; width:2px; background:#E2E8F0;"></div>
-        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#15803D; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月4日 16:30</div><div style="font-size:14px; color:#64748B;">2号气象站离线故障已修复，恢复数据上报</div></div>
-        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#15803D; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月3日 09:00</div><div style="font-size:14px; color:#64748B;">1号田灌溉任务完成，土壤湿度达标</div></div>
-        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#F97316; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月2日 14:20</div><div style="font-size:14px; color:#64748B;">5号田发现少量杂草，已安排无人机除草</div></div>
-        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#15803D; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月1日 08:00</div><div style="font-size:14px; color:#64748B;">月度设备巡检完成，全部设备正常</div></div>
-        <div style="position:relative;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#DC2626; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">5月28日 22:10</div><div style="font-size:14px; color:#64748B;">暴雨预警，提前关闭所有灌溉阀门</div></div>
+    <!-- 处理记录 -->
+    <div style="background:#fff; border-radius:16px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+      <div style="font-size:18px; font-weight:700; color:#1A5D1A; margin-bottom:16px;">📋 预警处理记录</div>
+      <div style="position:relative; padding-left:28px;">
+        <div style="position:absolute; left:8px; top:0; bottom:0; width:2px; background:linear-gradient(180deg,#15803D,#E2E8F0);"></div>
+        <div style="position:relative; margin-bottom:16px;">
+          <div style="position:absolute; left:-26px; top:2px; width:14px; height:14px; background:#15803D; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px #15803D;"></div>
+          <div style="font-size:14px; font-weight:600; color:#334155;">6月4日 16:30</div>
+          <div style="font-size:14px; color:#64748B; margin-top:2px;">2号气象站离线故障已修复，恢复数据上报</div>
+        </div>
+        <div style="position:relative; margin-bottom:16px;">
+          <div style="position:absolute; left:-26px; top:2px; width:14px; height:14px; background:#15803D; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px #15803D;"></div>
+          <div style="font-size:14px; font-weight:600; color:#334155;">6月3日 09:00</div>
+          <div style="font-size:14px; color:#64748B; margin-top:2px;">1号田灌溉任务完成，土壤湿度达标</div>
+        </div>
+        <div style="position:relative; margin-bottom:16px;">
+          <div style="position:absolute; left:-26px; top:2px; width:14px; height:14px; background:#F97316; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px #F97316;"></div>
+          <div style="font-size:14px; font-weight:600; color:#334155;">6月2日 14:20</div>
+          <div style="font-size:14px; color:#64748B; margin-top:2px;">5号田发现少量杂草，已安排无人机除草</div>
+        </div>
+        <div style="position:relative; margin-bottom:16px;">
+          <div style="position:absolute; left:-26px; top:2px; width:14px; height:14px; background:#15803D; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px #15803D;"></div>
+          <div style="font-size:14px; font-weight:600; color:#334155;">6月1日 08:00</div>
+          <div style="font-size:14px; color:#64748B; margin-top:2px;">月度设备巡检完成，全部设备正常</div>
+        </div>
+        <div style="position:relative;">
+          <div style="position:absolute; left:-26px; top:2px; width:14px; height:14px; background:#DC2626; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px #DC2626;"></div>
+          <div style="font-size:14px; font-weight:600; color:#334155;">5月28日 22:10</div>
+          <div style="font-size:14px; color:#64748B; margin-top:2px;">暴雨预警，提前关闭所有灌溉阀门</div>
+        </div>
       </div>
     </div>
   </section>
@@ -1259,6 +1380,64 @@ if(yieldCtx) {
       ]
     },
     options: { responsive: true, plugins: { legend: { position: 'top' } } }
+  });
+}
+
+// Device filtering
+let currentFilter = 'all';
+let currentCategory = 'all';
+
+function filterDevices(status) {
+  currentFilter = status;
+  applyDeviceFilter();
+  document.querySelectorAll('[id^="devFilter-"]').forEach(b => {
+    b.style.background = '#F8FAFC'; b.style.color = '#64748B'; b.style.border = '1px solid #E2E8F0';
+  });
+  const activeBtn = document.getElementById('devFilter-' + status);
+  if(activeBtn) { activeBtn.style.background = 'linear-gradient(135deg,#1A5D1A,#15803D)'; activeBtn.style.color = '#fff'; activeBtn.style.border = 'none'; }
+}
+
+function filterCategory(cat) {
+  currentCategory = cat;
+  applyDeviceFilter();
+  document.querySelectorAll('[id^="cat-"]').forEach(b => {
+    b.style.background = '#F8FAFC'; b.style.color = '#64748B'; b.style.border = '1px solid #E2E8F0';
+  });
+  const activeBtn = document.getElementById('cat-' + cat);
+  if(activeBtn) { activeBtn.style.background = '#1A5D1A'; activeBtn.style.color = '#fff'; activeBtn.style.border = 'none'; }
+}
+
+function applyDeviceFilter() {
+  const items = document.querySelectorAll('#deviceList > div');
+  const catKeywords = {
+    camera: ['摄像机','监控','球机'],
+    soil: ['土壤','湿度传感器'],
+    weather: ['气象站'],
+    irrigation: ['灌溉','阀门'],
+    pest: ['虫情','昆虫','诱'],
+    robot: ['无人','机器人','机器狗','巡检车'],
+    other: ['显示屏','LED','服务器','光照','CO2','风速','雨量','叶面','水位','水质']
+  };
+  items.forEach(item => {
+    const text = item.textContent;
+    const hasStatus = currentFilter === 'all' ||
+      (currentFilter === 'online' && text.includes('在线') && !text.includes('离线') && !text.includes('故障') && !text.includes('异常')) ||
+      (currentFilter === 'offline' && (text.includes('离线') || text.includes('离线'))) ||
+      (currentFilter === 'fault' && (text.includes('故障') || text.includes('异常')));
+    const hasCat = currentCategory === 'all' || (catKeywords[currentCategory] && catKeywords[currentCategory].some(k => text.includes(k)));
+    item.style.display = (hasStatus && hasCat) ? 'flex' : 'none';
+  });
+}
+
+function filterAlerts(type) {
+  const items = document.querySelectorAll('#alertList > div');
+  items.forEach(item => {
+    item.style.display = (type === 'all' || item.dataset.alertType === type) ? 'block' : 'none';
+  });
+  const btnMap = { all: ['linear-gradient(135deg,#1A5D1A,#15803D)', '#fff'], urgent: ['#FEE2E2', '#DC2626'], warning: ['#FEF3C7', '#CA8A04'], info: ['#DCFCE7', '#15803D'] };
+  document.querySelectorAll('[id^="alertFilter-"]').forEach(b => {
+    const t = b.id.replace('alertFilter-', '');
+    b.style.background = btnMap[t][0]; b.style.color = btnMap[t][1];
   });
 }
 </script>
