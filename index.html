@@ -259,37 +259,45 @@ main { flex: 1; display: flex; flex-direction: column; }
 
   <!-- 天气 + 土壤 -->
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
-    <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
-      <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">🌤️ 今天天气</h3>
-      <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
-        <div style="font-size:56px;">⛅</div>
+    <div style="background:linear-gradient(135deg, #1A5D1A 0%, #15803D 50%, #22C55E 100%); border-radius:16px; padding:20px; box-shadow:0 4px 20px rgba(26,93,26,0.3); color:#fff;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
         <div>
-          <div style="font-size:40px; font-weight:bold; color:#1A5D1A;">28°C</div>
-          <div style="font-size:18px; color:#64748B;">多云转晴 · 东南风3级</div>
+          <div style="font-size:14px; opacity:0.9; margin-bottom:4px;">今天 · 多云转晴</div>
+          <div style="font-size:48px; font-weight:bold; line-height:1;">28<span style="font-size:24px;">°C</span></div>
+        </div>
+        <div style="font-size:64px;">⛅</div>
+      </div>
+      <div style="display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:80px; background:rgba(255,255,255,0.15); border-radius:12px; padding:12px; text-align:center;">
+          <div style="font-size:20px; margin-bottom:2px;">🌬️</div>
+          <div style="font-size:16px; font-weight:600;">3.2m/s</div>
+          <div style="font-size:12px; opacity:0.8;">东南风</div>
+        </div>
+        <div style="flex:1; min-width:80px; background:rgba(255,255,255,0.15); border-radius:12px; padding:12px; text-align:center;">
+          <div style="font-size:20px; margin-bottom:2px;">💧</div>
+          <div style="font-size:16px; font-weight:600;">65%</div>
+          <div style="font-size:12px; opacity:0.8;">湿度</div>
+        </div>
+        <div style="flex:1; min-width:80px; background:rgba(255,255,255,0.15); border-radius:12px; padding:12px; text-align:center;">
+          <div style="font-size:20px; margin-bottom:2px;">👁️</div>
+          <div style="font-size:16px; font-weight:600;">12km</div>
+          <div style="font-size:12px; opacity:0.8;">能见度</div>
         </div>
       </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:16px; color:#475569; margin-bottom:16px;">
-        <div>💧 湿度 65%</div>
-        <div>🌬️ 风速 3.2m/s</div>
-        <div>🌅 日出 05:20</div>
-        <div>🌇 日落 18:50</div>
-        <div>☀️ 紫外线 中等</div>
-        <div>👁️ 能见度 12km</div>
+      <div style="background:#FEF3C7; border-radius:10px; padding:10px 14px; font-size:14px; color:#92400E; display:flex; align-items:center; gap:8px;">
+        <span style="font-size:16px;">⚠️</span>
+        <span>明天高温<span style="font-weight:bold;">35°C</span>，注意灌溉和防晒</span>
       </div>
-      <div style="margin-top:12px; padding:12px; background:#FEF3C7; border-radius:8px; font-size:16px; color:#CA8A04;">
-        ⚠️ 明天高温35°C，注意灌溉和防晒
-      </div>
-      <!-- 7天预报 -->
-      <div style="margin-top:16px; padding-top:16px; border-top:1px solid #E2E8F0;">
-        <div style="font-size:16px; font-weight:bold; color:#334155; margin-bottom:12px;">未来7天</div>
-        <div style="display:flex; gap:8px; overflow-x:auto;">
-          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">今天</div><div style="font-size:24px; margin:4px 0;">⛅</div><div style="font-size:16px; font-weight:bold;">28°</div></div>
-          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">明天</div><div style="font-size:24px; margin:4px 0;">☀️</div><div style="font-size:16px; font-weight:bold;">35°</div></div>
-          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">后天</div><div style="font-size:24px; margin:4px 0;">🌧️</div><div style="font-size:16px; font-weight:bold;">26°</div></div>
-          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周一</div><div style="font-size:24px; margin:4px 0;">⛅</div><div style="font-size:16px; font-weight:bold;">24°</div></div>
-          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周二</div><div style="font-size:24px; margin:4px 0;">☁️</div><div style="font-size:16px; font-weight:bold;">22°</div></div>
-          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周三</div><div style="font-size:24px; margin:4px 0;">🌧️</div><div style="font-size:16px; font-weight:bold;">20°</div></div>
-          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周四</div><div style="font-size:24px; margin:4px 0;">⛅</div><div style="font-size:16px; font-weight:bold;">23°</div></div>
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.2);">
+        <div style="font-size:14px; font-weight:600; margin-bottom:10px; opacity:0.9;">未来7天</div>
+        <div style="display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+          <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.2); border-radius:10px; min-width:50px; flex-shrink:0;"><div style="font-size:11px; opacity:0.8;">今天</div><div style="font-size:20px; margin:4px 0;">⛅</div><div style="font-size:14px; font-weight:600;">28°</div></div>
+          <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.1); border-radius:10px; min-width:50px; flex-shrink:0;"><div style="font-size:11px; opacity:0.8;">明天</div><div style="font-size:20px; margin:4px 0;">☀️</div><div style="font-size:14px; font-weight:600;">35°</div></div>
+          <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.1); border-radius:10px; min-width:50px; flex-shrink:0;"><div style="font-size:11px; opacity:0.8;">后天</div><div style="font-size:20px; margin:4px 0;">🌧️</div><div style="font-size:14px; font-weight:600;">26°</div></div>
+          <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.1); border-radius:10px; min-width:50px; flex-shrink:0;"><div style="font-size:11px; opacity:0.8;">周一</div><div style="font-size:20px; margin:4px 0;">⛅</div><div style="font-size:14px; font-weight:600;">24°</div></div>
+          <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.1); border-radius:10px; min-width:50px; flex-shrink:0;"><div style="font-size:11px; opacity:0.8;">周二</div><div style="font-size:20px; margin:4px 0;">☁️</div><div style="font-size:14px; font-weight:600;">22°</div></div>
+          <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.1); border-radius:10px; min-width:50px; flex-shrink:0;"><div style="font-size:11px; opacity:0.8;">周三</div><div style="font-size:20px; margin:4px 0;">🌧️</div><div style="font-size:14px; font-weight:600;">20°</div></div>
+          <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.1); border-radius:10px; min-width:50px; flex-shrink:0;"><div style="font-size:11px; opacity:0.8;">周四</div><div style="font-size:20px; margin:4px 0;">⛅</div><div style="font-size:14px; font-weight:600;">23°</div></div>
         </div>
       </div>
     </div>
