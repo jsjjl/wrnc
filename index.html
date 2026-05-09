@@ -815,87 +815,157 @@ main { flex: 1; display: flex; flex-direction: column; }
   </section>
 
   <!-- OPERATION -->
-  <section id="section-operation" class="section-page">
-    <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">作业管理</div><div style="font-size:14px; color:#64748B; margin-top:4px;">灌溉、农机、无人机作业调度</div></div>
-    <div style="display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+  <section id="section-operation" class="section-page" style="background:#F1F5F9; padding:16px;">
+    <div style="display:flex; gap:8px; padding:0 0 12px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
       <button class="tab-btn active" onclick="switchOpTab(this,'irrigation')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:linear-gradient(135deg, #1A5D1A, #15803D); color:#fff; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 2px 8px rgba(26,93,26,0.3);">智能灌溉</button>
       <button class="tab-btn" onclick="switchOpTab(this,'machinery')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">农机作业</button>
       <button class="tab-btn" onclick="switchOpTab(this,'drone')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">无人机</button>
     </div>
     <!-- 智能灌溉 -->
     <div id="op-irrigation" class="op-tab" style="display:block;">
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div style="font-size:18px; font-weight:700;">今日灌溉计划</div><span style="background:#DCFCE7; color:#15803D; padding:4px 12px; border-radius:20px; font-size:13px;">自动执行中</span></div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:15px; font-weight:600;">3号田 水稻分蘖期灌溉</span><span style="font-size:13px; color:#15803D;">进行中</span></div>
-          <div style="font-size:14px; color:#64748B; margin-bottom:8px;">目标水深: 3-5cm · 已灌溉 45分钟</div>
-          <div style="background:#E2E8F0; border-radius:6px; height:8px; overflow:hidden;"><div style="background:#15803D; width:65%; height:100%;"></div></div>
-          <div style="font-size:12px; color:#94A3B8; margin-top:4px;">预计剩余 25分钟</div>
+      <div style="background:#fff; border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-size:18px; font-weight:700; color:#1A5D1A;">今日灌溉计划</div>
+          <span style="background:linear-gradient(135deg,#DCFCE7,#15803D); color:#fff; padding:6px 16px; border-radius:20px; font-size:13px; font-weight:600;">自动执行中</span>
         </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:15px; font-weight:600;">1号田 小麦拔节水</span><span style="font-size:13px; color:#64748B;">待执行 14:00</span></div>
+        <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; margin-bottom:14px; border:1px solid #DCFCE7;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:16px; font-weight:700; color:#1A5D1A;">3号田 水稻分蘖期灌溉</span>
+            <span style="background:#15803D; color:#fff; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">进行中</span>
+          </div>
+          <div style="font-size:14px; color:#64748B; margin-bottom:12px;">目标水深: 3-5cm · 已灌溉 45分钟</div>
+          <div style="background:#E2E8F0; border-radius:8px; height:10px; overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#15803D,#22C55E); width:65%; height:100%; border-radius:8px;"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            <span style="font-size:12px; color:#94A3B8;">预计剩余 25分钟</span>
+            <span style="font-size:12px; color:#15803D; font-weight:600;">65%</span>
+          </div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:14px; padding:18px; margin-bottom:14px; border-left:4px solid #3B82F6;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:16px; font-weight:600; color:#334155;">1号田 小麦拔节水</span>
+            <span style="background:#DBEAFE; color:#2563EB; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">待执行 14:00</span>
+          </div>
           <div style="font-size:14px; color:#64748B;">目标: 土壤湿度≥65%</div>
         </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:15px; font-weight:600;">5号田 泡田水</span><span style="font-size:13px; color:#64748B;">待执行 16:30</span></div>
+        <div style="background:#F8FAFC; border-radius:14px; padding:18px; border-left:4px solid #3B82F6;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:16px; font-weight:600; color:#334155;">5号田 泡田水</span>
+            <span style="background:#DBEAFE; color:#2563EB; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">待执行 16:30</span>
+          </div>
           <div style="font-size:14px; color:#64748B;">目标水深: 5cm</div>
         </div>
       </div>
-      <div class="card">
-        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">灌溉用水统计</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div style="background:#F0FDF4; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#15803D;">1,240</div><div style="font-size:14px; color:#64748B;">今日用水(m³)</div></div>
-          <div style="background:#FFF7ED; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#F97316;">18,650</div><div style="font-size:14px; color:#64748B;">本月累计(m³)</div></div>
+      <div style="background:#fff; border-radius:16px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:18px; font-weight:700; color:#1A5D1A; margin-bottom:16px;">灌溉用水统计</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:20px; text-align:center; border:1px solid #DCFCE7;">
+            <div style="font-size:32px; font-weight:800; color:#15803D;">1,240</div>
+            <div style="font-size:14px; color:#64748B; margin-top:6px;">今日用水(m³)</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:4px;">较昨日 +12%</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#FFF7ED,#fff); border-radius:14px; padding:20px; text-align:center; border:1px solid #FED7AA;">
+            <div style="font-size:32px; font-weight:800; color:#F97316;">18,650</div>
+            <div style="font-size:14px; color:#64748B; margin-top:6px;">本月累计(m³)</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:4px;">预算剩余 62%</div>
+          </div>
         </div>
       </div>
     </div>
     <!-- 农机作业 -->
     <div id="op-machinery" class="op-tab" style="display:none;">
-      <div class="card">
-        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">农机调度</div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px; border-left:4px solid #15803D;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">无人插秧机</span><span style="font-size:13px; color:#15803D;">作业中</span></div>
-          <div style="font-size:14px; color:#64748B;">当前位置: 3号田 · 已完成 68%</div>
-          <div style="font-size:14px; color:#64748B;">作业内容: 水稻插秧 · 行距25cm</div>
-          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">预计完成: 今日 17:30</div>
-        </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px; border-left:4px solid #64748B;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">无人收割机</span><span style="font-size:13px; color:#64748B;">待命</span></div>
-          <div style="font-size:14px; color:#64748B;">位置: 仓储区 · 电量 92%</div>
-          <div style="font-size:14px; color:#64748B;">待作业: 2号田小麦收割 (6月8日)</div>
-        </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px; border-left:4px solid #64748B;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">无人拖拉机</span><span style="font-size:13px; color:#64748B;">待命</span></div>
-          <div style="font-size:14px; color:#64748B;">位置: 机库 · 电量 88%</div>
-          <div style="font-size:14px; color:#64748B;">待作业: 1号田旋耕 (明日)</div>
-        </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; border-left:4px solid #CA8A04;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">植保无人机</span><span style="font-size:13px; color:#CA8A04;">充电中</span></div>
-          <div style="font-size:14px; color:#64748B;">位置: 停机坪 · 电量 23%</div>
-          <div style="font-size:14px; color:#64748B;">待作业: 全场病虫害防治 (明日 6:00)</div>
+      <div style="background:#fff; border-radius:16px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:18px; font-weight:700; color:#1A5D1A; margin-bottom:16px;">农机调度</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; border:1px solid #DCFCE7; border-left:4px solid #15803D;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-size:16px; font-weight:700; color:#1A5D1A;">无人插秧机</span>
+              <span style="background:#15803D; color:#fff; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:600;">作业中</span>
+            </div>
+            <div style="font-size:14px; color:#64748B; line-height:1.6;">
+              <div>📍 3号田</div>
+              <div>🔋 电量 82%</div>
+              <div>📊 已完成 68%</div>
+            </div>
+            <div style="background:#E2E8F0; border-radius:6px; height:6px; overflow:hidden; margin-top:10px;">
+              <div style="background:linear-gradient(90deg,#15803D,#22C55E); width:68%; height:100%; border-radius:6px;"></div>
+            </div>
+          </div>
+          <div style="background:#F8FAFC; border-radius:14px; padding:18px; border-left:4px solid #64748B;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-size:16px; font-weight:700; color:#334155;">无人收割机</span>
+              <span style="background:#E2E8F0; color:#64748B; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:600;">待命</span>
+            </div>
+            <div style="font-size:14px; color:#64748B; line-height:1.6;">
+              <div>📍 仓储区</div>
+              <div>🔋 电量 92%</div>
+              <div>📅 待作业: 6月8日</div>
+            </div>
+          </div>
+          <div style="background:#F8FAFC; border-radius:14px; padding:18px; border-left:4px solid #64748B;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-size:16px; font-weight:700; color:#334155;">无人拖拉机</span>
+              <span style="background:#E2E8F0; color:#64748B; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:600;">待命</span>
+            </div>
+            <div style="font-size:14px; color:#64748B; line-height:1.6;">
+              <div>📍 机库</div>
+              <div>🔋 电量 88%</div>
+              <div>📅 待作业: 明日</div>
+            </div>
+          </div>
+          <div style="background:linear-gradient(135deg,#FEF3C7,#fff); border-radius:14px; padding:18px; border:1px solid #FED7AA; border-left:4px solid #CA8A04;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-size:16px; font-weight:700; color:#92400E;">植保无人机</span>
+              <span style="background:#CA8A04; color:#fff; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:600;">充电中</span>
+            </div>
+            <div style="font-size:14px; color:#64748B; line-height:1.6;">
+              <div>📍 停机坪</div>
+              <div>🔋 电量 23%</div>
+              <div>⏰ 预计充满: 2小时</div>
+            </div>
+            <div style="background:#E2E8F0; border-radius:6px; height:6px; overflow:hidden; margin-top:10px;">
+              <div style="background:linear-gradient(90deg,#CA8A04,#F59E0B); width:23%; height:100%; border-radius:6px;"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <!-- 无人机 -->
     <div id="op-drone" class="op-tab" style="display:none;">
-      <div class="card">
-        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">无人机任务</div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">多光谱巡田</span><span style="font-size:13px; color:#15803D;">已完成</span></div>
-          <div style="font-size:14px; color:#64748B;">飞行高度: 80m · 覆盖面积: 500亩</div>
-          <div style="font-size:14px; color:#64748B;">发现: 3号田轻度缺水区域 12亩</div>
-          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">完成时间: 今日 08:30</div>
+      <div style="background:#fff; border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:18px; font-weight:700; color:#1A5D1A; margin-bottom:16px;">无人机任务</div>
+        <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; margin-bottom:14px; border:1px solid #DCFCE7; border-left:4px solid #15803D;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:16px; font-weight:700; color:#1A5D1A;">多光谱巡田</span>
+            <span style="background:#15803D; color:#fff; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">已完成</span>
+          </div>
+          <div style="font-size:14px; color:#64748B; line-height:1.7;">
+            <div>🚁 飞行高度: 80m · 覆盖: 500亩</div>
+            <div>📊 发现: 3号田轻度缺水 12亩</div>
+            <div>⏰ 完成: 今日 08:30</div>
+          </div>
         </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">植保喷洒</span><span style="font-size:13px; color:#CA8A04;">计划中</span></div>
-          <div style="font-size:14px; color:#64748B;">药剂: 吡虫啉 · 配比: 1:1000</div>
-          <div style="font-size:14px; color:#64748B;">目标: 防治稻飞虱 · 面积: 300亩</div>
-          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">计划时间: 明日 06:00-08:00</div>
+        <div style="background:linear-gradient(135deg,#FFF7ED,#fff); border-radius:14px; padding:18px; margin-bottom:14px; border:1px solid #FED7AA; border-left:4px solid #CA8A04;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:16px; font-weight:700; color:#92400E;">植保喷洒</span>
+            <span style="background:#CA8A04; color:#fff; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">计划中</span>
+          </div>
+          <div style="font-size:14px; color:#64748B; line-height:1.7;">
+            <div>💊 药剂: 吡虫啉 · 配比: 1:1000</div>
+            <div>🎯 目标: 防治稻飞虱 · 300亩</div>
+            <div>📅 计划: 明日 06:00-08:00</div>
+          </div>
         </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">长势监测航拍</span><span style="font-size:13px; color:#64748B;">计划中</span></div>
-          <div style="font-size:14px; color:#64748B;">类型: RGB+NDVI · 分辨率: 2cm/px</div>
-          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">计划时间: 6月12日</div>
+        <div style="background:#F8FAFC; border-radius:14px; padding:18px; border-left:4px solid #64748B;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:16px; font-weight:700; color:#334155;">长势监测航拍</span>
+            <span style="background:#E2E8F0; color:#64748B; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">计划中</span>
+          </div>
+          <div style="font-size:14px; color:#64748B; line-height:1.7;">
+            <div>📷 类型: RGB+NDVI · 2cm/px</div>
+            <div>📅 计划: 6月12日</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1157,72 +1227,135 @@ main { flex: 1; display: flex; flex-direction: column; }
   </section>
 
   <!-- REPORT -->
-  <section id="section-report" class="section-page">
-    <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">数据报告</div><div style="font-size:14px; color:#64748B; margin-top:4px;">农场运营数据分析</div></div>
-    <div style="display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+  <section id="section-report" class="section-page" style="background:#F1F5F9; padding:16px;">
+    <div style="display:flex; gap:8px; padding:0 0 12px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
       <button class="tab-btn active" onclick="switchReportTab(this,'daily')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:linear-gradient(135deg, #1A5D1A, #15803D); color:#fff; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 2px 8px rgba(26,93,26,0.3);">日报</button>
       <button class="tab-btn" onclick="switchReportTab(this,'yield')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">产量分析</button>
       <button class="tab-btn" onclick="switchReportTab(this,'phenology')" style="min-height:40px; padding:8px 18px; border-radius:20px; border:none; background:#fff; color:#64748B; font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">生育期</button>
     </div>
     <!-- 日报 -->
     <div id="report-daily" class="report-tab" style="display:block;">
-      <div class="card">
-        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">2025年6月5日 农场日报</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
-          <div style="background:#F0FDF4; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#15803D;">26.5</div><div style="font-size:14px; color:#64748B;">平均气温(°C)</div></div>
-          <div style="background:#F0FDF4; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#15803D;">68%</div><div style="font-size:14px; color:#64748B;">平均湿度</div></div>
-          <div style="background:#FFF7ED; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#F97316;">1,240</div><div style="font-size:14px; color:#64748B;">灌溉用水(m³)</div></div>
-          <div style="background:#EFF6FF; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#2563EB;">0</div><div style="font-size:14px; color:#64748B;">今日降雨(mm)</div></div>
+      <div style="background:#fff; border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+          <div style="width:44px; height:44px; background:linear-gradient(135deg,#1A5D1A,#15803D); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px;">📊</div>
+          <div>
+            <div style="font-size:18px; font-weight:700; color:#1A5D1A;">2025年6月5日 农场日报</div>
+            <div style="font-size:13px; color:#64748B;">邗江区无人农场 · 500亩</div>
+          </div>
         </div>
-        <div style="font-size:16px; font-weight:600; margin-bottom:8px;">今日作业</div>
-        <div style="font-size:14px; color:#64748B; line-height:1.8;">
-          <div>· 3号田水稻插秧进行中，已完成68%</div>
-          <div>· 多光谱巡田完成，发现12亩轻度缺水</div>
-          <div>· 1号田小麦拔节水待执行(14:00)</div>
-          <div>· 6号灌溉阀故障，已派维修工</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+          <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; text-align:center; border:1px solid #DCFCE7;">
+            <div style="font-size:32px; font-weight:800; color:#15803D;">26.5</div>
+            <div style="font-size:14px; color:#64748B; margin-top:4px;">平均气温(°C)</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:2px;">较昨日 +1.2°C</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; text-align:center; border:1px solid #DCFCE7;">
+            <div style="font-size:32px; font-weight:800; color:#15803D;">68%</div>
+            <div style="font-size:14px; color:#64748B; margin-top:4px;">平均湿度</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:2px;">适宜</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#FFF7ED,#fff); border-radius:14px; padding:18px; text-align:center; border:1px solid #FED7AA;">
+            <div style="font-size:32px; font-weight:800; color:#F97316;">1,240</div>
+            <div style="font-size:14px; color:#64748B; margin-top:4px;">灌溉用水(m³)</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:2px;">较昨日 +12%</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#EFF6FF,#fff); border-radius:14px; padding:18px; text-align:center; border:1px solid #BFDBFE;">
+            <div style="font-size:32px; font-weight:800; color:#2563EB;">0</div>
+            <div style="font-size:14px; color:#64748B; margin-top:4px;">今日降雨(mm)</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:2px;">未来3天无雨</div>
+          </div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:14px; padding:18px;">
+          <div style="font-size:16px; font-weight:700; color:#1A5D1A; margin-bottom:12px;">📋 今日作业</div>
+          <div style="font-size:14px; color:#64748B; line-height:2;">
+            <div style="display:flex; align-items:center; gap:8px;"><span style="color:#15803D;">✓</span> 3号田水稻插秧进行中，已完成68%</div>
+            <div style="display:flex; align-items:center; gap:8px;"><span style="color:#15803D;">✓</span> 多光谱巡田完成，发现12亩轻度缺水</div>
+            <div style="display:flex; align-items:center; gap:8px;"><span style="color:#2563EB;">○</span> 1号田小麦拔节水待执行(14:00)</div>
+            <div style="display:flex; align-items:center; gap:8px;"><span style="color:#DC2626;">!</span> 6号灌溉阀故障，已派维修工</div>
+          </div>
         </div>
       </div>
     </div>
     <!-- 产量分析 -->
     <div id="report-yield" class="report-tab" style="display:none;">
-      <div class="card">
-        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">历年产量对比</div>
-        <div style="margin-bottom:16px;"><canvas id="yieldChart" height="200"></canvas></div>
+      <div style="background:#fff; border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:18px; font-weight:700; color:#1A5D1A; margin-bottom:16px;">📈 历年产量对比</div>
+        <div style="margin-bottom:20px; background:#F8FAFC; border-radius:14px; padding:16px;"><canvas id="yieldChart" height="220"></canvas></div>
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
-          <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:22px; font-weight:700; color:#15803D;">520</div><div style="font-size:13px; color:#64748B;">小麦亩产(kg)</div></div>
-          <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:22px; font-weight:700; color:#15803D;">650</div><div style="font-size:13px; color:#64748B;">水稻亩产(kg)</div></div>
-          <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:22px; font-weight:700; color:#F97316;">+8.3%</div><div style="font-size:13px; color:#64748B;">较去年增产</div></div>
+          <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; text-align:center; border:1px solid #DCFCE7;">
+            <div style="font-size:28px; font-weight:800; color:#15803D;">520</div>
+            <div style="font-size:13px; color:#64748B; margin-top:4px;">小麦亩产(kg)</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:2px;">较去年 +3%</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; text-align:center; border:1px solid #DCFCE7;">
+            <div style="font-size:28px; font-weight:800; color:#15803D;">650</div>
+            <div style="font-size:13px; color:#64748B; margin-top:4px;">水稻亩产(kg)</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:2px;">较去年 +5%</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#FFF7ED,#fff); border-radius:14px; padding:18px; text-align:center; border:1px solid #FED7AA;">
+            <div style="font-size:28px; font-weight:800; color:#F97316;">+8.3%</div>
+            <div style="font-size:13px; color:#64748B; margin-top:4px;">较去年增产</div>
+            <div style="font-size:12px; color:#94A3B8; margin-top:2px;">连续3年增长</div>
+          </div>
         </div>
       </div>
     </div>
     <!-- 生育期 -->
     <div id="report-phenology" class="report-tab" style="display:none;">
-      <div class="card">
-        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">作物生育期监测</div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">1-2号田 小麦</span><span style="background:#FEF3C7; color:#CA8A04; padding:4px 12px; border-radius:20px; font-size:13px;">蜡熟期</span></div>
-          <div style="background:#E2E8F0; border-radius:6px; height:10px; overflow:hidden; margin-bottom:8px;"><div style="background:#CA8A04; width:92%; height:100%;"></div></div>
-          <div style="font-size:14px; color:#64748B;">播种: 2024年11月5日 · 预计收获: 2025年6月8日</div>
-          <div style="font-size:14px; color:#64748B;">积温: 2,150°C · 生育天数: 214天</div>
+      <div style="background:#fff; border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:18px; font-weight:700; color:#1A5D1A; margin-bottom:16px;">🌱 作物生育期监测</div>
+        <div style="background:linear-gradient(135deg,#FEF3C7,#fff); border-radius:14px; padding:18px; margin-bottom:14px; border:1px solid #FED7AA;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:40px; height:40px; background:#CA8A04; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px;">🌾</div>
+              <div>
+                <div style="font-size:16px; font-weight:700; color:#92400E;">1-2号田 小麦</div>
+                <div style="font-size:13px; color:#64748B;">播种: 2024年11月5日</div>
+              </div>
+            </div>
+            <span style="background:#CA8A04; color:#fff; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600;">蜡熟期 92%</span>
+          </div>
+          <div style="background:#E2E8F0; border-radius:8px; height:12px; overflow:hidden; margin-bottom:10px;">
+            <div style="background:linear-gradient(90deg,#CA8A04,#F59E0B); width:92%; height:100%; border-radius:8px;"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; color:#64748B;">
+            <span>积温: 2,150°C</span>
+            <span>生育天数: 214天</span>
+            <span style="color:#CA8A04; font-weight:600;">预计收获: 6月8日</span>
+          </div>
         </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">3-5号田 水稻</span><span style="background:#DCFCE7; color:#15803D; padding:4px 12px; border-radius:20px; font-size:13px;">移栽期</span></div>
-          <div style="background:#E2E8F0; border-radius:6px; height:10px; overflow:hidden; margin-bottom:8px;"><div style="background:#15803D; width:15%; height:100%;"></div></div>
-          <div style="font-size:14px; color:#64748B;">插秧: 2025年6月15日(计划) · 预计收获: 2025年10月20日</div>
-          <div style="font-size:14px; color:#64748B;">品种: 南粳9108 · 目标亩产: 650kg</div>
+        <div style="background:linear-gradient(135deg,#F0FDF4,#fff); border-radius:14px; padding:18px; margin-bottom:14px; border:1px solid #DCFCE7;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:40px; height:40px; background:#15803D; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px;">🌱</div>
+              <div>
+                <div style="font-size:16px; font-weight:700; color:#1A5D1A;">3-5号田 水稻</div>
+                <div style="font-size:13px; color:#64748B;">品种: 南粳9108</div>
+              </div>
+            </div>
+            <span style="background:#15803D; color:#fff; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600;">移栽期 15%</span>
+          </div>
+          <div style="background:#E2E8F0; border-radius:8px; height:12px; overflow:hidden; margin-bottom:10px;">
+            <div style="background:linear-gradient(90deg,#15803D,#22C55E); width:15%; height:100%; border-radius:8px;"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; color:#64748B;">
+            <span>计划插秧: 6月15日</span>
+            <span>目标亩产: 650kg</span>
+            <span style="color:#15803D; font-weight:600;">预计收获: 10月20日</span>
+          </div>
         </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-          <div style="font-size:16px; font-weight:600; margin-bottom:8px;">生育期日历</div>
-          <div style="display:flex; gap:4px; flex-wrap:wrap;">
-            <div style="background:#DCFCE7; color:#15803D; padding:6px 10px; border-radius:6px; font-size:12px;">播种</div>
-            <div style="background:#DCFCE7; color:#15803D; padding:6px 10px; border-radius:6px; font-size:12px;">出苗</div>
-            <div style="background:#DCFCE7; color:#15803D; padding:6px 10px; border-radius:6px; font-size:12px;">分蘖</div>
-            <div style="background:#FEF3C7; color:#CA8A04; padding:6px 10px; border-radius:6px; font-size:12px;">拔节</div>
-            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">孕穗</div>
-            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">抽穗</div>
-            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">扬花</div>
-            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">灌浆</div>
-            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">成熟</div>
+        <div style="background:#F8FAFC; border-radius:14px; padding:18px;">
+          <div style="font-size:16px; font-weight:700; color:#1A5D1A; margin-bottom:12px;">📅 生育期日历</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <div style="background:#DCFCE7; color:#15803D; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:600;">播种 ✓</div>
+            <div style="background:#DCFCE7; color:#15803D; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:600;">出苗 ✓</div>
+            <div style="background:#DCFCE7; color:#15803D; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:600;">分蘖 ✓</div>
+            <div style="background:#FEF3C7; color:#CA8A04; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:600;">拔节 →</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:8px 14px; border-radius:8px; font-size:13px;">孕穗</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:8px 14px; border-radius:8px; font-size:13px;">抽穗</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:8px 14px; border-radius:8px; font-size:13px;">扬花</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:8px 14px; border-radius:8px; font-size:13px;">灌浆</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:8px 14px; border-radius:8px; font-size:13px;">成熟</div>
           </div>
         </div>
       </div>
