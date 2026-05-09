@@ -1157,6 +1157,21 @@ function switchReportTab(btn, tab) {
 }
 
 // Charts
+const tempHumidityCtx = document.getElementById('tempHumidityChart');
+if(tempHumidityCtx) {
+  new Chart(tempHumidityCtx, {
+    type: 'line',
+    data: {
+      labels: ['00:00','04:00','08:00','12:00','16:00','20:00','24:00'],
+      datasets: [
+        { label: '气温(°C)', data: [22,21,23,27,28,25,23], borderColor: '#F97316', backgroundColor: 'rgba(249,115,22,0.1)', tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: '#F97316' },
+        { label: '湿度(%)', data: [75,78,70,58,55,62,68], borderColor: '#2563EB', backgroundColor: 'rgba(37,99,235,0.1)', tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: '#2563EB' }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: false } } }
+  });
+}
+
 const weatherCtx = document.getElementById('weatherChart');
 if(weatherCtx) {
   new Chart(weatherCtx, {
