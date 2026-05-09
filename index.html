@@ -38,217 +38,66 @@ tailwind.config = {
 html { scroll-behavior: smooth; height: 100%; }
 body { font-family: 'Noto Sans SC', sans-serif; background: #F1F5F9; color: #0F172A; overflow-x: hidden; height: 100%; display: flex; flex-direction: column; font-size: 20px; }
 main { flex: 1; display: flex; flex-direction: column; }
-
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #F1F5F9; }
 ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(26, 93, 26, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(26, 93, 26, 0.6); }
-}
-@keyframes blink-alert {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-@keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-@keyframes toastIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes toastOut {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-20px); }
-}
-
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px rgba(26, 93, 26, 0.3); } 50% { box-shadow: 0 0 20px rgba(26, 93, 26, 0.6); } }
+@keyframes blink-alert { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+@keyframes toastIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
 .animate-fadeInUp { animation: fadeInUp 0.6s ease-out forwards; }
 .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-blink { animation: blink-alert 1s ease-in-out infinite; }
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-marquee { animation: marquee 40s linear infinite; }
-
 .card-hover { transition: all 0.3s ease; }
 .card-hover:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(26, 93, 26, 0.12); border-color: #1A5D1A; }
-
-.glass-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-
+.glass-card { background: #FFFFFF; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 .status-badge-orange { background: rgba(249,115,22,0.1); color: #F97316; border: 1px solid rgba(249,115,22,0.3); }
 .status-badge-blue { background: rgba(59,130,246,0.1); color: #3B82F6; border: 1px solid rgba(59,130,246,0.3); }
 .status-badge-green { background: rgba(21,128,61,0.1); color: #15803D; border: 1px solid rgba(21,128,61,0.3); }
-
 .nav-item { transition: all 0.3s ease; position: relative; }
 .nav-item.active { color: #1A5D1A; background: rgba(26,93,26,0.08); }
-.nav-item.active::after { display: none; }
 .nav-item:hover { color: #1A5D1A; background: rgba(26,93,26,0.05); }
-
 .section-page { display: none; flex: 1; overflow-y: auto; }
 .section-page.active { display: flex; flex-direction: column; animation: fadeIn 0.4s ease-out; }
-
-.progress-ring { transform: rotate(-90deg); }
-.progress-ring circle { transition: stroke-dashoffset 1s ease-out; }
-
-.stat-number { font-variant-numeric: tabular-nums; animation: countUp 0.8s ease-out; }
-
-.video-placeholder {
-  background: linear-gradient(135deg, #F1F5F9, #E2E8F0);
-  position: relative;
-  overflow: hidden;
-}
-.video-placeholder::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent 40%, rgba(26,93,26,0.04) 50%, transparent 60%);
-  animation: rotate-slow 8s linear infinite;
-}
-
-.soil-layer { transition: all 0.3s ease; }
-.soil-layer:hover { transform: scale(1.03); box-shadow: 0 0 15px rgba(26, 93, 26, 0.15); }
-
 .device-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .device-dot.online { background: #15803D; box-shadow: 0 0 6px #15803D; }
 .device-dot.offline { background: #94A3B8; }
 .device-dot.fault { background: #F97316; box-shadow: 0 0 6px #F97316; animation: blink-alert 1s infinite; }
-
 .timeline-item { position: relative; padding-left: 24px; }
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid #1A5D1A;
-  background: #FFFFFF;
-}
-.timeline-item::after {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 20px;
-  width: 2px;
-  height: calc(100% - 8px);
-  background: #E2E8F0;
-}
+.timeline-item::before { content: ''; position: absolute; left: 0; top: 8px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #1A5D1A; background: #FFFFFF; }
+.timeline-item::after { content: ''; position: absolute; left: 5px; top: 20px; width: 2px; height: calc(100% - 8px); background: #E2E8F0; }
 .timeline-item:last-child::after { display: none; }
-
 .tab-btn { transition: all 0.3s ease; }
-
 .mobile-nav { display: none; }
 .mobile-nav-scroll::-webkit-scrollbar { display: none; }
 .mobile-nav-item.active { color: #1A5D1A !important; background: rgba(26,93,26,0.08); }
 .desktop-nav { display: flex; }
-
 .toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-.toast-item {
-  pointer-events: auto;
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  animation: toastIn 0.3s ease-out;
-  max-width: 360px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.toast-item { pointer-events: auto; padding: 12px 20px; border-radius: 10px; font-size: 16px; font-weight: 500; animation: toastIn 0.3s ease-out; max-width: 360px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; }
 .toast-item.success { background: #15803D; color: #fff; }
 .toast-item.warning { background: #CA8A04; color: #fff; }
 .toast-item.error { background: #DC2626; color: #fff; }
 .toast-item.info { background: #3B82F6; color: #fff; }
 .toast-item.removing { animation: toastOut 0.3s ease-out forwards; }
-
-.ai-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(4px);
-  z-index: 9000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-.ai-modal-overlay.active { display: flex; }
-.ai-modal {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 560px;
-  max-height: 85vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-
-.chat-fab{position:fixed;bottom:24px;right:24px;z-index:8000;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1A5D1A,#15803D);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(26,93,26,.3);display:flex;align-items:center;justify-content:center;transition:all .3s}
-.chat-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(26,93,26,.4)}
-.chat-fab.open{transform:rotate(90deg) scale(1.1)}
-.chat-panel{position:fixed;bottom:92px;right:24px;z-index:8000;width:360px;max-width:calc(100vw - 48px);height:480px;max-height:calc(100vh - 140px);background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.15);display:none;flex-direction:column;overflow:hidden;animation:fadeInUp .3s ease-out}
-.chat-panel.open{display:flex}
-.chat-header{padding:14px 16px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;gap:10px;background:#F8FAFC}
-.chat-messages{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
-.chat-msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:16px;line-height:1.6;animation:fadeInUp .3s ease-out}
-.chat-msg.bot{background:#F1F5F9;color:#0F172A;align-self:flex-start;border-bottom-left-radius:4px}
-.chat-msg.user{background:rgba(26,93,26,.08);color:#1A5D1A;align-self:flex-end;border-bottom-right-radius:4px}
-.chat-quick{display:flex;flex-wrap:wrap;gap:6px;padding:6px 16px;border-top:1px solid rgba(226,232,240,.5)}
-.chat-quick button{font-size:14px;padding:6px 12px;border-radius:20px;border:1px solid #E2E8F0;background:#F8FAFC;color:#64748B;cursor:pointer;transition:all .2s;white-space:nowrap}
-.chat-quick button:hover{border-color:#1A5D1A;color:#1A5D1A;background:rgba(26,93,26,.05)}
-.chat-input-wrap{padding:10px 16px;border-top:1px solid #E2E8F0;display:flex;gap:8px;align-items:center}
-.chat-input-wrap input{flex:1;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:20px;padding:8px 14px;color:#0F172A;font-size:16px;outline:none;transition:border-color .2s}
-.chat-input-wrap input:focus{border-color:#1A5D1A}
-.chat-input-wrap input::placeholder{color:#94A3B8}
-.chat-input-wrap button{width:36px;height:36px;border-radius:50%;background:#1A5D1A;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
-.chat-input-wrap button:hover{background:#15803D}
-.typing-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#94A3B8;margin:0 2px;animation:float 1.2s ease-in-out infinite}
-.typing-dots span:nth-child(2){animation-delay:.2s}
-.typing-dots span:nth-child(3){animation-delay:.4s}
-.chat-fullscreen{bottom:0!important;right:0!important;width:100%!important;max-width:100%!important;height:100vh!important;max-height:100vh!important;border-radius:0!important}
-.chat-overlay{position:fixed;inset:0;background:rgba(241,245,249,0.6);backdrop-filter:blur(4px);z-index:7999;display:none;animation:fadeIn .3s ease-out}
-.chat-overlay.open{display:block}
-
-@media (max-width: 767px) {
-  .mobile-nav { display: flex; }
-  .desktop-nav { display: none; }
-  .desktop-sidebar { display: none !important; }
-  .main-content { margin-left: 0 !important; padding-bottom: 70px; }
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  .desktop-sidebar { width: 60px !important; }
-  .desktop-sidebar .nav-text { display: none; }
-  .desktop-sidebar .sidebar-title { display: none; }
-  .main-content { margin-left: 60px !important; }
-}
-@media(max-width:767px){.chat-panel{bottom:80px;right:12px;left:12px;width:auto;height:60vh}.chat-fab{bottom:80px;right:16px}.chat-fullscreen{bottom:0!important;left:0!important;height:100vh!important;max-height:100vh!important}}
+.video-placeholder { background: linear-gradient(135deg, #F1F5F9, #E2E8F0); position: relative; overflow: hidden; }
+.video-placeholder::after { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, transparent 40%, rgba(26,93,26,0.04) 50%, transparent 60%); }
+@media (max-width: 767px) { .mobile-nav { display: flex; } .desktop-nav { display: none; } .desktop-sidebar { display: none !important; } .main-content { margin-left: 0 !important; padding-bottom: 70px; } }
+@media (min-width: 768px) and (max-width: 1199px) { .desktop-sidebar { width: 60px !important; } .desktop-sidebar .nav-text { display: none; } .main-content { margin-left: 60px !important; } }
 </style>
 </head>
 <body>
 
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- 桌面侧边栏 -->
 <aside class="desktop-sidebar fixed left-0 top-0 h-full w-56 bg-white border-r border-farm-border z-40 flex flex-col" style="display:flex">
   <div class="p-4 border-b border-farm-border">
     <div class="flex items-center gap-3">
@@ -262,35 +111,35 @@ main { flex: 1; display: flex; flex-direction: column; }
     </div>
   </div>
   <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
-    <a href="#home" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm hover:bg-farm-surface" data-section="home" onclick="switchSection('home')">
+    <a href="#home" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm" data-section="home" onclick="switchSection('home')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="nav-text">首页</span>
     </a>
-    <a href="#monitor" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="monitor" onclick="switchSection('monitor')">
+    <a href="#monitor" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted" data-section="monitor" onclick="switchSection('monitor')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
       <span class="nav-text">农情监测</span>
     </a>
-    <a href="#video" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="video" onclick="switchSection('video')">
+    <a href="#video" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted" data-section="video" onclick="switchSection('video')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
       <span class="nav-text">视频监控</span>
     </a>
-    <a href="#device" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="device" onclick="switchSection('device')">
+    <a href="#device" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted" data-section="device" onclick="switchSection('device')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       <span class="nav-text">智能设备</span>
     </a>
-    <a href="#operation" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="operation" onclick="switchSection('operation')">
+    <a href="#operation" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted" data-section="operation" onclick="switchSection('operation')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       <span class="nav-text">作业管理</span>
     </a>
-    <a href="#alert" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="alert" onclick="switchSection('alert')">
+    <a href="#alert" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted" data-section="alert" onclick="switchSection('alert')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
       <span class="nav-text">预警中心</span>
     </a>
-    <a href="#plan" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="plan" onclick="switchSection('plan')">
+    <a href="#plan" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted" data-section="plan" onclick="switchSection('plan')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       <span class="nav-text">生产规划</span>
     </a>
-    <a href="#report" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted hover:bg-farm-surface" data-section="report" onclick="switchSection('report')">
+    <a href="#report" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-farm-muted" data-section="report" onclick="switchSection('report')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       <span class="nav-text">数据报告</span>
     </a>
@@ -308,205 +157,257 @@ main { flex: 1; display: flex; flex-direction: column; }
   </div>
 </aside>
 
-<nav class="mobile-nav fixed bottom-0 left-0 right-0 bg-white border-t border-farm-border z-50 flex-col" id="mobileNav">
-  <div class="flex items-center py-1.5 px-1" id="mobileNavScroll" style="-webkit-overflow-scrolling:touch;scrollbar-width:none">
-    <a href="#home" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-green flex-1" data-section="home" onclick="switchSection('home')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span class="text-[10px]">首页</span>
-    </a>
-    <a href="#monitor" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-1" data-section="monitor" onclick="switchSection('monitor')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      <span class="text-[10px]">农情</span>
-    </a>
-    <a href="#video" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-1" data-section="video" onclick="switchSection('video')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-      <span class="text-[10px]">视频</span>
-    </a>
-    <a href="#device" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-1" data-section="device" onclick="switchSection('device')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      <span class="text-[10px]">设备</span>
-    </a>
-    <a href="#operation" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-1" data-section="operation" onclick="switchSection('operation')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      <span class="text-[10px]">作业</span>
-    </a>
-    <a href="#alert" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-1" data-section="alert" onclick="switchSection('alert')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-      <span class="text-[10px]">预警</span>
-    </a>
-    <a href="#plan" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-1" data-section="plan" onclick="switchSection('plan')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      <span class="text-[10px]">规划</span>
-    </a>
-    <a href="#report" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-1" data-section="report" onclick="switchSection('report')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <span class="text-[10px]">报告</span>
-    </a>
+<!-- 移动端底部导航 -->
+<nav class="mobile-nav fixed bottom-0 left-0 right-0 bg-white border-t border-farm-border z-50" id="mobileNav">
+  <div class="flex items-center py-1 px-1 overflow-x-auto" id="mobileNavScroll">
+    <a href="#home" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-green flex-shrink-0 w-16" data-section="home" onclick="switchSection('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="text-xs">首页</span></a>
+    <a href="#monitor" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-shrink-0 w-16" data-section="monitor" onclick="switchSection('monitor')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="text-xs">农情</span></a>
+    <a href="#video" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-shrink-0 w-16" data-section="video" onclick="switchSection('video')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><span class="text-xs">视频</span></a>
+    <a href="#device" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-shrink-0 w-16" data-section="device" onclick="switchSection('device')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span class="text-xs">设备</span></a>
+    <a href="#operation" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-shrink-0 w-16" data-section="operation" onclick="switchSection('operation')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span class="text-xs">作业</span></a>
+    <a href="#alert" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-shrink-0 w-16" data-section="alert" onclick="switchSection('alert')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="text-xs">预警</span></a>
+    <a href="#plan" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-shrink-0 w-16" data-section="plan" onclick="switchSection('plan')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span class="text-xs">规划</span></a>
+    <a href="#report" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted flex-shrink-0 w-16" data-section="report" onclick="switchSection('report')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg><span class="text-xs">报告</span></a>
   </div>
 </nav>
 
 <main class="main-content" style="margin-left:224px">
-  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-farm-border">
-    <div class="flex items-center justify-between px-4 md:px-6 py-3">
-      <div class="flex items-center gap-3">
-        <div class="md:hidden flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-farm-green to-farm-greenLight flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </div>
-          <span class="text-sm font-bold text-farm-text">邗江区无人农场</span>
-        </div>
-        <h2 id="page-title" class="hidden md:block text-base font-bold text-farm-text">首页</h2>
-      </div>
-      <div class="flex items-center gap-3 md:gap-4">
-        <div class="relative overflow-hidden bg-farm-surface rounded-full px-3 py-1.5 flex items-center gap-2 text-xs">
-          <span class="device-dot online" style="width:6px;height:6px"></span>
-          <span class="text-farm-muted whitespace-nowrap">系统运行正常</span>
-        </div>
-        <div class="text-xs text-farm-muted hidden sm:block" id="current-time"></div>
-        <button class="relative p-2 rounded-lg hover:bg-farm-surface transition-colors" onclick="switchSection('alert')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-farm-orange rounded-full text-[10px] flex items-center justify-center text-white font-bold">5</span>
-        </button>
-      </div>
-    </div>
-  </header>
 
-  <div class="bg-farm-orange/10 border-b border-farm-orange/20 px-4 py-1.5 flex items-center gap-2 overflow-hidden">
-    <span class="text-farm-orange text-xs font-bold whitespace-nowrap flex-shrink-0">⚠ 预警</span>
-    <div class="overflow-hidden flex-1">
-      <div class="animate-marquee text-xs text-farm-orange/90 whitespace-nowrap">
-        土壤湿度异常：3号田块湿度低于阈值（当前18%，阈值25%） | 打药预警：稻纵卷叶螟蛾量超标，建议3日内防治 | 设备告警：5号球机离线，请检查网络连接 | 高温预警：明日最高温度35°C，关注蒸腾与灌溉 | 台风动态：台风"海葵"路径偏东，持续关注
+<!-- 顶部Header -->
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-farm-border">
+  <div class="flex items-center justify-between px-4 md:px-6 py-3">
+    <div class="flex items-center gap-3">
+      <div class="md:hidden flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-farm-green to-farm-greenLight flex items-center justify-center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="text-sm font-bold text-farm-text">邗江区无人农场</span>
       </div>
+      <h2 id="page-title" class="hidden md:block text-base font-bold text-farm-text">首页</h2>
+    </div>
+    <div class="flex items-center gap-3 md:gap-4">
+      <div class="relative overflow-hidden bg-farm-surface rounded-full px-3 py-1.5 flex items-center gap-2 text-xs">
+        <span class="device-dot online" style="width:6px;height:6px"></span>
+        <span class="text-farm-muted whitespace-nowrap">系统运行正常</span>
+      </div>
+      <div class="text-xs text-farm-muted hidden sm:block" id="current-time"></div>
+      <button class="relative p-2 rounded-lg hover:bg-farm-surface transition-colors" onclick="switchSection('alert')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-farm-orange rounded-full text-[10px] flex items-center justify-center text-white font-bold">5</span>
+      </button>
     </div>
   </div>
+</header>
 
-<!-- ============ HOME ============ -->
-<section id="section-home" class="section-page active" style="background:#F1F5F9; padding:16px;">
-  <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:16px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
-      <h2 style="font-size:28px; font-weight:bold; color:#1A5D1A; margin:0;">🏡 我的农场</h2>
-      <span style="font-size:16px; color:#64748B;">2026年5月9日</span>
+<!-- 预警滚动条 -->
+<div class="bg-farm-orange/10 border-b border-farm-orange/20 px-4 py-1.5 flex items-center gap-2 overflow-hidden">
+  <span class="text-farm-orange text-xs font-bold whitespace-nowrap flex-shrink-0">⚠ 预警</span>
+  <div class="overflow-hidden flex-1">
+    <div class="animate-marquee text-xs text-farm-orange/90 whitespace-nowrap">
+      土壤湿度异常：3号田块湿度低于阈值（当前18%，阈值25%） | 打药预警：稻纵卷叶螟蛾量超标，建议3日内防治 | 设备告警：5号球机离线，请检查网络连接 | 高温预警：明日最高温度35°C，关注蒸腾与灌溉 | 台风动态：台风"海葵"路径偏东，持续关注
     </div>
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;">
+  </div>
+</div>
+
+<!-- ==================== HOME 首页 ==================== -->
+<section id="section-home" class="section-page active" style="background:#F1F5F9; padding:16px;">
+  <!-- 农场概览 -->
+  <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:16px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:8px;">
+      <h2 style="font-size:28px; font-weight:bold; color:#1A5D1A; margin:0;">🏡 我的农场</h2>
+      <span style="font-size:16px; color:#64748B;">2026年5月9日 星期五</span>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px;">
       <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;">
-        <div style="font-size:36px; font-weight:bold; color:#1A5D1A;">300<span style="font-size:20px;">亩</span></div>
-        <div style="font-size:18px; color:#15803D; margin-top:4px;">总种植面积</div>
+        <div style="font-size:36px; font-weight:bold; color:#1A5D1A;">300<span style="font-size:18px;">亩</span></div>
+        <div style="font-size:16px; color:#15803D; margin-top:4px;">总种植面积</div>
+        <div style="font-size:14px; color:#64748B; margin-top:2px;">5个田块</div>
       </div>
       <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;">
-        <div style="font-size:36px; font-weight:bold; color:#1A5D1A;">42<span style="font-size:20px;">台</span></div>
-        <div style="font-size:18px; color:#15803D; margin-top:4px;">在线设备</div>
+        <div style="font-size:36px; font-weight:bold; color:#1A5D1A;">42<span style="font-size:18px;">台</span></div>
+        <div style="font-size:16px; color:#15803D; margin-top:4px;">在线设备</div>
+        <div style="font-size:14px; color:#64748B; margin-top:2px;">共47台</div>
       </div>
       <div style="text-align:center; padding:16px; background:#FFF7ED; border-radius:12px;">
-        <div style="font-size:36px; font-weight:bold; color:#F97316;">14.56<span style="font-size:20px;">万斤</span></div>
-        <div style="font-size:18px; color:#CA8A04; margin-top:4px;">预计产量</div>
+        <div style="font-size:36px; font-weight:bold; color:#F97316;">14.56<span style="font-size:18px;">万斤</span></div>
+        <div style="font-size:16px; color:#CA8A04; margin-top:4px;">预计产量</div>
+        <div style="font-size:14px; color:#64748B; margin-top:2px;">亩产485kg</div>
+      </div>
+      <div style="text-align:center; padding:16px; background:#EFF6FF; border-radius:12px;">
+        <div style="font-size:36px; font-weight:bold; color:#3B82F6;">96.5<span style="font-size:18px;">%</span></div>
+        <div style="font-size:16px; color:#3B82F6; margin-top:4px;">设备在线率</div>
+        <div style="font-size:14px; color:#64748B; margin-top:2px;">3台离线 2台故障</div>
       </div>
     </div>
   </div>
 
+  <!-- 天气 + 土壤 -->
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
     <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
       <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">🌤️ 今天天气</h3>
       <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
-        <div style="font-size:48px;">⛅</div>
+        <div style="font-size:56px;">⛅</div>
         <div>
-          <div style="font-size:36px; font-weight:bold; color:#1A5D1A;">28°C</div>
-          <div style="font-size:18px; color:#64748B;">多云转晴</div>
+          <div style="font-size:40px; font-weight:bold; color:#1A5D1A;">28°C</div>
+          <div style="font-size:18px; color:#64748B;">多云转晴 · 东南风3级</div>
         </div>
       </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:16px; color:#475569;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:16px; color:#475569; margin-bottom:16px;">
         <div>💧 湿度 65%</div>
-        <div>🌬️ 东南风 3级</div>
+        <div>🌬️ 风速 3.2m/s</div>
         <div>🌅 日出 05:20</div>
         <div>🌇 日落 18:50</div>
+        <div>☀️ 紫外线 中等</div>
+        <div>👁️ 能见度 12km</div>
       </div>
-      <div style="margin-top:16px; padding:12px; background:#FEF3C7; border-radius:8px; font-size:16px; color:#CA8A04;">
-        ⚠️ 明天高温35°C，注意灌溉
+      <div style="margin-top:12px; padding:12px; background:#FEF3C7; border-radius:8px; font-size:16px; color:#CA8A04;">
+        ⚠️ 明天高温35°C，注意灌溉和防晒
+      </div>
+      <!-- 7天预报 -->
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid #E2E8F0;">
+        <div style="font-size:16px; font-weight:bold; color:#334155; margin-bottom:12px;">未来7天</div>
+        <div style="display:flex; gap:8px; overflow-x:auto;">
+          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">今天</div><div style="font-size:24px; margin:4px 0;">⛅</div><div style="font-size:16px; font-weight:bold;">28°</div></div>
+          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">明天</div><div style="font-size:24px; margin:4px 0;">☀️</div><div style="font-size:16px; font-weight:bold;">35°</div></div>
+          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">后天</div><div style="font-size:24px; margin:4px 0;">🌧️</div><div style="font-size:16px; font-weight:bold;">26°</div></div>
+          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周一</div><div style="font-size:24px; margin:4px 0;">⛅</div><div style="font-size:16px; font-weight:bold;">24°</div></div>
+          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周二</div><div style="font-size:24px; margin:4px 0;">☁️</div><div style="font-size:16px; font-weight:bold;">22°</div></div>
+          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周三</div><div style="font-size:24px; margin:4px 0;">🌧️</div><div style="font-size:16px; font-weight:bold;">20°</div></div>
+          <div style="text-align:center; padding:10px; background:#F8FAFC; border-radius:10px; min-width:70px;"><div style="font-size:12px; color:#64748B;">周四</div><div style="font-size:24px; margin:4px 0;">⛅</div><div style="font-size:16px; font-weight:bold;">23°</div></div>
+        </div>
       </div>
     </div>
 
     <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
       <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">💧 土壤湿度</h3>
-      <div style="margin-bottom:16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span style="font-size:16px; color:#475569;">3号田</span>
-          <span style="font-size:18px; font-weight:bold; color:#DC2626;">18% ⚠️</span>
+      <div style="margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:16px; color:#475569;">1号田 · 南粳9108</span>
+          <span style="font-size:16px; font-weight:bold; color:#15803D;">72% ✓</span>
         </div>
-        <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;">
-          <div style="width:18%; height:100%; background:#DC2626; border-radius:5px;"></div>
+        <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:72%; height:100%; background:#15803D; border-radius:5px;"></div></div>
+        <div style="font-size:13px; color:#15803D; margin-top:3px;">湿度正好</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:16px; color:#475569;">2号田 · 扬麦25</span>
+          <span style="font-size:16px; font-weight:bold; color:#15803D;">68% ✓</span>
         </div>
-        <div style="font-size:14px; color:#DC2626; margin-top:4px;">太干了，需要浇水！</div>
+        <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:68%; height:100%; background:#15803D; border-radius:5px;"></div></div>
+        <div style="font-size:13px; color:#15803D; margin-top:3px;">湿度正常</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:16px; color:#475569;">3号田 · 宁麦13</span>
+          <span style="font-size:16px; font-weight:bold; color:#DC2626;">18% ⚠️</span>
+        </div>
+        <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:18%; height:100%; background:#DC2626; border-radius:5px;"></div></div>
+        <div style="font-size:13px; color:#DC2626; margin-top:3px;">太干了！已触发自动灌溉</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:16px; color:#475569;">4号田 · 镇麦12</span>
+          <span style="font-size:16px; font-weight:bold; color:#CA8A04;">45% ⚠️</span>
+        </div>
+        <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:45%; height:100%; background:#CA8A04; border-radius:5px;"></div></div>
+        <div style="font-size:13px; color:#CA8A04; margin-top:3px;">有点偏干，注意观察</div>
       </div>
       <div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span style="font-size:16px; color:#475569;">其他田块</span>
-          <span style="font-size:18px; font-weight:bold; color:#15803D;">65% ✓</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:16px; color:#475569;">5号田 · 南粳46</span>
+          <span style="font-size:16px; font-weight:bold; color:#15803D;">65% ✓</span>
         </div>
-        <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;">
-          <div style="width:65%; height:100%; background:#15803D; border-radius:5px;"></div>
-        </div>
-        <div style="font-size:14px; color:#15803D; margin-top:4px;">湿度正常</div>
+        <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:65%; height:100%; background:#15803D; border-radius:5px;"></div></div>
+        <div style="font-size:13px; color:#15803D; margin-top:3px;">湿度正常</div>
       </div>
     </div>
   </div>
 
+  <!-- 打药预警 -->
   <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:16px;">
     <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">🐛 打药预警</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div style="display:flex; align-items:center; gap:16px; padding:16px; background:#FEF2F2; border-radius:12px; border-left:4px solid #DC2626;">
         <div style="width:48px; height:48px; background:#DC2626; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:24px; flex-shrink:0;">🔴</div>
         <div style="flex:1;">
-          <div style="font-size:18px; font-weight:bold; color:#DC2626;">稻纵卷叶螟超标</div>
-          <div style="font-size:16px; color:#64748B;">580头/亩，超过防治指标300头/亩</div>
+          <div style="font-size:18px; font-weight:bold; color:#DC2626;">稻纵卷叶螟严重超标</div>
+          <div style="font-size:15px; color:#64748B; margin-top:4px;">580头/亩，超过防治指标300头/亩93%！2天内可能扩散到旁边地块</div>
+          <div style="font-size:14px; color:#DC2626; margin-top:6px;">💊 建议：5%甲维盐20g/亩，无人机明天06:00飞防</div>
         </div>
-        <button style="padding:12px 24px; background:#DC2626; color:#FFF; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; min-height:48px;">立即处理</button>
+        <button style="padding:12px 24px; background:#DC2626; color:#FFF; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; min-height:48px; flex-shrink:0;">立即处理</button>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; padding:16px; background:#FFFBEB; border-radius:12px; border-left:4px solid #CA8A04;">
+        <div style="width:48px; height:48px; background:#CA8A04; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:24px; flex-shrink:0;">🟡</div>
+        <div style="flex:1;">
+          <div style="font-size:18px; font-weight:bold; color:#CA8A04;">4号田有感染风险</div>
+          <div style="font-size:15px; color:#64748B; margin-top:4px;">挨着3号田，可能会被稻纵卷叶螟传染，建议提前预防</div>
+        </div>
+        <button style="padding:12px 24px; background:#CA8A04; color:#FFF; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; min-height:48px; flex-shrink:0;">去看看</button>
       </div>
       <div style="display:flex; align-items:center; gap:16px; padding:16px; background:#F0FDF4; border-radius:12px; border-left:4px solid #15803D;">
         <div style="width:48px; height:48px; background:#15803D; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:24px; flex-shrink:0;">🟢</div>
         <div style="flex:1;">
-          <div style="font-size:18px; font-weight:bold; color:#15803D;">其他害虫</div>
-          <div style="font-size:16px; color:#64748B;">二化螟、飞虱等都在正常范围内</div>
+          <div style="font-size:18px; font-weight:bold; color:#15803D;">其他害虫正常</div>
+          <div style="font-size:15px; color:#64748B; margin-top:4px;">二化螟120头/亩、白背飞虱210头/百丛、褐飞虱180头/百丛，都在正常范围内</div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- 设备状态 -->
   <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:16px;">
-    <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">📡 设备运行情况</h3>
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px;">
-      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;">
-        <div style="font-size:32px; margin-bottom:8px;">🎥</div>
-        <div style="font-size:28px; font-weight:bold; color:#15803D;">8/8</div>
-        <div style="font-size:14px; color:#64748B;">摄像头</div>
-      </div>
-      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;">
-        <div style="font-size:32px; margin-bottom:8px;">💧</div>
-        <div style="font-size:28px; font-weight:bold; color:#15803D;">6/6</div>
-        <div style="font-size:14px; color:#64748B;">湿度传感</div>
-      </div>
-      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;">
-        <div style="font-size:32px; margin-bottom:8px;">🌡️</div>
-        <div style="font-size:28px; font-weight:bold; color:#15803D;">4/4</div>
-        <div style="font-size:14px; color:#64748B;">气象站</div>
-      </div>
-      <div style="text-align:center; padding:16px; background:#FEF2F2; border-radius:12px;">
-        <div style="font-size:32px; margin-bottom:8px;">🚜</div>
-        <div style="font-size:28px; font-weight:bold; color:#DC2626;">5/6</div>
-        <div style="font-size:14px; color:#64748B;">灌溉设备</div>
-      </div>
+    <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">📡 设备运行情况（47台）</h3>
+    <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:12px;">
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">🎥</div><div style="font-size:28px; font-weight:bold; color:#15803D;">8/8</div><div style="font-size:14px; color:#64748B; margin-top:4px;">摄像头</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">💧</div><div style="font-size:28px; font-weight:bold; color:#15803D;">6/6</div><div style="font-size:14px; color:#64748B; margin-top:4px;">湿度传感器</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">🌡️</div><div style="font-size:28px; font-weight:bold; color:#15803D;">4/4</div><div style="font-size:14px; color:#64748B; margin-top:4px;">气象站</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">🚜</div><div style="font-size:28px; font-weight:bold; color:#15803D;">5/6</div><div style="font-size:14px; color:#64748B; margin-top:4px;">灌溉设备</div></div>
+      <div style="text-align:center; padding:16px; background:#FEF2F2; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">🐛</div><div style="font-size:28px; font-weight:bold; color:#DC2626;">5/6</div><div style="font-size:14px; color:#64748B; margin-top:4px;">虫情监测</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">🤖</div><div style="font-size:28px; font-weight:bold; color:#15803D;">4/4</div><div style="font-size:14px; color:#64748B; margin-top:4px;">机器人</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">🖥️</div><div style="font-size:28px; font-weight:bold; color:#15803D;">2/2</div><div style="font-size:14px; color:#64748B; margin-top:4px;">显示屏</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">💡</div><div style="font-size:28px; font-weight:bold; color:#15803D;">2/2</div><div style="font-size:14px; color:#64748B; margin-top:4px;">LED屏</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">🖥️</div><div style="font-size:28px; font-weight:bold; color:#15803D;">1/1</div><div style="font-size:14px; color:#64748B; margin-top:4px;">服务器</div></div>
+      <div style="text-align:center; padding:16px; background:#F0FDF4; border-radius:12px;"><div style="font-size:32px; margin-bottom:6px;">📡</div><div style="font-size:28px; font-weight:bold; color:#15803D;">8/8</div><div style="font-size:14px; color:#64748B; margin-top:4px;">其他传感</div></div>
     </div>
   </div>
 
-  <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+  <!-- 快捷操作 -->
+  <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:16px;">
     <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">⚡ 快捷操作</h3>
     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
-      <button style="padding:16px; background:#1A5D1A; color:#FFF; border:none; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">💧 一键浇水</button>
-      <button style="padding:16px; background:#F97316; color:#FFF; border:none; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">🐛 查看虫情</button>
-      <button style="padding:16px; background:#1A5D1A; color:#FFF; border:none; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">📹 查看监控</button>
+      <button onclick="showToast('已启动3号田自动灌溉','success')" style="padding:16px; background:#1A5D1A; color:#FFF; border:none; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">💧 一键浇水</button>
+      <button onclick="showToast('正在查看虫情监测数据','info')" style="padding:16px; background:#F97316; color:#FFF; border:none; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">🐛 查看虫情</button>
+      <button onclick="showToast('正在打开视频监控','info')" style="padding:16px; background:#1A5D1A; color:#FFF; border:none; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">📹 查看监控</button>
+      <button onclick="switchSection('report')" style="padding:16px; background:#F8FAFC; color:#1A5D1A; border:2px solid #1A5D1A; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">📊 产量报告</button>
+      <button onclick="showToast('已打开农事记录','success')" style="padding:16px; background:#F8FAFC; color:#1A5D1A; border:2px solid #1A5D1A; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">📝 记农事</button>
+      <button onclick="switchSection('device')" style="padding:16px; background:#F8FAFC; color:#1A5D1A; border:2px solid #1A5D1A; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; min-height:56px;">⚙️ 设备管理</button>
+    </div>
+  </div>
+
+  <!-- 今日农事 -->
+  <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+    <h3 style="font-size:24px; font-weight:bold; color:#1A5D1A; margin:0 0 16px 0;">📋 今天要做的事</h3>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:center; gap:16px; padding:16px; background:#FEF3C7; border-radius:12px;">
+        <div style="width:48px; height:48px; background:#CA8A04; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:24px; flex-shrink:0;">⏰</div>
+        <div style="flex:1;"><div style="font-size:18px; font-weight:bold; color:#1A5D1A;">给3号田浇水</div><div style="font-size:15px; color:#64748B;">土壤太干了，建议今天下午浇水2小时</div></div>
+        <div style="font-size:16px; color:#CA8A04; font-weight:bold;">待办</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; padding:16px; background:#FEF3C7; border-radius:12px;">
+        <div style="width:48px; height:48px; background:#CA8A04; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:24px; flex-shrink:0;">⏰</div>
+        <div style="flex:1;"><div style="font-size:18px; font-weight:bold; color:#1A5D1A;">检查灌溉设备</div><div style="font-size:15px; color:#64748B;">有1个设备离线，需要去看看怎么回事</div></div>
+        <div style="font-size:16px; color:#CA8A04; font-weight:bold;">待办</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; padding:16px; background:#F0FDF4; border-radius:12px;">
+        <div style="width:48px; height:48px; background:#15803D; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:24px; flex-shrink:0;">✓</div>
+        <div style="flex:1;"><div style="font-size:18px; font-weight:bold; color:#15803D;">早上巡田已完成</div><div style="font-size:15px; color:#64748B;">6:30 巡了5个田块，一切正常</div></div>
+        <div style="font-size:16px; color:#15803D; font-weight:bold;">已完成</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ MONITOR ============ -->
+<!-- ==================== MONITOR 农情监测 ==================== -->
 <section id="section-monitor" class="section-page" style="background:#F1F5F9; padding:16px;">
   <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:12px; margin-bottom:16px;" id="monitorTabs">
     <button class="tab-btn active" onclick="switchMonitorTab('weather')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#1A5D1A; color:#fff; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">天气监测</button>
@@ -514,61 +415,83 @@ main { flex: 1; display: flex; flex-direction: column; }
     <button class="tab-btn" onclick="switchMonitorTab('pest')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">虫子监测</button>
     <button class="tab-btn" onclick="switchMonitorTab('seedling')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">庄稼长势</button>
   </div>
-  
+
+  <!-- 天气监测 -->
   <div id="monitor-weather" style="display:flex; flex-direction:column; gap:16px;">
     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">温度</div>
-        <div style="font-size:36px; font-weight:800; color:#F97316;">26°C</div>
-        <div style="font-size:14px; color:#15803D; margin-top:4px;">适宜</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">湿度</div>
-        <div style="font-size:36px; font-weight:800; color:#3B82F6;">68%</div>
-        <div style="font-size:14px; color:#15803D; margin-top:4px;">适宜</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">风速</div>
-        <div style="font-size:36px; font-weight:800; color:#0F172A;">3.2</div>
-        <div style="font-size:14px; color:#64748B; margin-top:4px;">m/s</div>
-      </div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">温度</div><div style="font-size:36px; font-weight:800; color:#F97316;">26°C</div><div style="font-size:14px; color:#15803D; margin-top:4px;">适宜</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">湿度</div><div style="font-size:36px; font-weight:800; color:#3B82F6;">68%</div><div style="font-size:14px; color:#15803D; margin-top:4px;">适宜</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">风速</div><div style="font-size:36px; font-weight:800; color:#0F172A;">3.2</div><div style="font-size:14px; color:#64748B; margin-top:4px;">m/s 东南风</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">降雨量</div><div style="font-size:36px; font-weight:800; color:#3B82F6;">0</div><div style="font-size:14px; color:#64748B; margin-top:4px;">mm 今日</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">紫外线</div><div style="font-size:36px; font-weight:800; color:#CA8A04;">中等</div><div style="font-size:14px; color:#64748B; margin-top:4px;">UV指数5</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">气压</div><div style="font-size:36px; font-weight:800; color:#0F172A;">1012</div><div style="font-size:14px; color:#64748B; margin-top:4px;">hPa</div></div>
     </div>
     <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">24小时温湿度趋势</h4>
       <div style="height:220px"><canvas id="tempHumidityChart"></canvas></div>
     </div>
+    <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">7天天气预报</h4>
+      <div style="display:flex; gap:10px; overflow-x:auto;">
+        <div style="text-align:center; padding:14px; background:#F8FAFC; border-radius:12px; min-width:90px;"><div style="font-size:13px; color:#64748B;">今天</div><div style="font-size:32px; margin:6px 0;">⛅</div><div style="font-size:18px; font-weight:bold;">28°</div><div style="font-size:12px; color:#64748B;">多云</div></div>
+        <div style="text-align:center; padding:14px; background:#FEF3C7; border-radius:12px; min-width:90px;"><div style="font-size:13px; color:#64748B;">明天</div><div style="font-size:32px; margin:6px 0;">☀️</div><div style="font-size:18px; font-weight:bold; color:#F97316;">35°</div><div style="font-size:12px; color:#CA8A04;">高温</div></div>
+        <div style="text-align:center; padding:14px; background:#EFF6FF; border-radius:12px; min-width:90px;"><div style="font-size:13px; color:#64748B;">后天</div><div style="font-size:32px; margin:6px 0;">🌧️</div><div style="font-size:18px; font-weight:bold;">26°</div><div style="font-size:12px; color:#3B82F6;">中雨</div></div>
+        <div style="text-align:center; padding:14px; background:#F8FAFC; border-radius:12px; min-width:90px;"><div style="font-size:13px; color:#64748B;">周一</div><div style="font-size:32px; margin:6px 0;">⛅</div><div style="font-size:18px; font-weight:bold;">24°</div><div style="font-size:12px; color:#64748B;">多云</div></div>
+        <div style="text-align:center; padding:14px; background:#F8FAFC; border-radius:12px; min-width:90px;"><div style="font-size:13px; color:#64748B;">周二</div><div style="font-size:32px; margin:6px 0;">☁️</div><div style="font-size:18px; font-weight:bold;">22°</div><div style="font-size:12px; color:#64748B;">阴天</div></div>
+        <div style="text-align:center; padding:14px; background:#EFF6FF; border-radius:12px; min-width:90px;"><div style="font-size:13px; color:#64748B;">周三</div><div style="font-size:32px; margin:6px 0;">🌧️</div><div style="font-size:18px; font-weight:bold;">20°</div><div style="font-size:12px; color:#3B82F6;">小雨</div></div>
+        <div style="text-align:center; padding:14px; background:#F8FAFC; border-radius:12px; min-width:90px;"><div style="font-size:13px; color:#64748B;">周四</div><div style="font-size:32px; margin:6px 0;">⛅</div><div style="font-size:18px; font-weight:bold;">23°</div><div style="font-size:12px; color:#64748B;">多云</div></div>
+      </div>
+    </div>
   </div>
 
+  <!-- 土壤监测 -->
   <div id="monitor-soil" style="display:none; flex-direction:column; gap:16px;">
     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
       <div style="background:#FFFFFF; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
         <h4 style="font-size:16px; font-weight:bold; margin-bottom:12px;">土壤情况（10cm深）</h4>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div><div style="font-size:14px; color:#64748B;">温度</div><div style="font-size:24px; font-weight:bold; color:#0F172A;">22.5°C</div></div>
-          <div><div style="font-size:14px; color:#64748B;">湿度</div><div style="font-size:24px; font-weight:bold; color:#DC2626;">32% ⚠️</div></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div><div style="font-size:13px; color:#64748B;">温度</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">22.5°C</div></div>
+          <div><div style="font-size:13px; color:#64748B;">湿度</div><div style="font-size:22px; font-weight:bold; color:#DC2626;">32% ⚠️</div></div>
+          <div><div style="font-size:13px; color:#64748B;">pH值</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">6.8</div></div>
+          <div><div style="font-size:13px; color:#64748B;">电导率</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">450</div></div>
         </div>
       </div>
       <div style="background:#FFFFFF; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
         <h4 style="font-size:16px; font-weight:bold; margin-bottom:12px;">土壤情况（20cm深）</h4>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div><div style="font-size:14px; color:#64748B;">温度</div><div style="font-size:24px; font-weight:bold; color:#0F172A;">21.8°C</div></div>
-          <div><div style="font-size:14px; color:#64748B;">湿度</div><div style="font-size:24px; font-weight:bold; color:#CA8A04;">38%</div></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div><div style="font-size:13px; color:#64748B;">温度</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">21.8°C</div></div>
+          <div><div style="font-size:13px; color:#64748B;">湿度</div><div style="font-size:22px; font-weight:bold; color:#CA8A04;">38%</div></div>
+          <div><div style="font-size:13px; color:#64748B;">pH值</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">6.9</div></div>
+          <div><div style="font-size:13px; color:#64748B;">电导率</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">520</div></div>
         </div>
       </div>
       <div style="background:#FFFFFF; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
         <h4 style="font-size:16px; font-weight:bold; margin-bottom:12px;">土壤情况（30cm深）</h4>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div><div style="font-size:14px; color:#64748B;">温度</div><div style="font-size:24px; font-weight:bold; color:#0F172A;">20.3°C</div></div>
-          <div><div style="font-size:14px; color:#64748B;">湿度</div><div style="font-size:24px; font-weight:bold; color:#15803D;">45%</div></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div><div style="font-size:13px; color:#64748B;">温度</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">20.3°C</div></div>
+          <div><div style="font-size:13px; color:#64748B;">湿度</div><div style="font-size:22px; font-weight:bold; color:#15803D;">45%</div></div>
+          <div><div style="font-size:13px; color:#64748B;">pH值</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">7.0</div></div>
+          <div><div style="font-size:13px; color:#64748B;">电导率</div><div style="font-size:22px; font-weight:bold; color:#0F172A;">580</div></div>
         </div>
       </div>
     </div>
     <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">氮磷钾含量</h4>
+      <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">氮磷钾含量（mg/kg）</h4>
       <div style="height:220px"><canvas id="npkChart"></canvas></div>
+    </div>
+    <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">各田块土壤湿度对比</h4>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>1号田 · 南粳9108</span><span style="font-weight:bold; color:#15803D;">72% 正常</span></div><div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:72%; height:100%; background:#15803D; border-radius:5px;"></div></div></div>
+        <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>2号田 · 扬麦25</span><span style="font-weight:bold; color:#15803D;">68% 正常</span></div><div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:68%; height:100%; background:#15803D; border-radius:5px;"></div></div></div>
+        <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>3号田 · 宁麦13</span><span style="font-weight:bold; color:#DC2626;">18% 干旱！</span></div><div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:18%; height:100%; background:#DC2626; border-radius:5px;"></div></div></div>
+        <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>4号田 · 镇麦12</span><span style="font-weight:bold; color:#CA8A04;">45% 偏干</span></div><div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:45%; height:100%; background:#CA8A04; border-radius:5px;"></div></div></div>
+        <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>5号田 · 南粳46</span><span style="font-weight:bold; color:#15803D;">65% 正常</span></div><div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:65%; height:100%; background:#15803D; border-radius:5px;"></div></div></div>
+      </div>
     </div>
   </div>
 
+  <!-- 虫子监测 -->
   <div id="monitor-pest" style="display:none; flex-direction:column; gap:16px;">
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
       <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
@@ -576,573 +499,695 @@ main { flex: 1; display: flex; flex-direction: column; }
         <div style="height:220px"><canvas id="pestChart"></canvas></div>
       </div>
       <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">害虫类型</h4>
-        <div style="display:flex; flex-direction:column; gap:12px;">
+        <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">害虫类型分布</h4>
+        <div style="display:flex; flex-direction:column; gap:14px;">
           <div>
-            <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>稻纵卷叶螟</span><span style="font-weight:bold; color:#DC2626;">580头/亩 超标</span></div>
-            <div style="width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;"><div style="width:85%; height:100%; background:#DC2626; border-radius:4px;"></div></div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; margin-bottom:6px;"><span style="font-weight:600;">稻纵卷叶螟</span><span style="font-weight:bold; color:#DC2626;">580头/亩 超标93%</span></div>
+            <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:93%; height:100%; background:#DC2626; border-radius:5px;"></div></div>
           </div>
           <div>
-            <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>二化螟</span><span style="font-weight:bold; color:#15803D;">120头/亩 正常</span></div>
-            <div style="width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;"><div style="width:30%; height:100%; background:#15803D; border-radius:4px;"></div></div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; margin-bottom:6px;"><span style="font-weight:600;">二化螟</span><span style="font-weight:bold; color:#15803D;">120头/亩 正常</span></div>
+            <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:30%; height:100%; background:#15803D; border-radius:5px;"></div></div>
           </div>
           <div>
-            <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;"><span>白背飞虱</span><span style="font-weight:bold; color:#15803D;">210头/百丛 正常</span></div>
-            <div style="width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;"><div style="width:40%; height:100%; background:#3B82F6; border-radius:4px;"></div></div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; margin-bottom:6px;"><span style="font-weight:600;">白背飞虱</span><span style="font-weight:bold; color:#15803D;">210头/百丛 正常</span></div>
+            <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:40%; height:100%; background:#3B82F6; border-radius:5px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; margin-bottom:6px;"><span style="font-weight:600;">褐飞虱</span><span style="font-weight:bold; color:#15803D;">180头/百丛 正常</span></div>
+            <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:35%; height:100%; background:#3B82F6; border-radius:5px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; margin-bottom:6px;"><span style="font-weight:600;">稻飞虱</span><span style="font-weight:bold; color:#15803D;">95头/百丛 正常</span></div>
+            <div style="width:100%; height:10px; background:#E2E8F0; border-radius:5px; overflow:hidden;"><div style="width:20%; height:100%; background:#15803D; border-radius:5px;"></div></div>
           </div>
         </div>
-        <div style="margin-top:16px; padding:12px; background:#FEF3C7; border-radius:8px; border-left:4px solid #CA8A04;">
-          <p style="font-size:14px; font-weight:bold; color:#CA8A04;">💊 打药建议</p>
-          <p style="font-size:14px; color:#64748B; margin-top:8px;">稻纵卷叶螟超标，建议3日内使用甲维盐打药防治。</p>
+        <div style="margin-top:16px; padding:14px; background:#FEF3C7; border-radius:10px; border-left:4px solid #CA8A04;">
+          <p style="font-size:15px; font-weight:bold; color:#CA8A04;">💊 打药建议</p>
+          <p style="font-size:14px; color:#64748B; margin-top:8px; line-height:1.6;">稻纵卷叶螟超标严重，建议3日内使用5%甲维盐20g/亩进行防治。无人机飞防时间：明天早上6:00，预计2小时完成。</p>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- 庄稼长势 -->
   <div id="monitor-seedling" style="display:none; flex-direction:column; gap:16px;">
     <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px;">
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">叶面积指数</div>
-        <div style="font-size:32px; font-weight:800; color:#15803D;">3.8</div>
-        <div style="font-size:14px; color:#15803D; margin-top:4px;">良好</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">叶层氮含量</div>
-        <div style="font-size:32px; font-weight:800; color:#3B82F6;">2.1%</div>
-        <div style="font-size:14px; color:#64748B; margin-top:4px;">正常</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">叶龄</div>
-        <div style="font-size:32px; font-weight:800; color:#0F172A;">9.2</div>
-        <div style="font-size:14px; color:#64748B; margin-top:4px;">叶</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">亩穗数</div>
-        <div style="font-size:32px; font-weight:800; color:#0F172A;">18.5万</div>
-        <div style="font-size:14px; color:#64748B; margin-top:4px;">预估</div>
-      </div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">叶面积指数</div><div style="font-size:32px; font-weight:800; color:#15803D;">3.8</div><div style="font-size:14px; color:#15803D; margin-top:4px;">良好</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">叶层氮含量</div><div style="font-size:32px; font-weight:800; color:#3B82F6;">2.1%</div><div style="font-size:14px; color:#64748B; margin-top:4px;">正常</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">叶龄</div><div style="font-size:32px; font-weight:800; color:#0F172A;">9.2</div><div style="font-size:14px; color:#64748B; margin-top:4px;">叶</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">亩穗数</div><div style="font-size:32px; font-weight:800; color:#0F172A;">18.5万</div><div style="font-size:14px; color:#64748B; margin-top:4px;">预估</div></div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">株高</div><div style="font-size:32px; font-weight:800; color:#0F172A;">68cm</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">分蘖数</div><div style="font-size:32px; font-weight:800; color:#0F172A;">12.3个</div></div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:14px; color:#64748B; margin-bottom:8px;">生育期</div><div style="font-size:24px; font-weight:800; color:#1A5D1A;">抽穗期</div></div>
     </div>
     <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">庄稼长势趋势</h4>
       <div style="height:220px"><canvas id="seedlingChart"></canvas></div>
     </div>
+    <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:12px;">
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <h4 style="font-size:16px; font-weight:bold; margin-bottom:12px;">各田块长势对比</h4>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:14px;">1号田 · 南粳9108</span><span style="font-size:14px; font-weight:bold; color:#15803D;">优秀</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:14px;">2号田 · 扬麦25</span><span style="font-size:14px; font-weight:bold; color:#15803D;">良好</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:14px;">3号田 · 宁麦13</span><span style="font-size:14px; font-weight:bold; color:#CA8A04;">一般（干旱影响）</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:14px;">4号田 · 镇麦12</span><span style="font-size:14px; font-weight:bold; color:#15803D;">良好</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:14px;">5号田 · 南粳46</span><span style="font-size:14px; font-weight:bold; color:#15803D;">优秀</span></div>
+        </div>
+      </div>
+      <div style="background:#FFFFFF; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <h4 style="font-size:16px; font-weight:bold; margin-bottom:12px;">产量构成因素</h4>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px;"><span>亩穗数</span><span style="font-weight:bold;">18.5万/亩</span></div><div style="width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;"><div style="width:92%; height:100%; background:#15803D; border-radius:4px;"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px;"><span>穗粒数</span><span style="font-weight:bold;">132.6粒</span></div><div style="width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;"><div style="width:88%; height:100%; background:#3B82F6; border-radius:4px;"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px;"><span>千粒重</span><span style="font-weight:bold;">26.8g</span></div><div style="width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;"><div style="width:89%; height:100%; background:#F97316; border-radius:4px;"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px;"><span>结实率</span><span style="font-weight:bold;">89.2%</span></div><div style="width:100%; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;"><div style="width:89%; height:100%; background:#15803D; border-radius:4px;"></div></div></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ============ VIDEO ============ -->
+<!-- ==================== VIDEO 视频监控 ==================== -->
 <section id="section-video" class="section-page" style="background:#F1F5F9; padding:16px;">
   <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px;">
     <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
-        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:14px; font-weight:600;">高空鹰眼全景</span></div>
-        <span style="font-size:12px; color:#64748B;">270°全景</span>
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">高空鹰眼全景</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#15803D; background:#F0FDF4; padding:2px 8px; border-radius:10px;">● 录制中</span><span style="font-size:12px; color:#64748B;">270°全景</span></div>
       </div>
       <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
-        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(26,93,26,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke:#1A5D1A stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><p style="font-size:14px; color:#64748B;">鹰眼全景摄像机</p></div>
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(26,93,26,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5D1A" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><p style="font-size:14px; color:#64748B;">鹰眼全景摄像机</p><p style="font-size:12px; color:#64748B; margin-top:4px;">覆盖300亩农田</p></div>
       </div>
     </div>
     <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
-        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:14px; font-weight:600;">1号监控球机</span></div>
-        <span style="font-size:12px; color:#64748B;">25倍光学</span>
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">1号监控球机</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#15803D; background:#F0FDF4; padding:2px 8px; border-radius:10px;">● 录制中</span><span style="font-size:12px; color:#64748B;">25倍光学</span></div>
       </div>
       <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
-        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(59,130,246,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke:#3B82F6 stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><p style="font-size:14px; color:#64748B;">1号监控球机</p></div>
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(59,130,246,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><p style="font-size:14px; color:#64748B;">1号监控球机</p><p style="font-size:12px; color:#64748B; margin-top:4px;">1号田 · 南粳9108</p></div>
       </div>
     </div>
     <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
-        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot fault"></span><span style="font-size:14px; font-weight:600;">5号监控球机</span></div>
-        <span style="font-size:12px; color:#F97316;">离线</span>
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">2号监控球机</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#15803D; background:#F0FDF4; padding:2px 8px; border-radius:10px;">● 录制中</span><span style="font-size:12px; color:#64748B;">25倍光学</span></div>
+      </div>
+      <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(59,130,246,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><p style="font-size:14px; color:#64748B;">2号监控球机</p><p style="font-size:12px; color:#64748B; margin-top:4px;">2号田 · 扬麦25</p></div>
+      </div>
+    </div>
+    <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">3号监控球机</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#15803D; background:#F0FDF4; padding:2px 8px; border-radius:10px;">● 录制中</span><span style="font-size:12px; color:#64748B;">25倍光学</span></div>
+      </div>
+      <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(59,130,246,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><p style="font-size:14px; color:#64748B;">3号监控球机</p><p style="font-size:12px; color:#64748B; margin-top:4px;">3号田 · 宁麦13</p></div>
+      </div>
+    </div>
+    <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">4号监控球机</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#15803D; background:#F0FDF4; padding:2px 8px; border-radius:10px;">● 录制中</span><span style="font-size:12px; color:#64748B;">25倍光学</span></div>
+      </div>
+      <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(59,130,246,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><p style="font-size:14px; color:#64748B;">4号监控球机</p><p style="font-size:12px; color:#64748B; margin-top:4px;">4号田 · 镇麦12</p></div>
+      </div>
+    </div>
+    <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot fault"></span><span style="font-size:15px; font-weight:600;">5号监控球机</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#F97316; background:#FFF7ED; padding:2px 8px; border-radius:10px;">● 离线</span><span style="font-size:12px; color:#F97316;">网络异常</span></div>
       </div>
       <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; opacity:0.6;">
-        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(249,115,22,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke:#F97316 stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><path d="M21 21H3a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><p style="font-size:14px; color:#F97316;">设备离线</p></div>
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(249,115,22,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><path d="M21 21H3a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><p style="font-size:14px; color:#F97316;">设备离线</p><p style="font-size:12px; color:#64748B; margin-top:4px;">5号田 · 南粳46</p></div>
       </div>
     </div>
     <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
       <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
-        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:14px; font-weight:600;">巡检无人车</span></div>
-        <span style="font-size:12px; color:#15803D;">巡检中</span>
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">巡检无人车</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#15803D; background:#F0FDF4; padding:2px 8px; border-radius:10px;">● 巡检中</span><span style="font-size:12px; color:#64748B;">电量82%</span></div>
       </div>
       <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
-        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(26,93,26,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke:#1A5D1A stroke-width="2"><rect x="3" y="11" width="18" height="8" rx="2"/><circle cx="7" cy="21" r="1.5"/><circle cx="17" cy="21" r="1.5"/><path d="M5 11V7a2 2 0 012-2h10a2 2 0 012 2v4"/></svg></div><p style="font-size:14px; color:#64748B;">巡检无人车</p><p style="font-size:12px; color:#64748B; margin-top:4px;">电量82%</p></div>
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(26,93,26,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5D1A" stroke-width="2"><rect x="3" y="11" width="18" height="8" rx="2"/><circle cx="7" cy="21" r="1.5"/><circle cx="17" cy="21" r="1.5"/><path d="M5 11V7a2 2 0 012-2h10a2 2 0 012 2v4"/></svg></div><p style="font-size:14px; color:#64748B;">巡检无人车</p><p style="font-size:12px; color:#64748B; margin-top:4px;">今日已巡检3个田块</p></div>
+      </div>
+    </div>
+    <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
+        <div style="display:flex; align-items:center; gap:8px;"><span class="device-dot online"></span><span style="font-size:15px; font-weight:600;">巡检机器狗</span></div>
+        <div style="display:flex; gap:8px;"><span style="font-size:12px; color:#15803D; background:#F0FDF4; padding:2px 8px; border-radius:10px;">● 待命</span><span style="font-size:12px; color:#64748B;">电量95%</span></div>
+      </div>
+      <div class="video-placeholder" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center;"><div style="width:64px; height:64px; border-radius:50%; background:rgba(26,93,26,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5D1A" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><p style="font-size:14px; color:#64748B;">巡检机器狗</p><p style="font-size:12px; color:#64748B; margin-top:4px;">等待指令</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ DEVICE ============ -->
+<!-- ==================== DEVICE 智能设备 ==================== -->
 <section id="section-device" class="section-page" style="background:#F1F5F9; padding:16px;">
   <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:16px;">
-    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="font-size:36px; font-weight:800; color:#15803D;">42</div>
-      <div style="font-size:14px; color:#64748B; margin-top:4px;">在线设备</div>
-    </div>
-    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="font-size:36px; font-weight:800; color:#64748B;">3</div>
-      <div style="font-size:14px; color:#64748B; margin-top:4px;">离线设备</div>
-    </div>
-    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="font-size:36px; font-weight:800; color:#F97316;">2</div>
-      <div style="font-size:14px; color:#64748B; margin-top:4px;">故障设备</div>
-    </div>
-    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="font-size:36px; font-weight:800; color:#3B82F6;">96.5%</div>
-      <div style="font-size:14px; color:#64748B; margin-top:4px;">在线率</div>
-    </div>
+    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:36px; font-weight:800; color:#15803D;">42</div><div style="font-size:14px; color:#64748B; margin-top:4px;">在线设备</div></div>
+    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:36px; font-weight:800; color:#64748B;">3</div><div style="font-size:14px; color:#64748B; margin-top:4px;">离线设备</div></div>
+    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:36px; font-weight:800; color:#F97316;">2</div><div style="font-size:14px; color:#64748B; margin-top:4px;">故障设备</div></div>
+    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);"><div style="font-size:36px; font-weight:800; color:#3B82F6;">96.5%</div><div style="font-size:14px; color:#64748B; margin-top:4px;">在线率</div></div>
   </div>
   <div style="background:#FFFFFF; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-    <div style="padding:16px 20px; border-bottom:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between;">
-      <h4 style="font-size:18px; font-weight:bold;">设备列表</h4>
+    <div style="padding:16px 20px; border-bottom:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+      <h4 style="font-size:18px; font-weight:bold;">设备列表（共47台）</h4>
       <div style="display:flex; gap:8px;">
         <button onclick="filterDevices('all')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#1A5D1A; color:#fff; border:none; cursor:pointer;">全部</button>
         <button onclick="filterDevices('online')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer;">在线</button>
+        <button onclick="filterDevices('offline')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer;">离线</button>
         <button onclick="filterDevices('fault')" style="font-size:14px; padding:8px 16px; border-radius:20px; background:#F8FAFC; color:#64748B; border:1px solid #E2E8F0; cursor:pointer;">故障</button>
       </div>
     </div>
-    <div id="deviceList" style="padding:8px 0;"></div>
-  </div>
-</section>
-
-<!-- ============ OPERATION ============ -->
-<section id="section-operation" class="section-page" style="background:#F1F5F9; padding:16px;">
-  <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:12px; margin-bottom:16px;">
-    <button class="tab-btn active" onclick="switchOperationTab('irrigation')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#1A5D1A; color:#fff; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">灌溉管理</button>
-    <button class="tab-btn" onclick="switchOperationTab('machinery')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">农机管理</button>
-    <button class="tab-btn" onclick="switchOperationTab('drone')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">打药无人机</button>
-  </div>
-  <div id="op-irrigation" style="display:flex; flex-direction:column; gap:16px;"></div>
-  <div id="op-machinery" style="display:none; flex-direction:column; gap:16px;"></div>
-  <div id="op-drone" style="display:none; flex-direction:column; gap:16px;"></div>
-</section>
-
-<!-- ============ ALERT ============ -->
-<section id="section-alert" class="section-page" style="background:#F1F5F9; padding:16px;">
-  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:16px;">
-    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="font-size:40px; font-weight:800; color:#DC2626;">1</div>
-      <div style="font-size:16px; color:#64748B; margin-top:4px;">紧急</div>
+    <div id="deviceList" style="padding:8px 0;">
+      <!-- 摄像头 8台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">高空鹰眼全景摄像机</div><div style="font-size:13px; color:#64748B;">全场覆盖 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 85%</div><div style="font-size:12px; color:#94A3B8;">2分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号监控球机</div><div style="font-size:13px; color:#64748B;">1号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 92%</div><div style="font-size:12px; color:#94A3B8;">1分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">2号监控球机</div><div style="font-size:13px; color:#64748B;">2号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 88%</div><div style="font-size:12px; color:#94A3B8;">3分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">3号监控球机</div><div style="font-size:13px; color:#64748B;">3号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 76%</div><div style="font-size:12px; color:#94A3B8;">2分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">4号监控球机</div><div style="font-size:13px; color:#64748B;">4号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 90%</div><div style="font-size:12px; color:#94A3B8;">1分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot fault"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">5号监控球机</div><div style="font-size:13px; color:#F97316;">5号田 · 网络异常离线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#F97316;">离线 2小时</div><div style="font-size:12px; color:#94A3B8;">需检修</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">6号监控球机</div><div style="font-size:13px; color:#64748B;">仓储区 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 95%</div><div style="font-size:12px; color:#94A3B8;">1分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">7号监控球机</div><div style="font-size:13px; color:#64748B;">控制中心 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 100%</div><div style="font-size:12px; color:#94A3B8;">刚刚</div></div></div>
+      <!-- 土壤传感器 6台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号土壤湿度传感器</div><div style="font-size:13px; color:#64748B;">1号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 78%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">2号土壤湿度传感器</div><div style="font-size:13px; color:#64748B;">2号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 82%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">3号土壤湿度传感器</div><div style="font-size:13px; color:#64748B;">3号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 65%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">4号土壤湿度传感器</div><div style="font-size:13px; color:#64748B;">4号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 71%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">5号土壤湿度传感器</div><div style="font-size:13px; color:#64748B;">5号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 80%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot offline"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">6号土壤湿度传感器</div><div style="font-size:13px; color:#94A3B8;">3号田深层 · 离线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#94A3B8;">离线 1天</div><div style="font-size:12px; color:#94A3B8;">需更换电池</div></div></div>
+      <!-- 气象站 4台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号田间气象站</div><div style="font-size:13px; color:#64748B;">1号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 90%</div><div style="font-size:12px; color:#94A3B8;">3分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">2号田间气象站</div><div style="font-size:13px; color:#64748B;">3号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 85%</div><div style="font-size:12px; color:#94A3B8;">3分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">3号田间气象站</div><div style="font-size:13px; color:#64748B;">5号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 88%</div><div style="font-size:12px; color:#94A3B8;">3分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">4号田间气象站</div><div style="font-size:13px; color:#64748B;">控制中心 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 100%</div><div style="font-size:12px; color:#94A3B8;">3分钟前</div></div></div>
+      <!-- 灌溉设备 6台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号智能灌溉阀</div><div style="font-size:13px; color:#64748B;">1号田 · 在线 · 关闭</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 75%</div><div style="font-size:12px; color:#94A3B8;">10分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">2号智能灌溉阀</div><div style="font-size:13px; color:#64748B;">2号田 · 在线 · 关闭</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 72%</div><div style="font-size:12px; color:#94A3B8;">10分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">3号智能灌溉阀</div><div style="font-size:13px; color:#64748B;">3号田 · 在线 · 灌溉中</div></div><div style="text-align:right;"><div style="font-size:13px; color:#15803D;">已运行 45分钟</div><div style="font-size:12px; color:#94A3B8;">自动模式</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">4号智能灌溉阀</div><div style="font-size:13px; color:#64748B;">4号田 · 在线 · 关闭</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 68%</div><div style="font-size:12px; color:#94A3B8;">10分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">5号智能灌溉阀</div><div style="font-size:13px; color:#64748B;">5号田 · 在线 · 关闭</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 80%</div><div style="font-size:12px; color:#94A3B8;">10分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot fault"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">6号智能灌溉阀</div><div style="font-size:13px; color:#F97316;">3号田 · 阀门故障</div></div><div style="text-align:right;"><div style="font-size:13px; color:#F97316;">故障 3小时</div><div style="font-size:12px; color:#94A3B8;">需维修</div></div></div>
+      <!-- 虫情监测 6台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号智能虫情测报灯</div><div style="font-size:13px; color:#64748B;">1号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 70%</div><div style="font-size:12px; color:#94A3B8;">15分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">2号智能虫情测报灯</div><div style="font-size:13px; color:#64748B;">2号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 73%</div><div style="font-size:12px; color:#94A3B8;">15分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">3号智能虫情测报灯</div><div style="font-size:13px; color:#64748B;">3号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 66%</div><div style="font-size:12px; color:#94A3B8;">15分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">4号智能虫情测报灯</div><div style="font-size:13px; color:#64748B;">4号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 77%</div><div style="font-size:12px; color:#94A3B8;">15分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">5号智能虫情测报灯</div><div style="font-size:13px; color:#64748B;">5号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 81%</div><div style="font-size:12px; color:#94A3B8;">15分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot offline"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">6号昆虫性诱设备</div><div style="font-size:13px; color:#94A3B8;">3号田 · 离线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#94A3B8;">离线 5小时</div><div style="font-size:12px; color:#94A3B8;">电池耗尽</div></div></div>
+      <!-- 机器人 4台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">巡检无人车</div><div style="font-size:13px; color:#64748B;">全场巡检 · 巡检中</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 82%</div><div style="font-size:12px; color:#94A3B8;">实时</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">巡检机器狗</div><div style="font-size:13px; color:#64748B;">待命 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 95%</div><div style="font-size:12px; color:#94A3B8;">刚刚</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">具身人形机器人</div><div style="font-size:13px; color:#64748B;">控制中心 · 待命</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 100%</div><div style="font-size:12px; color:#94A3B8;">刚刚</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">无人插秧机</div><div style="font-size:13px; color:#64748B;">仓储区 · 待命</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 90%</div><div style="font-size:12px; color:#94A3B8;">2小时前</div></div></div>
+      <!-- 显示屏 2台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">控制中心大屏</div><div style="font-size:13px; color:#64748B;">控制中心 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 100%</div><div style="font-size:12px; color:#94A3B8;">实时</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">田间信息屏</div><div style="font-size:13px; color:#64748B;">2号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 88%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <!-- LED屏 2台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">入口LED显示屏</div><div style="font-size:13px; color:#64748B;">农场入口 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 100%</div><div style="font-size:12px; color:#94A3B8;">实时</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">仓储LED屏</div><div style="font-size:13px; color:#64748B;">仓储区 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 100%</div><div style="font-size:12px; color:#94A3B8;">实时</div></div></div>
+      <!-- 服务器 1台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">边缘计算服务器</div><div style="font-size:13px; color:#64748B;">控制中心 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">CPU 34%</div><div style="font-size:12px; color:#94A3B8;">内存 62%</div></div></div>
+      <!-- 其他传感器 8台 -->
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号光照传感器</div><div style="font-size:13px; color:#64748B;">1号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 85%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">2号光照传感器</div><div style="font-size:13px; color:#64748B;">3号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 79%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号CO2传感器</div><div style="font-size:13px; color:#64748B;">2号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 76%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号风速风向仪</div><div style="font-size:13px; color:#64748B;">4号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 83%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号雨量计</div><div style="font-size:13px; color:#64748B;">1号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 91%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号叶面湿度传感器</div><div style="font-size:13px; color:#64748B;">3号田 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 74%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot online"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号水位传感器</div><div style="font-size:13px; color:#64748B;">灌溉渠 · 在线</div></div><div style="text-align:right;"><div style="font-size:13px; color:#64748B;">电量 87%</div><div style="font-size:12px; color:#94A3B8;">5分钟前</div></div></div>
+      <div style="padding:14px 20px; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:12px;"><span class="device-dot fault"></span><div style="flex:1;"><div style="font-size:15px; font-weight:600;">1号水质传感器</div><div style="font-size:13px; color:#F97316;">灌溉渠 · 数据异常</div></div><div style="text-align:right;"><div style="font-size:13px; color:#F97316;">异常 2小时</div><div style="font-size:12px; color:#94A3B8;">需校准</div></div></div>
     </div>
-    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="font-size:40px; font-weight:800; color:#F97316;">2</div>
-      <div style="font-size:16px; color:#64748B; margin-top:4px;">警告</div>
-    </div>
-    <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="font-size:40px; font-weight:800; color:#CA8A04;">2</div>
-      <div style="font-size:16px; color:#64748B; margin-top:4px;">提示</div>
-    </div>
-  </div>
-  <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-    <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">预警时间线</h4>
-    <div id="alertTimeline" style="display:flex; flex-direction:column; gap:16px;"></div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ PRODUCTION PLAN ============ -->
-<section id="section-plan" class="section-page" style="background:#F1F5F9; padding:16px;">
-  <div style="background:#FFFFFF; border-radius:16px; padding:24px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-    <h4 style="font-size:20px; font-weight:bold; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
-      <span style="width:4px; height:20px; background:#1A5D1A; border-radius:2px;"></span>
-      2026年度生产计划概要
-    </h4>
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:16px;">
-      <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;">
-        <div style="font-size:32px; font-weight:800; color:#1A5D1A;">1,280</div>
-        <div style="font-size:14px; color:#64748B; margin-top:4px;">总种植面积(亩)</div>
-      </div>
-      <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;">
-        <div style="font-size:32px; font-weight:800; color:#3B82F6;">5</div>
-        <div style="font-size:14px; color:#64748B; margin-top:4px;">规划田块数</div>
-      </div>
-      <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;">
-        <div style="font-size:32px; font-weight:800; color:#F97316;">842</div>
-        <div style="font-size:14px; color:#64748B; margin-top:4px;">目标产量(吨)</div>
-      </div>
+  <!-- OPERATION -->
+  <section id="operation" class="section">
+    <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">作业管理</div><div style="font-size:14px; color:#64748B; margin-top:4px;">灌溉、农机、无人机作业调度</div></div>
+    <div style="display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto;">
+      <button class="tab-btn active" onclick="switchOpTab(this,'irrigation')">智能灌溉</button>
+      <button class="tab-btn" onclick="switchOpTab(this,'machinery')">农机作业</button>
+      <button class="tab-btn" onclick="switchOpTab(this,'drone')">无人机</button>
     </div>
-    <div style="display:flex; flex-direction:column; gap:12px; font-size:14px;">
-      <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-        <div style="font-weight:bold; color:#0F172A; margin-bottom:4px;">🌾 种植结构</div>
-        <div style="color:#64748B;">水稻1,080亩（84.4%）、小麦200亩（15.6%）</div>
-      </div>
-      <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-        <div style="font-weight:bold; color:#0F172A; margin-bottom:4px;">🔄 轮作方案</div>
-        <div style="color:#64748B;">稻麦轮作：水稻(6-11月)→小麦(11-5月)</div>
-      </div>
-    </div>
-  </div>
-
-  <div style="background:#FFFFFF; border-radius:16px; padding:24px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-    <h4 style="font-size:20px; font-weight:bold; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
-      <span style="width:4px; height:20px; background:#3B82F6; border-radius:2px;"></span>
-      田块分布地图
-    </h4>
-    <div style="position:relative; background:#F8FAFC; border-radius:12px; overflow:hidden; height:300px;">
-      <svg viewBox="0 0 800 400" style="width:100%; height:100%;" id="farmMap">
-        <defs>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(203,213,225,0.5)" stroke-width="0.5"/>
-          </pattern>
-          <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <rect width="800" height="400" fill="url(#grid)"/>
-        <text x="400" y="25" text-anchor="middle" fill="#64748B" font-size="14" font-weight="bold">邗江区无人农场田块分布图</text>
-        <g class="cursor-pointer" onclick="showFieldDetail(0)">
-          <rect x="30" y="55" width="220" height="130" rx="8" fill="rgba(26,93,26,0.1)" stroke="#1A5D1A" stroke-width="2"/>
-          <text x="140" y="105" text-anchor="middle" fill="#1A5D1A" font-size="16" font-weight="bold">1号田 280亩</text>
-          <text x="140" y="125" text-anchor="middle" fill="#64748B" font-size="11">南粳9108</text>
-        </g>
-        <g class="cursor-pointer" onclick="showFieldDetail(2)">
-          <rect x="410" y="55" width="180" height="130" rx="8" fill="rgba(249,115,22,0.1)" stroke="#F97316" stroke-width="2"/>
-          <text x="500" y="105" text-anchor="middle" fill="#F97316" font-size="16" font-weight="bold">3号田 300亩</text>
-          <text x="500" y="125" text-anchor="middle" fill="#64748B" font-size="11">⚠ 干旱预警</text>
-        </g>
-      </svg>
-    </div>
-  </div>
-
-  <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-    <h4 style="font-size:20px; font-weight:bold; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
-      <span style="width:4px; height:20px; background:#3B82F6; border-radius:2px;"></span>
-      分阶段生产计划
-    </h4>
-    <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:12px; margin-bottom:16px;">
-      <button class="tab-btn active" onclick="switchPlanTab('prep')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#1A5D1A; color:#fff; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">备耕阶段</button>
-      <button class="tab-btn" onclick="switchPlanTab('sow')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">播种插秧</button>
-      <button class="tab-btn" onclick="switchPlanTab('grow')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">田间管理</button>
-      <button class="tab-btn" onclick="switchPlanTab('harvest')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">收获仓储</button>
-    </div>
-    <div id="plan-prep" class="plan-tab"></div>
-    <div id="plan-sow" class="plan-tab" style="display:none;"></div>
-    <div id="plan-grow" class="plan-tab" style="display:none;"></div>
-    <div id="plan-harvest" class="plan-tab" style="display:none;"></div>
-  </div>
-</section>
-
-<!-- ============ REPORT ============ -->
-<section id="section-report" class="section-page" style="background:#F1F5F9; padding:16px;">
-  <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:12px; margin-bottom:16px;">
-    <button class="tab-btn active" onclick="switchReportTab('daily')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#1A5D1A; color:#fff; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">日常报告</button>
-    <button class="tab-btn" onclick="switchReportTab('yield')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">产量预测</button>
-    <button class="tab-btn" onclick="switchReportTab('phenology')" style="min-height:48px; padding:12px 24px; border-radius:24px; border:1px solid #E2E8F0; background:#FFFFFF; color:#64748B; font-size:16px; font-weight:600; white-space:nowrap; cursor:pointer;">物候期追踪</button>
-  </div>
-
-  <div id="report-daily" style="display:flex; flex-direction:column; gap:16px;">
-    <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
-        <h4 style="font-size:20px; font-weight:bold;">今日农情日报</h4>
-        <div style="display:flex; align-items:center; gap:12px;">
-          <span style="font-size:14px; color:#64748B;">2026年5月6日</span>
-          <button onclick="showToast('日报已导出为PDF','success')" style="font-size:14px; padding:10px 20px; border-radius:8px; background:rgba(26,93,26,0.1); color:#1A5D1A; border:none; font-weight:600; cursor:pointer; min-height:48px;">导出报告</button>
+    <!-- 智能灌溉 -->
+    <div id="op-irrigation" class="op-tab" style="display:block;">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div style="font-size:18px; font-weight:700;">今日灌溉计划</div><span style="background:#DCFCE7; color:#15803D; padding:4px 12px; border-radius:20px; font-size:13px;">自动执行中</span></div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:15px; font-weight:600;">3号田 水稻分蘖期灌溉</span><span style="font-size:13px; color:#15803D;">进行中</span></div>
+          <div style="font-size:14px; color:#64748B; margin-bottom:8px;">目标水深: 3-5cm · 已灌溉 45分钟</div>
+          <div style="background:#E2E8F0; border-radius:6px; height:8px; overflow:hidden;"><div style="background:#15803D; width:65%; height:100%;"></div></div>
+          <div style="font-size:12px; color:#94A3B8; margin-top:4px;">预计剩余 25分钟</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:15px; font-weight:600;">1号田 小麦拔节水</span><span style="font-size:13px; color:#64748B;">待执行 14:00</span></div>
+          <div style="font-size:14px; color:#64748B;">目标: 土壤湿度≥65%</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:15px; font-weight:600;">5号田 泡田水</span><span style="font-size:13px; color:#64748B;">待执行 16:30</span></div>
+          <div style="font-size:14px; color:#64748B;">目标水深: 5cm</div>
         </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:16px;">
-        <div>
-          <h5 style="font-size:16px; font-weight:bold; color:#15803D; margin-bottom:8px;">🌤️ 气象概况</h5>
-          <p style="font-size:14px; color:#64748B; line-height:1.6;">今日晴转多云，气温22-28°C，相对湿度65-72%，东南风3-4级，无降雨。光照充足，适宜作物生长。预计明日最高温度35°C。</p>
-        </div>
-        <div>
-          <h5 style="font-size:16px; font-weight:bold; color:#3B82F6; margin-bottom:8px;">💧 土壤湿度</h5>
-          <p style="font-size:14px; color:#64748B; line-height:1.6;">3号田块浅层湿度偏低（18%），已触发自动灌溉。</p>
-        </div>
-        <div>
-          <h5 style="font-size:16px; font-weight:bold; color:#F97316; margin-bottom:8px;">🐛 虫情动态</h5>
-          <p style="font-size:14px; color:#64748B; line-height:1.6;">稻纵卷叶螟亩蛾量580头，超过防治指标300头/亩。建议3日内打药防治。</p>
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">灌溉用水统计</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="background:#F0FDF4; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#15803D;">1,240</div><div style="font-size:14px; color:#64748B;">今日用水(m³)</div></div>
+          <div style="background:#FFF7ED; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#F97316;">18,650</div><div style="font-size:14px; color:#64748B;">本月累计(m³)</div></div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div id="report-yield" style="display:none; flex-direction:column; gap:16px;">
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px;">
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">亩穗数</div>
-        <div style="font-size:32px; font-weight:800; color:#15803D;">18.5万</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">穗粒数</div>
-        <div style="font-size:32px; font-weight:800; color:#3B82F6;">132.6</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">千粒重</div>
-        <div style="font-size:32px; font-weight:800; color:#0F172A;">26.8g</div>
-      </div>
-      <div style="background:#FFFFFF; border-radius:16px; padding:20px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-        <div style="font-size:14px; color:#64748B; margin-bottom:8px;">预估亩产</div>
-        <div style="font-size:32px; font-weight:800; color:#15803D;">658kg</div>
+    <!-- 农机作业 -->
+    <div id="op-machinery" class="op-tab" style="display:none;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">农机调度</div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px; border-left:4px solid #15803D;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">无人插秧机</span><span style="font-size:13px; color:#15803D;">作业中</span></div>
+          <div style="font-size:14px; color:#64748B;">当前位置: 3号田 · 已完成 68%</div>
+          <div style="font-size:14px; color:#64748B;">作业内容: 水稻插秧 · 行距25cm</div>
+          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">预计完成: 今日 17:30</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px; border-left:4px solid #64748B;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">无人收割机</span><span style="font-size:13px; color:#64748B;">待命</span></div>
+          <div style="font-size:14px; color:#64748B;">位置: 仓储区 · 电量 92%</div>
+          <div style="font-size:14px; color:#64748B;">待作业: 2号田小麦收割 (6月8日)</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px; border-left:4px solid #64748B;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">无人拖拉机</span><span style="font-size:13px; color:#64748B;">待命</span></div>
+          <div style="font-size:14px; color:#64748B;">位置: 机库 · 电量 88%</div>
+          <div style="font-size:14px; color:#64748B;">待作业: 1号田旋耕 (明日)</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; border-left:4px solid #CA8A04;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">植保无人机</span><span style="font-size:13px; color:#CA8A04;">充电中</span></div>
+          <div style="font-size:14px; color:#64748B;">位置: 停机坪 · 电量 23%</div>
+          <div style="font-size:14px; color:#64748B;">待作业: 全场病虫害防治 (明日 6:00)</div>
+        </div>
       </div>
     </div>
-    <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">产量预测趋势</h4>
-      <div style="height:220px"><canvas id="yieldChart"></canvas></div>
+    <!-- 无人机 -->
+    <div id="op-drone" class="op-tab" style="display:none;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">无人机任务</div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">多光谱巡田</span><span style="font-size:13px; color:#15803D;">已完成</span></div>
+          <div style="font-size:14px; color:#64748B;">飞行高度: 80m · 覆盖面积: 500亩</div>
+          <div style="font-size:14px; color:#64748B;">发现: 3号田轻度缺水区域 12亩</div>
+          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">完成时间: 今日 08:30</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">植保喷洒</span><span style="font-size:13px; color:#CA8A04;">计划中</span></div>
+          <div style="font-size:14px; color:#64748B;">药剂: 吡虫啉 · 配比: 1:1000</div>
+          <div style="font-size:14px; color:#64748B;">目标: 防治稻飞虱 · 面积: 300亩</div>
+          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">计划时间: 明日 06:00-08:00</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">长势监测航拍</span><span style="font-size:13px; color:#64748B;">计划中</span></div>
+          <div style="font-size:14px; color:#64748B;">类型: RGB+NDVI · 分辨率: 2cm/px</div>
+          <div style="font-size:13px; color:#94A3B8; margin-top:4px;">计划时间: 6月12日</div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div id="report-phenology" style="display:none; flex-direction:column; gap:16px;">
-    <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <h4 style="font-size:18px; font-weight:bold; margin-bottom:20px;">水稻生长时间轴（南粳9108）</h4>
-      <div style="position:relative; padding-left:32px;">
+  <!-- ALERT -->
+  <section id="alert" class="section">
+    <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">预警中心</div><div style="font-size:14px; color:#64748B; margin-top:4px;">实时异常预警与处理记录</div></div>
+    <div class="card" style="border-left:4px solid #DC2626;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+        <div><div style="font-size:16px; font-weight:700; color:#DC2626;">紧急: 3号田灌溉阀门故障</div><div style="font-size:14px; color:#64748B; margin-top:4px;">6号智能灌溉阀无法正常关闭，已持续溢水3小时</div></div>
+        <span style="background:#FEE2E2; color:#DC2626; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">紧急</span>
+      </div>
+      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 09:15 · 设备: 6号智能灌溉阀</div>
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button style="background:#DC2626; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">立即处理</button>
+        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">派维修工</button>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid #CA8A04;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+        <div><div style="font-size:16px; font-weight:700; color:#CA8A04;">预警: 稻飞虱虫口密度上升</div><div style="font-size:14px; color:#64748B; margin-top:4px;">3号田虫情测报灯监测到稻飞虱数量达120头/盏，超过预警阈值</div></div>
+        <span style="background:#FEF3C7; color:#CA8A04; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">预警</span>
+      </div>
+      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 07:30 · 设备: 3号虫情测报灯</div>
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button style="background:#F97316; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">启动防治</button>
+        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">查看详情</button>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid #CA8A04;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+        <div><div style="font-size:16px; font-weight:700; color:#CA8A04;">预警: 6号土壤传感器离线</div><div style="font-size:14px; color:#64748B; margin-top:4px;">3号田深层土壤湿度传感器电池耗尽，已离线1天</div></div>
+        <span style="background:#FEF3C7; color:#CA8A04; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">预警</span>
+      </div>
+      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-04 14:20 · 设备: 6号土壤湿度传感器</div>
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button style="background:#F97316; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">安排更换</button>
+        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">忽略</button>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid #CA8A04;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+        <div><div style="font-size:16px; font-weight:700; color:#CA8A04;">预警: 1号水质传感器数据异常</div><div style="font-size:14px; color:#64748B; margin-top:4px;">灌溉渠水质pH值读数异常波动，可能需校准</div></div>
+        <span style="background:#FEF3C7; color:#CA8A04; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">预警</span>
+      </div>
+      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 10:00 · 设备: 1号水质传感器</div>
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button style="background:#F97316; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">校准设备</button>
+        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">查看趋势</button>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid #15803D;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+        <div><div style="font-size:16px; font-weight:700; color:#15803D;">提示: 2号田小麦即将成熟</div><div style="font-size:14px; color:#64748B; margin-top:4px;">根据积温模型预测，2号田小麦预计6月8日达到最佳收获期</div></div>
+        <span style="background:#DCFCE7; color:#15803D; padding:4px 10px; border-radius:20px; font-size:12px; white-space:nowrap;">提示</span>
+      </div>
+      <div style="font-size:13px; color:#94A3B8;">触发时间: 2025-06-05 06:00 · 来源: AI预测模型</div>
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button style="background:#1A5D1A; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">安排收割</button>
+        <button style="background:#F1F5F9; color:#64748B; border:none; padding:8px 16px; border-radius:8px; font-size:14px; cursor:pointer;">查看详情</button>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:18px; font-weight:700; margin-bottom:12px;">预警处理记录</div>
+      <div style="position:relative; padding-left:24px;">
         <div style="position:absolute; left:6px; top:0; bottom:0; width:2px; background:#E2E8F0;"></div>
-        <div style="display:flex; flex-direction:column; gap:24px;">
-          <div style="position:relative;">
-            <div style="position:absolute; left:-29px; width:16px; height:16px; border-radius:50%; background:#1A5D1A; border:2px solid #fff;"></div>
-            <div style="font-size:16px; font-weight:bold; color:#1A5D1A;">抽穗期 <span style="font-size:12px; background:rgba(26,93,26,0.1); color:#1A5D1A; padding:4px 12px; border-radius:12px; margin-left:8px;">当前阶段</span></div>
-            <div style="font-size:14px; color:#64748B; margin-top:4px;">5月4日至今 | 叶龄9.2叶，生长状态良好</div>
-          </div>
-          <div style="position:relative;">
-            <div style="position:absolute; left:-29px; width:16px; height:16px; border-radius:50%; background:#3B82F6; border:2px solid #fff;"></div>
-            <div style="font-size:16px; font-weight:bold; color:#0F172A;">孕穗期</div>
-            <div style="font-size:14px; color:#64748B; margin-top:4px;">4月28日 - 5月3日</div>
-          </div>
-          <div style="position:relative;">
-            <div style="position:absolute; left:-29px; width:16px; height:16px; border-radius:50%; background:#3B82F6; border:2px solid #fff;"></div>
-            <div style="font-size:16px; font-weight:bold; color:#0F172A;">拔节期</div>
-            <div style="font-size:14px; color:#64748B; margin-top:4px;">4月18日 - 4月27日</div>
+        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#15803D; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月4日 16:30</div><div style="font-size:14px; color:#64748B;">2号气象站离线故障已修复，恢复数据上报</div></div>
+        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#15803D; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月3日 09:00</div><div style="font-size:14px; color:#64748B;">1号田灌溉任务完成，土壤湿度达标</div></div>
+        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#F97316; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月2日 14:20</div><div style="font-size:14px; color:#64748B;">5号田发现少量杂草，已安排无人机除草</div></div>
+        <div style="position:relative; margin-bottom:16px;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#15803D; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">6月1日 08:00</div><div style="font-size:14px; color:#64748B;">月度设备巡检完成，全部设备正常</div></div>
+        <div style="position:relative;"><div style="position:absolute; left:-22px; top:2px; width:12px; height:12px; background:#DC2626; border-radius:50%;"></div><div style="font-size:14px; font-weight:600;">5月28日 22:10</div><div style="font-size:14px; color:#64748B;">暴雨预警，提前关闭所有灌溉阀门</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAN -->
+  <section id="plan" class="section">
+    <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">生产规划</div><div style="font-size:14px; color:#64748B; margin-top:4px;">小麦水稻全周期种植计划</div></div>
+    <div style="display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto;">
+      <button class="tab-btn active" onclick="switchPlanTab(this,'prep')">备耕期</button>
+      <button class="tab-btn" onclick="switchPlanTab(this,'sow')">播种期</button>
+      <button class="tab-btn" onclick="switchPlanTab(this,'grow')">生长期</button>
+      <button class="tab-btn" onclick="switchPlanTab(this,'harvest')">收获期</button>
+    </div>
+    <!-- 备耕期 -->
+    <div id="plan-prep" class="plan-tab" style="display:block;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">5月备耕计划</div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#15803D; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</div><span style="font-size:16px; font-weight:600;">秸秆还田与旋耕</span><span style="background:#DCFCE7; color:#15803D; padding:2px 8px; border-radius:12px; font-size:12px;">已完成</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">5月1日-5月5日 · 1-5号田 · 深度15cm</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#15803D; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</div><span style="font-size:16px; font-weight:600;">泡田整地</span><span style="background:#DCFCE7; color:#15803D; padding:2px 8px; border-radius:12px; font-size:12px;">已完成</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">5月6日-5月10日 · 3-5号田 · 水深5cm</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#15803D; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</div><span style="font-size:16px; font-weight:600;">基肥施用</span><span style="background:#DCFCE7; color:#15803D; padding:2px 8px; border-radius:12px; font-size:12px;">已完成</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">5月11日-5月15日 · 复合肥 30kg/亩 · 无人机撒施</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#F97316; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">4</div><span style="font-size:16px; font-weight:600;">种子处理</span><span style="background:#FEF3C7; color:#CA8A04; padding:2px 8px; border-radius:12px; font-size:12px;">进行中</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">5月20日-5月25日 · 浸种催芽 · 品种: 南粳9108</div>
+        </div>
+      </div>
+    </div>
+    <!-- 播种期 -->
+    <div id="plan-sow" class="plan-tab" style="display:none;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">6月播种计划</div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#F97316; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</div><span style="font-size:16px; font-weight:600;">小麦收割</span><span style="background:#FEF3C7; color:#CA8A04; padding:2px 8px; border-radius:12px; font-size:12px;">待执行</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">6月8日-6月12日 · 1-2号田 · 预计亩产 520kg</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</div><span style="font-size:16px; font-weight:600;">水稻插秧</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">6月15日-6月20日 · 3-5号田 · 行距25cm 株距12cm</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</div><span style="font-size:16px; font-weight:600;">返青期管理</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">6月21日-6月30日 · 保持浅水层 3cm</div>
+        </div>
+      </div>
+    </div>
+    <!-- 生长期 -->
+    <div id="plan-grow" class="plan-tab" style="display:none;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">7-9月生长期管理</div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</div><span style="font-size:16px; font-weight:600;">分蘖期管理</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">7月1日-7月20日 · 浅水勤灌 · 追施分蘖肥</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</div><span style="font-size:16px; font-weight:600;">拔节孕穗期</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">7月21日-8月20日 · 间歇灌溉 · 追施穗肥</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</div><span style="font-size:16px; font-weight:600;">病虫害防治</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">7月-8月 · 重点防治稻飞虱、纹枯病</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">4</div><span style="font-size:16px; font-weight:600;">抽穗扬花期</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">8月21日-9月10日 · 保持水层 5cm</div>
+        </div>
+      </div>
+    </div>
+    <!-- 收获期 -->
+    <div id="plan-harvest" class="plan-tab" style="display:none;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">10-11月收获计划</div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</div><span style="font-size:16px; font-weight:600;">乳熟期管理</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">9月11日-9月30日 · 干湿交替灌溉</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</div><span style="font-size:16px; font-weight:600;">蜡熟期管理</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">10月1日-10月15日 · 断水晒田</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</div><span style="font-size:16px; font-weight:600;">机械收割</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">10月16日-10月25日 · 预计亩产 650kg</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;"><div style="width:24px; height:24px; background:#64748B; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">4</div><span style="font-size:16px; font-weight:600;">秸秆还田</span><span style="background:#F1F5F9; color:#64748B; padding:2px 8px; border-radius:12px; font-size:12px;">未开始</span></div>
+          <div style="font-size:14px; color:#64748B; padding-left:32px;">10月26日-10月31日 · 粉碎还田</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section id="report" class="section">
+    <div style="padding:16px 20px 8px;"><div style="font-size:22px; font-weight:700;">数据报告</div><div style="font-size:14px; color:#64748B; margin-top:4px;">农场运营数据分析</div></div>
+    <div style="display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto;">
+      <button class="tab-btn active" onclick="switchReportTab(this,'daily')">日报</button>
+      <button class="tab-btn" onclick="switchReportTab(this,'yield')">产量分析</button>
+      <button class="tab-btn" onclick="switchReportTab(this,'phenology')">生育期</button>
+    </div>
+    <!-- 日报 -->
+    <div id="report-daily" class="report-tab" style="display:block;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">2025年6月5日 农场日报</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+          <div style="background:#F0FDF4; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#15803D;">26.5</div><div style="font-size:14px; color:#64748B;">平均气温(°C)</div></div>
+          <div style="background:#F0FDF4; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#15803D;">68%</div><div style="font-size:14px; color:#64748B;">平均湿度</div></div>
+          <div style="background:#FFF7ED; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#F97316;">1,240</div><div style="font-size:14px; color:#64748B;">灌溉用水(m³)</div></div>
+          <div style="background:#EFF6FF; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:28px; font-weight:700; color:#2563EB;">0</div><div style="font-size:14px; color:#64748B;">今日降雨(mm)</div></div>
+        </div>
+        <div style="font-size:16px; font-weight:600; margin-bottom:8px;">今日作业</div>
+        <div style="font-size:14px; color:#64748B; line-height:1.8;">
+          <div>· 3号田水稻插秧进行中，已完成68%</div>
+          <div>· 多光谱巡田完成，发现12亩轻度缺水</div>
+          <div>· 1号田小麦拔节水待执行(14:00)</div>
+          <div>· 6号灌溉阀故障，已派维修工</div>
+        </div>
+      </div>
+    </div>
+    <!-- 产量分析 -->
+    <div id="report-yield" class="report-tab" style="display:none;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">历年产量对比</div>
+        <div style="margin-bottom:16px;"><canvas id="yieldChart" height="200"></canvas></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+          <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:22px; font-weight:700; color:#15803D;">520</div><div style="font-size:13px; color:#64748B;">小麦亩产(kg)</div></div>
+          <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:22px; font-weight:700; color:#15803D;">650</div><div style="font-size:13px; color:#64748B;">水稻亩产(kg)</div></div>
+          <div style="background:#F8FAFC; border-radius:12px; padding:16px; text-align:center;"><div style="font-size:22px; font-weight:700; color:#F97316;">+8.3%</div><div style="font-size:13px; color:#64748B;">较去年增产</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- 生育期 -->
+    <div id="report-phenology" class="report-tab" style="display:none;">
+      <div class="card">
+        <div style="font-size:18px; font-weight:700; margin-bottom:12px;">作物生育期监测</div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">1-2号田 小麦</span><span style="background:#FEF3C7; color:#CA8A04; padding:4px 12px; border-radius:20px; font-size:13px;">蜡熟期</span></div>
+          <div style="background:#E2E8F0; border-radius:6px; height:10px; overflow:hidden; margin-bottom:8px;"><div style="background:#CA8A04; width:92%; height:100%;"></div></div>
+          <div style="font-size:14px; color:#64748B;">播种: 2024年11月5日 · 预计收获: 2025年6月8日</div>
+          <div style="font-size:14px; color:#64748B;">积温: 2,150°C · 生育天数: 214天</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;"><span style="font-size:16px; font-weight:600;">3-5号田 水稻</span><span style="background:#DCFCE7; color:#15803D; padding:4px 12px; border-radius:20px; font-size:13px;">移栽期</span></div>
+          <div style="background:#E2E8F0; border-radius:6px; height:10px; overflow:hidden; margin-bottom:8px;"><div style="background:#15803D; width:15%; height:100%;"></div></div>
+          <div style="font-size:14px; color:#64748B;">插秧: 2025年6月15日(计划) · 预计收获: 2025年10月20日</div>
+          <div style="font-size:14px; color:#64748B;">品种: 南粳9108 · 目标亩产: 650kg</div>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
+          <div style="font-size:16px; font-weight:600; margin-bottom:8px;">生育期日历</div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            <div style="background:#DCFCE7; color:#15803D; padding:6px 10px; border-radius:6px; font-size:12px;">播种</div>
+            <div style="background:#DCFCE7; color:#15803D; padding:6px 10px; border-radius:6px; font-size:12px;">出苗</div>
+            <div style="background:#DCFCE7; color:#15803D; padding:6px 10px; border-radius:6px; font-size:12px;">分蘖</div>
+            <div style="background:#FEF3C7; color:#CA8A04; padding:6px 10px; border-radius:6px; font-size:12px;">拔节</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">孕穗</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">抽穗</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">扬花</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">灌浆</div>
+            <div style="background:#F1F5F9; color:#94A3B8; padding:6px 10px; border-radius:6px; font-size:12px;">成熟</div>
           </div>
         </div>
       </div>
     </div>
-    <div style="background:#FFFFFF; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-      <h4 style="font-size:18px; font-weight:bold; margin-bottom:16px;">下一阶段预测</h4>
-      <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:12px;">
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-          <div style="font-size:14px; color:#64748B;">开花期</div>
-          <div style="font-size:18px; font-weight:bold; color:#0F172A; margin-top:4px;">预计5月12日</div>
-        </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-          <div style="font-size:14px; color:#64748B;">灌浆期</div>
-          <div style="font-size:18px; font-weight:bold; color:#0F172A; margin-top:4px;">预计5月18日</div>
-        </div>
-        <div style="background:#F8FAFC; border-radius:12px; padding:16px;">
-          <div style="font-size:14px; color:#64748B;">成熟期</div>
-          <div style="font-size:18px; font-weight:bold; color:#0F172A; margin-top:4px;">预计6月15日</div>
-        </div>
-        <div style="background:#F0FDF4; border-radius:12px; padding:16px;">
-          <div style="font-size:14px; color:#64748B;">预计收割</div>
-          <div style="font-size:18px; font-weight:bold; color:#15803D; margin-top:4px;">6月18-22日</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
 </main>
 
 <script>
-const chartInstances = {};
-const chartDefaults = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { labels: { color: '#64748B', font: { size: 11, family: 'Noto Sans SC' } } },
-    tooltip: {
-      backgroundColor: 'rgba(255,255,255,0.95)',
-      titleColor: '#0F172A',
-      bodyColor: '#64748B',
-      borderColor: '#E2E8F0',
-      borderWidth: 1,
-      padding: 10,
-      cornerRadius: 8,
-      titleFont: { size: 12, family: 'Noto Sans SC' },
-      bodyFont: { size: 11, family: 'Noto Sans SC' },
-      displayColors: true,
-      boxPadding: 4
-    }
-  },
-  scales: {
-    x: { ticks: { color: '#64748B', font: { size: 10 } }, grid: { color: 'rgba(226,232,240,0.6)' } },
-    y: { ticks: { color: '#64748B', font: { size: 10 } }, grid: { color: 'rgba(226,232,240,0.6)' } }
-  }
-};
-
-function destroyChart(id) { if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; } }
-
-function showToast(msg, type) {
-  type = type || 'info';
-  var container = document.getElementById('toastContainer');
-  var el = document.createElement('div');
-  el.className = 'toast-item ' + type;
-  var icons = { success: '✓', warning: '⚠', error: '✕', info: 'ℹ' };
-  el.innerHTML = '<span style="font-weight:900;font-size:16px">' + (icons[type]||'ℹ') + '</span><span>' + msg + '</span>';
-  container.appendChild(el);
-  setTimeout(function() { el.classList.add('removing'); setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 300); }, 3000);
+// Section switching
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => { if(n.textContent.includes(id==='home'?'首页':id==='monitor'?'监测':id==='video'?'视频':id==='device'?'设备':id==='operation'?'作业':id==='alert'?'预警':id==='plan'?'规划':'报告')) n.classList.add('active'); });
+  window.scrollTo(0,0);
 }
 
-function initTempHumidityChart() {
-  var ctx = document.getElementById('tempHumidityChart'); if (!ctx) return; destroyChart('tempHumidityChart');
-  var hours = []; for (var i=0;i<24;i++) hours.push(i+':00');
-  var temps = [18,17,16,16,15,16,18,20,22,24,25,26,27,28,28,27,26,25,24,23,22,21,20,19];
-  var humids = [78,80,82,83,85,84,80,75,70,68,65,63,62,60,61,63,65,68,70,72,74,76,78,79];
-  chartInstances['tempHumidityChart'] = new Chart(ctx, {
+// Monitor tabs
+function switchMonitorTab(btn, tab) {
+  document.querySelectorAll('#monitor .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.monitor-tab').forEach(t => t.style.display = 'none');
+  document.getElementById('monitor-' + tab).style.display = 'block';
+}
+
+// Operation tabs
+function switchOpTab(btn, tab) {
+  document.querySelectorAll('#operation .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.op-tab').forEach(t => t.style.display = 'none');
+  document.getElementById('op-' + tab).style.display = 'block';
+}
+
+// Plan tabs
+function switchPlanTab(btn, tab) {
+  document.querySelectorAll('#plan .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.plan-tab').forEach(t => t.style.display = 'none');
+  document.getElementById('plan-' + tab).style.display = 'block';
+}
+
+// Report tabs
+function switchReportTab(btn, tab) {
+  document.querySelectorAll('#report .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.report-tab').forEach(t => t.style.display = 'none');
+  document.getElementById('report-' + tab).style.display = 'block';
+}
+
+// Charts
+const weatherCtx = document.getElementById('weatherChart');
+if(weatherCtx) {
+  new Chart(weatherCtx, {
     type: 'line',
-    data: { labels: hours, datasets: [
-      { label: '温度°C', data: temps, borderColor: '#F97316', backgroundColor: 'rgba(249,115,22,0.1)', tension: 0.4, fill: true, pointRadius: 2, pointBackgroundColor: '#F97316' },
-      { label: '湿度%', data: humids, borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', tension: 0.4, fill: true, pointRadius: 2, pointBackgroundColor: '#3B82F6', yAxisID: 'y1' }
-    ]},
-    options: { ...chartDefaults, scales: {
-      x: { ticks:{color:'#64748B',font:{size:10},maxTicksLimit:12}, grid:{color:'rgba(226,232,240,0.6)'} },
-      y: { position:'left', ticks:{color:'#F97316',font:{size:10}}, grid:{color:'rgba(226,232,240,0.6)'}, title:{display:true,text:'温度°C',color:'#F97316',font:{size:10}} },
-      y1: { position:'right', ticks:{color:'#3B82F6',font:{size:10}}, grid:{drawOnChartArea:false}, title:{display:true,text:'湿度%',color:'#3B82F6',font:{size:10}} }
-    }}
+    data: {
+      labels: ['6/1','6/2','6/3','6/4','6/5','6/6','6/7'],
+      datasets: [
+        { label: '气温(°C)', data: [24,25,26,25.5,26.5,27,28], borderColor: '#F97316', backgroundColor: '#F9731620', tension: 0.4, fill: true },
+        { label: '湿度(%)', data: [72,70,68,69,68,65,63], borderColor: '#2563EB', backgroundColor: '#2563EB20', tension: 0.4, fill: true }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: false } } }
   });
 }
 
-function initNPKChart() {
-  var ctx = document.getElementById('npkChart'); if (!ctx) return; destroyChart('npkChart');
-  chartInstances['npkChart'] = new Chart(ctx, {
+const soilCtx = document.getElementById('soilChart');
+if(soilCtx) {
+  new Chart(soilCtx, {
     type: 'bar',
-    data: { labels: ['10cm','20cm','30cm'], datasets: [
-      { label:'氮(mg/kg)', data:[85,92,78], backgroundColor:'rgba(26,93,26,0.7)', borderRadius:4 },
-      { label:'磷(mg/kg)', data:[42,38,35], backgroundColor:'rgba(59,130,246,0.7)', borderRadius:4 },
-      { label:'钾(mg/kg)', data:[128,145,156], backgroundColor:'rgba(249,115,22,0.7)', borderRadius:4 }
-    ]},
-    options: { ...chartDefaults, plugins:{...chartDefaults.plugins, legend:{position:'top',labels:{color:'#64748B',font:{size:10,family:'Noto Sans SC'},boxWidth:12}}} }
+    data: {
+      labels: ['1号田','2号田','3号田','4号田','5号田'],
+      datasets: [
+        { label: '湿度(%)', data: [62,58,72,55,68], backgroundColor: '#2563EB' },
+        { label: '温度(°C)', data: [22,21,23,20,22], backgroundColor: '#F97316' }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } } }
   });
 }
 
-function initPestChart() {
-  var ctx = document.getElementById('pestChart'); if (!ctx) return; destroyChart('pestChart');
-  chartInstances['pestChart'] = new Chart(ctx, {
+const npkCtx = document.getElementById('npkChart');
+if(npkCtx) {
+  new Chart(npkCtx, {
+    type: 'radar',
+    data: {
+      labels: ['氮(N)','磷(P)','钾(K)','有机质','pH值'],
+      datasets: [
+        { label: '1号田', data: [85,72,78,80,75], borderColor: '#15803D', backgroundColor: '#15803D30' },
+        { label: '3号田', data: [70,65,80,75,80], borderColor: '#2563EB', backgroundColor: '#2563EB30' }
+      ]
+    },
+    options: { responsive: true, scales: { r: { beginAtZero: true, max: 100 } } }
+  });
+}
+
+const pestCtx = document.getElementById('pestChart');
+if(pestCtx) {
+  new Chart(pestCtx, {
     type: 'bar',
-    data: { labels: ['5/1','5/2','5/3','5/4','5/5','5/6'], datasets: [
-      { label:'稻纵卷叶螟', data:[320,380,420,490,530,580], backgroundColor:'rgba(249,115,22,0.7)', borderRadius:4 },
-      { label:'二化螟', data:[110,115,118,120,122,120], backgroundColor:'rgba(26,93,26,0.7)', borderRadius:4 },
-      { label:'飞虱', data:[180,190,195,200,205,210], backgroundColor:'rgba(59,130,246,0.7)', borderRadius:4 }
-    ]},
-    options: { ...chartDefaults, plugins:{...chartDefaults.plugins, legend:{position:'top',labels:{color:'#64748B',font:{size:10,family:'Noto Sans SC'},boxWidth:12}}} }
+    data: {
+      labels: ['稻飞虱','二化螟','稻纵卷叶螟','纹枯病','稻瘟病'],
+      datasets: [
+        { label: '当前虫口/病指', data: [120,15,8,25,5], backgroundColor: ['#DC2626','#F97316','#CA8A04','#F97316','#15803D'] },
+        { label: '预警阈值', data: [100,50,30,40,20], backgroundColor: '#E2E8F0' }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } } }
   });
 }
 
-function initSeedlingChart() {
-  var ctx = document.getElementById('seedlingChart'); if (!ctx) return; destroyChart('seedlingChart');
-  chartInstances['seedlingChart'] = new Chart(ctx, {
+const seedlingCtx = document.getElementById('seedlingChart');
+if(seedlingCtx) {
+  new Chart(seedlingCtx, {
     type: 'line',
-    data: { labels:['3/15','3/25','4/5','4/15','4/25','5/5'], datasets: [
-      { label:'LAI指数', data:[0.5,1.2,2.1,2.8,3.4,3.8], borderColor:'#1A5D1A', backgroundColor:'rgba(26,93,26,0.1)', tension:0.4, fill:true, pointRadius:3, pointBackgroundColor:'#1A5D1A' },
-      { label:'叶层氮含量%', data:[3.2,3.0,2.8,2.5,2.3,2.1], borderColor:'#3B82F6', backgroundColor:'rgba(59,130,246,0.1)', tension:0.4, fill:true, pointRadius:3, pointBackgroundColor:'#3B82F6', yAxisID:'y1' }
-    ]},
-    options: { ...chartDefaults, scales: {
-      x: { ticks:{color:'#64748B',font:{size:10}}, grid:{color:'rgba(226,232,240,0.6)'} },
-      y: { position:'left', ticks:{color:'#1A5D1A',font:{size:10}}, grid:{color:'rgba(226,232,240,0.6)'}, title:{display:true,text:'LAI',color:'#1A5D1A',font:{size:10}} },
-      y1: { position:'right', ticks:{color:'#3B82F6',font:{size:10}}, grid:{drawOnChartArea:false}, title:{display:true,text:'氮含量%',color:'#3B82F6',font:{size:10}} }
-    }}
+    data: {
+      labels: ['5/20','5/25','5/30','6/5','6/10','6/15'],
+      datasets: [
+        { label: '株高(cm)', data: [5,12,18,25,32,40], borderColor: '#15803D', backgroundColor: '#15803D20', tension: 0.4, fill: true },
+        { label: '叶龄', data: [1.2,2.1,3.0,3.8,4.5,5.2], borderColor: '#2563EB', backgroundColor: '#2563EB20', tension: 0.4, fill: true, yAxisID: 'y1' }
+      ]
+    },
+    options: { responsive: true, scales: { y1: { position: 'right', beginAtZero: true } } }
   });
 }
 
-function initYieldChart() {
-  var ctx = document.getElementById('yieldChart'); if (!ctx) return; destroyChart('yieldChart');
-  chartInstances['yieldChart'] = new Chart(ctx, {
-    type: 'line',
-    data: { labels:['3/15','4/1','4/15','5/1','5/15','6/1'], datasets: [
-      { label:'预估亩产(kg)', data:[580,620,640,658,665,670], borderColor:'#1A5D1A', backgroundColor:'rgba(26,93,26,0.1)', tension:0.4, fill:true, pointRadius:3, pointBackgroundColor:'#1A5D1A' }
-    ]},
-    options: { ...chartDefaults, plugins:{...chartDefaults.plugins, legend:{display:false}} }
+const yieldCtx = document.getElementById('yieldChart');
+if(yieldCtx) {
+  new Chart(yieldCtx, {
+    type: 'bar',
+    data: {
+      labels: ['2021','2022','2023','2024','2025(预)'],
+      datasets: [
+        { label: '小麦(kg/亩)', data: [480,495,510,505,520], backgroundColor: '#CA8A04' },
+        { label: '水稻(kg/亩)', data: [580,600,620,610,650], backgroundColor: '#15803D' }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } } }
   });
 }
-
-function switchSection(section) {
-  document.querySelectorAll('.section-page').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.mobile-nav-item').forEach(function(el) { el.classList.remove('active'); });
-  var target = document.getElementById('section-' + section);
-  if (target) target.classList.add('active');
-  var navItem = document.querySelector('.nav-item[data-section="' + section + '"]');
-  if (navItem) navItem.classList.add('active');
-  var mobileNavItem = document.querySelector('.mobile-nav-item[data-section="' + section + '"]');
-  if (mobileNavItem) mobileNavItem.classList.add('active');
-  var titles = { home: '首页', monitor: '农情监测', video: '视频监控', device: '智能设备', operation: '作业管理', alert: '预警中心', plan: '生产规划', report: '数据报告' };
-  var pageTitle = document.getElementById('page-title');
-  if (pageTitle && titles[section]) pageTitle.textContent = titles[section];
-  if (section === 'monitor') { setTimeout(function() { initTempHumidityChart(); initNPKChart(); initPestChart(); initSeedlingChart(); }, 100); }
-  if (section === 'report') { setTimeout(function() { initYieldChart(); }, 100); }
-}
-
-function switchMonitorTab(tab) {
-  document.querySelectorAll('#monitor-weather, #monitor-soil, #monitor-pest, #monitor-seedling').forEach(function(el) { el.style.display = 'none'; });
-  var target = document.getElementById('monitor-' + tab);
-  if (target) target.style.display = 'flex';
-  document.querySelectorAll('#monitorTabs .tab-btn').forEach(function(btn) { 
-    btn.classList.remove('active'); 
-    btn.style.background = '#FFFFFF';
-    btn.style.color = '#64748B';
-  });
-  event.target.classList.add('active');
-  event.target.style.background = '#1A5D1A';
-  event.target.style.color = '#fff';
-  if (tab === 'weather') setTimeout(initTempHumidityChart, 100);
-  if (tab === 'soil') setTimeout(initNPKChart, 100);
-  if (tab === 'pest') setTimeout(initPestChart, 100);
-  if (tab === 'seedling') setTimeout(initSeedlingChart, 100);
-}
-
-function switchOperationTab(tab) {
-  document.querySelectorAll('.operation-tab').forEach(function(el) { el.style.display = 'none'; });
-  var target = document.getElementById('op-' + tab);
-  if (target) target.style.display = 'flex';
-  document.querySelectorAll('#operationTabs .tab-btn').forEach(function(btn) { 
-    btn.classList.remove('active');
-    btn.style.background = '#FFFFFF';
-    btn.style.color = '#64748B';
-  });
-  event.target.classList.add('active');
-  event.target.style.background = '#1A5D1A';
-  event.target.style.color = '#fff';
-}
-
-function switchReportTab(tab) {
-  document.querySelectorAll('.report-tab').forEach(function(el) { el.style.display = 'none'; });
-  var target = document.getElementById('report-' + tab);
-  if (target) target.style.display = 'flex';
-  document.querySelectorAll('#reportTabs .tab-btn').forEach(function(btn) { 
-    btn.classList.remove('active');
-    btn.style.background = '#FFFFFF';
-    btn.style.color = '#64748B';
-  });
-  event.target.classList.add('active');
-  event.target.style.background = '#1A5D1A';
-  event.target.style.color = '#fff';
-  if (tab === 'yield') setTimeout(initYieldChart, 100);
-}
-
-function switchPlanTab(tab) {
-  document.querySelectorAll('.plan-tab').forEach(function(el) { el.style.display = 'none'; });
-  var target = document.getElementById('plan-' + tab);
-  if (target) target.style.display = 'block';
-  var buttons = event.target.parentElement.querySelectorAll('.tab-btn');
-  buttons.forEach(function(btn) { 
-    btn.classList.remove('active');
-    btn.style.background = '#FFFFFF';
-    btn.style.color = '#64748B';
-  });
-  event.target.classList.add('active');
-  event.target.style.background = '#1A5D1A';
-  event.target.style.color = '#fff';
-}
-
-function filterDevices(type) {
-  showToast('筛选' + (type === 'all' ? '全部' : type === 'online' ? '在线' : '故障') + '设备', 'info');
-}
-
-function showFieldDetail(index) {
-  showToast('查看' + (index + 1) + '号田详情', 'info');
-}
-
-function updateTime() {
-  var now = new Date();
-  var timeStr = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  var el = document.getElementById('current-time');
-  if (el) el.textContent = timeStr;
-}
-setInterval(updateTime, 60000);
-updateTime();
-
-setTimeout(function() {
-  initTempHumidityChart();
-  initNPKChart();
-  initPestChart();
-  initSeedlingChart();
-  initYieldChart();
-}, 500);
 </script>
-
 </body>
 </html>
