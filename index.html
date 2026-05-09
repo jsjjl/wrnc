@@ -172,7 +172,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 <!-- 移动端底部导航 -->
 <nav class="mobile-nav fixed bottom-0 left-0 right-0 bg-white border-t border-farm-border z-50" id="mobileNav">
-  <div class="grid grid-cols-8 py-1 px-1" id="mobileNavScroll">
+  <div class="grid grid-cols-8 w-full" id="mobileNavScroll" style="display:grid; grid-template-columns: repeat(8, 1fr); width:100%;">
     <a href="#home" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-green" data-section="home" onclick="switchSection('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="text-xs">首页</span></a>
     <a href="#monitor" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted" data-section="monitor" onclick="switchSection('monitor')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="text-xs">农情</span></a>
     <a href="#video" class="mobile-nav-item flex flex-col items-center gap-0.5 py-1 rounded-lg text-farm-muted" data-section="video" onclick="switchSection('video')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><span class="text-xs">视频</span></a>
